@@ -1,0 +1,58 @@
+<div class="login-page d-flex align-items-center justify-content-center min-vh-100">
+  <div class="login-card shadow-sm">
+
+    <div class="header text-center text-white py-4">
+      <h1 class="fw-bold mb-1 d-flex align-items-center justify-content-center gap-2">
+        <img src="icons/bus.png" alt="" width="28" height="28">
+        BozaCM
+        <img src="icons/plane.png" alt="" width="28" height="28">
+      </h1>
+      <small>Découvrez le Cameroun en 1 clic</small>
+    </div>
+
+    <div class="d-flex tabs">
+      <button type="button" class="tab-btn flex-fill"
+        [class.active]="activeTab() === 'ADMIN'"
+        (click)="setTab('ADMIN')">
+        Administrateur
+      </button>
+      <button type="button" class="tab-btn flex-fill"
+        [class.active]="activeTab() === 'CLIENT'"
+        (click)="setTab('CLIENT')">
+        Client
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="p-4">
+
+      <label class="form-label small fw-semibold">EMAIL</label>
+      <input type="email" class="form-control mb-1"
+        formControlName="email"
+        placeholder="admin@bozacm.cm">
+      @if (form.get('email')?.invalid && form.get('email')?.touched) {
+        <small class="text-danger">Email invalide ou requis</small>
+      }
+
+      <label class="form-label small fw-semibold mt-3">MOT DE PASSE</label>
+      <div class="input-group mb-1">
+        <input [type]="showPassword() ? 'text' : 'password'"
+          class="form-control"
+          formControlName="password">
+        <button type="button" class="btn btn-outline-secondary" (click)="togglePassword()">
+          <i class="bi" [class.bi-eye]="!showPassword()" [class.bi-eye-slash]="showPassword()"></i>
+        </button>
+      </div>
+      @if (form.get('password')?.invalid && form.get('password')?.touched) {
+        <small class="text-danger">6 caractères minimum</small>
+      }
+
+      <button type="submit" class="btn btn-navy w-100 mt-4">
+        Se connecter
+      </button>
+
+      <p class="text-center mt-3 small">
+        Pas de compte ? <a routerLink="/register">S'inscrire</a>
+      </p>
+    </form>
+  </div>
+</div>

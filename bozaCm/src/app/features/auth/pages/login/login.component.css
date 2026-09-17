@@ -1,0 +1,85 @@
+/* Page entière */
+.login-page {
+  background-color: #f8f9fb;
+}
+
+/* Carte blanche du formulaire */
+.login-card {
+  width: 420px;         /* à vérifier Figma */
+  border-radius: 12px;  /* à vérifier Figma */
+  overflow: hidden;
+  background: #fff;
+}
+
+/* Bandeau bleu du header */
+.header {
+  background-color: #011844;
+  padding: 32px;
+}
+
+/* Titre "BozaCM" */
+.header h1 {
+  font-family: 'Liberation Serif', 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 36px;
+  letter-spacing: -0.75px;
+}
+
+/* Sous-titre du header */
+.header small {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  opacity: 0.75;
+}
+
+/* Onglets Administrateur / Client */
+
+.tabs {
+  margin: 32px;
+}
+
+.tabs .tab-btn {
+  padding: 12px 0;
+  border: none;
+  background: #f1f2f5;  /* à vérifier Figma */
+  font-weight: 600;
+  color: #6b7280;
+  width: 185px;
+  height: 48px;
+  padding-top: 13.5px;
+  padding-right: 16px;
+  padding-bottom: 14.5px;
+  padding-left: 16px;
+
+  
+}
+
+.tabs .tab-btn.active {
+  background: #8BF1E6;
+  color: #0f1e3d;
+  font-weight: 700;
+  border-radius: 8px;  /* à vérifier Figma */
+}
+
+/* Champs email/mot de passe (surcharge de .form-control Bootstrap) */
+/* .form-control {
+  background: #___;
+  border-radius: ___;
+} */
+
+/* Bouton Se connecter */
+.btn-navy {
+  background-color: #0f1e3d;  /* à vérifier Figma */
+  color: #fff;
+  border-radius: 8px;          /* à vérifier Figma */
+}
+
+.btn-navy:hover {
+  background-color: #17284d;
+  color: #fff;
+}
+
+/* Lien "Pas de compte ? S'inscrire" */
