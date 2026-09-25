@@ -25,22 +25,22 @@
     <article class="carte-statistique">
       <div class="icone-statistique bleu"><i class="bi bi-signpost-split"></i></div>
       <div>
-        <span>Total trajets</span>
-        <strong>{{ trajets.length }}</strong>
+        <div class="libelle-statistique">Total trajets</div>
+        <div class="valeur-statistique">{{ trajets.length }}</div>
       </div>
     </article>
     <article class="carte-statistique">
       <div class="icone-statistique vert"><i class="bi bi-bus-front"></i></div>
       <div>
-        <span>Types transport</span>
-        <strong>{{ nombreTypes }}</strong>
+        <div class="libelle-statistique">Types transport</div>
+        <div class="valeur-statistique">{{ nombreTypes }}</div>
       </div>
     </article>
     <article class="carte-statistique">
       <div class="icone-statistique orange"><i class="bi bi-buildings"></i></div>
       <div>
-        <span>Villes desservies</span>
-        <strong>{{ nombreVilles }}</strong>
+        <div class="libelle-statistique">Villes desservies</div>
+        <div class="valeur-statistique">{{ nombreVilles }}</div>
       </div>
     </article>
   </div>
@@ -105,7 +105,7 @@
     <aside class="aperçu-rapide">
       <h2>Aperçu rapide</h2>
       <p>Le réseau BozaCM s'étend progressivement. Prochainement, de nouvelles liaisons seront ajoutées.</p>
-      <div class="activite"><span>Activité mensuelle</span><strong>+12%</strong></div>
+      <div class="activite"><div>Activité mensuelle</div><div>+12%</div></div>
       <div class="barre-activite"><span></span></div>
     </aside>
   </div>

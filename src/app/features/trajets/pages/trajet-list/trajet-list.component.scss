@@ -17,9 +17,7 @@
   text-transform: uppercase;
 }
 
-h1, h2, p { margin-top: 0; }
-
-h1 {
+.titre-principal {
   margin-bottom: 0;
   font-size: 24px;
   color: #0b2550;
@@ -80,7 +78,7 @@ h1 {
   background: #fff;
 }
 
-.carte-statistique span {
+.libelle-statistique {
   display: block;
   margin-bottom: 5px;
   color: #91a0b8;
@@ -90,7 +88,7 @@ h1 {
   text-transform: uppercase;
 }
 
-.carte-statistique strong { font-size: 22px; color: #0b2550; }
+.valeur-statistique { font-size: 22px; color: #0b2550; font-weight: 700; }
 
 .icone-statistique {
   display: grid;
@@ -119,7 +117,7 @@ h1 {
   padding: 18px 20px;
 }
 
-.titre-bloc h2 { margin: 0; font-size: 15px; color: #0b2550; }
+.titre-liste { margin: 0; font-size: 15px; color: #0b2550; font-weight: 700; }
 .outils-bloc { gap: 14px; }
 .outils-bloc button, .bouton-action, .pagination button {
   border: 0;
@@ -172,7 +170,11 @@ td i { margin-right: 8px; color: #a4b1c1; }
   min-height: 200px;
   padding: 20px;
   border-radius: 12px;
-  background: #fff;
+  background-color: #fff;
+  background-image: url('/images/cameroun.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   overflow: hidden;
 }
 
@@ -210,10 +212,10 @@ td i { margin-right: 8px; color: #a4b1c1; }
   box-shadow: 0 8px 16px rgba(11, 37, 80, .15);
 }
 
-.aperçu-rapide h2 { margin-bottom: 12px; font-size: 17px; }
-.aperçu-rapide p { color: #b8c8df; font-size: 11px; line-height: 1.6; }
+.titre-apercu { margin-bottom: 12px; font-size: 17px; font-weight: 700; }
+.texte-apercu { color: #b8c8df; font-size: 11px; line-height: 1.6; }
 .activite { display: flex; justify-content: space-between; color: #92a8c7; font-size: 9px; text-transform: uppercase; }
-.activite strong { color: #54d8d0; }
+.activite div:last-child { color: #54d8d0; }
 .barre-activite { height: 4px; margin-top: 10px; border-radius: 4px; background: #304a70; }
 .barre-activite span { display: block; width: 72%; height: 100%; border-radius: inherit; background: #54d8d0; }
 
