@@ -10,7 +10,7 @@ import { TrajetService } from '../../../../services/trajet/trajet.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './trajet-form.component.html',
-  styleUrl: './trajet-form.component.scss'
+  styleUrls: ['./trajet-form.component.scss']
 })
 export class TrajetFormComponent implements OnInit {
   trajet: TrajetRequestDTO = { depart: '', arrivee: '' };
