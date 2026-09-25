@@ -1,0 +1,65 @@
+.conteneur-formulaire-trajet {
+  width: 100%;
+  max-width: 620px;
+  margin: 30px auto;
+  padding: 28px;
+  border: 1px solid #edf0f4;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(18, 35, 63, .04);
+}
+
+.en-tete-formulaire-trajet { margin-bottom: 24px; }
+.sur-titre {
+  margin-bottom: 6px;
+  color: #007f78;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.titre-formulaire { margin-bottom: 8px; color: #0b2550; font-size: 24px; font-weight: 700; }
+.description-formulaire { color: #8a9ab2; font-size: 13px; }
+
+.champs-trajet { display: grid; gap: 18px; }
+.groupe-champ-trajet { display: grid; gap: 8px; }
+.libelle-champ { color: #33435a; font-size: 12px; font-weight: 700; }
+.groupe-champ-trajet input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #dfe5ec;
+  border-radius: 7px;
+  outline: none;
+  color: #12233f;
+  background: #f8fafc;
+  font-size: 14px;
+}
+.groupe-champ-trajet input:focus { border-color: #007f78; background: #fff; }
+
+.message-erreur {
+  margin-bottom: 18px;
+  padding: 11px 13px;
+  border-radius: 7px;
+  color: #b42318;
+  background: #fff1f0;
+  font-size: 13px;
+}
+.actions-formulaire-trajet {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid #edf0f4;
+}
+.bouton-annuler, .bouton-enregistrer {
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+.bouton-annuler { border: 1px solid #dfe5ec; color: #53647b; background: #fff; }
+.bouton-enregistrer { color: #fff; background: #007f78; }
+.bouton-enregistrer.desactive { opacity: .6; pointer-events: none; }
