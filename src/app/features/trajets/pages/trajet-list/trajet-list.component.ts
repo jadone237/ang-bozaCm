@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { TrajetResponseDTO } from '../../../../models/trajet.model';
 import { TrajetService } from '../../../../services/trajet/trajet.service';
 
 @Component({
   selector: 'app-trajet-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './trajet-list.component.html',
   styleUrl: './trajet-list.component.scss'
 })
