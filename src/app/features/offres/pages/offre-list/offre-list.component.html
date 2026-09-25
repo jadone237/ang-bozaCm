@@ -1,0 +1,93 @@
+<div class="page-offres">
+  <div class="entete-offres">
+    <div>
+      <div class="surtitre-offres">Administration</div>
+      <div class="titre-offres">Gestion des offres</div>
+      <div class="description-offres">Supervisez et mettez à jour les options de voyage en temps réel.</div>
+    </div>
+    <div class="actions-haut-offres">
+      <div class="recherche-offres">
+        <i class="bi bi-search"></i>
+        <input type="search" [(ngModel)]="recherche" (input)="filtrerOffres()" placeholder="Rechercher une offre...">
+      </div>
+      <div class="bouton-nouvelle-offre" routerLink="/ajouter-offre"><i class="bi bi-plus-lg"></i> Nouvelle offre</div>
+      <i class="bi bi-bell icone-entete"></i>
+      <i class="bi bi-gear icone-entete"></i>
+    </div>
+  </div>
+
+  @if (successMessage) { <div class="message-succes">{{ successMessage }}</div> }
+  @if (errorMessage && !isLoading) { <div class="message-erreur">{{ errorMessage }}</div> }
+
+  <div class="statistiques-offres">
+    <div class="carte-offre-stat">
+      <div><div class="libelle-stat-offre">Total offres</div><div class="valeur-stat-offre">{{ offres.length }}</div></div>
+      <div class="icone-stat-offre bleu"><i class="bi bi-card-list"></i></div>
+    </div>
+    <div class="carte-offre-stat">
+      <div><div class="libelle-stat-offre">Offres actives</div><div class="valeur-stat-offre">{{ nombreOffresActives }}</div></div>
+      <div class="icone-stat-offre vert"><i class="bi bi-calendar-check"></i></div>
+    </div>
+    <div class="carte-offre-stat">
+      <div><div class="libelle-stat-offre">Places restantes</div><div class="valeur-stat-offre">{{ nombrePlacesDisponibles }}</div></div>
+      <div class="icone-stat-offre cyan"><i class="bi bi-person-seat"></i></div>
+    </div>
+    <div class="carte-offre-stat carte-stat-accent">
+      <div><div class="libelle-stat-offre">Agences partenaires</div><div class="valeur-stat-offre">{{ agences.length }}</div></div>
+      <div class="icone-stat-offre cyan"><i class="bi bi-building"></i></div>
+    </div>
+  </div>
+
+  <div class="tableau-offres">
+    <div class="barre-filtres-offres">
+      <div class="filtres-gauche">
+        <div class="filtre-ville">
+          <i class="bi bi-geo-alt"></i>
+          <input type="search" [(ngModel)]="recherche" (input)="filtrerOffres()" placeholder="Toutes les villes">
+        </div>
+        <select [(ngModel)]="agenceSelectionnee" (change)="filtrerOffres()">
+          <option value="">Toutes les agences</option>
+          @for (agence of agences; track agence.id) {
+            <option [value]="agence.id">{{ agence.nom }}</option>
+          }
+        </select>
+      </div>
+      <div class="compteur-offres">Affichage de {{ offresFiltrees.length ? (page - 1) * taillePage + 1 : 0 }}–{{ (page - 1) * taillePage + offresAffichees.length }} sur {{ offresFiltrees.length }} offres</div>
+    </div>
+
+    <div class="entete-ligne-offre">
+      <div>Titre</div><div>Type</div><div>Agence</div><div>Prix</div><div>Places</div><div>Actions</div>
+    </div>
+
+    @if (isLoading) {
+      <div class="etat-offres">Chargement des offres...</div>
+    } @else if (offresAffichees.length === 0) {
+      <div class="etat-offres">Aucune offre trouvée.</div>
+    } @else {
+      @for (offre of offresAffichees; track offre.id) {
+        <div class="ligne-offre">
+          <div class="titre-cellule-offre">
+            <div>{{ offre.titre }}</div>
+            <small>{{ offre.trajet.depart }} → {{ offre.trajet.arrivee }} · {{ offre.dateDepart | date:'short' }}</small>
+          </div>
+          <div class="type-offre"><i class="bi bi-signpost-2"></i></div>
+          <div>{{ offre.agence.nom }}</div>
+          <div class="prix-offre">{{ offre.prix | number:'1.0-0' }} F</div>
+          <div><span class="badge-places" [class.peu-places]="offre.placesDisponibles <= 2">{{ offre.placesDisponibles }} dispo</span></div>
+          <div class="actions-ligne-offre">
+            <div class="action-offre" [routerLink]="['/modifier-offre', offre.id]" title="Modifier"><i class="bi bi-pencil"></i></div>
+            <div class="action-offre supprimer" (click)="supprimerOffre(offre.id)" title="Supprimer"><i class="bi bi-trash"></i></div>
+          </div>
+        </div>
+      }
+    }
+
+    <div class="pagination-offres">
+      <div class="bouton-page" [class.page-desactive]="page === 1" (click)="changerPage(page - 1)"><i class="bi bi-chevron-left"></i></div>
+      @for (numero of [].constructor(nombrePages); track $index) {
+        <div class="bouton-page" [class.page-active]="page === $index + 1" (click)="changerPage($index + 1)">{{ $index + 1 }}</div>
+      }
+      <div class="bouton-page" [class.page-desactive]="page === nombrePages" (click)="changerPage(page + 1)"><i class="bi bi-chevron-right"></i></div>
+    </div>
+  </div>
+</div>
