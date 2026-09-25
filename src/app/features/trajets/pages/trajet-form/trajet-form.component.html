@@ -1,0 +1,34 @@
+<div class="conteneur-formulaire-trajet">
+  <div class="en-tete-formulaire-trajet">
+    <div class="sur-titre">Gestion des trajets</div>
+    <div class="titre-formulaire">{{ isEditMode ? 'Modifier le trajet' : 'Nouveau trajet' }}</div>
+    <div class="description-formulaire">Renseignez le départ et l’arrivée du trajet.</div>
+  </div>
+
+  @if (errorMessage) {
+    <div class="message-erreur">{{ errorMessage }}</div>
+  }
+
+  <div class="champs-trajet">
+    <div class="groupe-champ-trajet">
+      <div class="libelle-champ">Ville de départ</div>
+      <input type="text" [(ngModel)]="trajet.depart" placeholder="Ex : Douala">
+    </div>
+
+    <div class="groupe-champ-trajet">
+      <div class="libelle-champ">Ville d’arrivée</div>
+      <input type="text" [(ngModel)]="trajet.arrivee" placeholder="Ex : Yaoundé">
+    </div>
+  </div>
+
+  <div class="actions-formulaire-trajet">
+    <div class="bouton-annuler" routerLink="/trajets">Annuler</div>
+    <div
+      class="bouton-enregistrer"
+      [class.desactive]="isSubmitting"
+      (click)="enregistrer()"
+    >
+      {{ isSubmitting ? 'Enregistrement...' : (isEditMode ? 'Modifier le trajet' : 'Créer le trajet') }}
+    </div>
+  </div>
+</div>
