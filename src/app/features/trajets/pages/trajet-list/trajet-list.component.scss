@@ -59,6 +59,15 @@
 }
 
 .bouton-principal i { margin-right: 6px; }
+.bouton-principal { cursor: pointer; }
+.message-succes {
+  margin-bottom: 20px;
+  padding: 11px 13px;
+  border-radius: 7px;
+  color: #15803d;
+  background: #f0fdf4;
+  font-size: 13px;
+}
 
 .cartes-statistiques {
   display: grid;
@@ -158,6 +167,9 @@ td i { margin-right: 8px; color: #a4b1c1; }
 .pagination button:disabled { opacity: .35; cursor: default; }
 .etat-tableau { padding: 35px 20px; margin: 0; text-align: center; color: #8a9ab2; }
 .erreur { color: #c0392b; }
+.actions-trajet { display: flex; gap: 10px; }
+.bouton-action { cursor: pointer; }
+.bouton-action.supprimer { color: #c0392b; }
 
 .bas-page {
   display: grid;

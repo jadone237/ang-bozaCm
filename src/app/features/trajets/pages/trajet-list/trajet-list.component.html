@@ -14,12 +14,16 @@
           placeholder="Rechercher un trajet..."
         />
         </div>
-        <div class="bouton-principal">
+        <div class="bouton-principal" routerLink="/ajouter-trajet">
         <i class="bi bi-plus-lg"></i>
         Nouveau trajet
         </div>
     </div>
   </div>
+
+  @if (successMessage) {
+    <div class="message-succes">{{ successMessage }}</div>
+  }
 
   <div class="cartes-statistiques">
     <article class="carte-statistique">
@@ -77,7 +81,12 @@
                 <td><i class="bi bi-geo-alt"></i>{{ trajet.arrivee }}</td>
                 <td><span class="badge-trajet">{{ trajet.type || 'Non défini' }}</span></td>
                 <td>{{ trajet.duree || 'Non définie' }}</td>
-                <td><button type="button" class="bouton-action" title="Actions"><i class="bi bi-three-dots"></i></button></td>
+                <td>
+                  <div class="actions-trajet">
+                    <div class="bouton-action" [routerLink]="['/modifier-trajet', trajet.id]" title="Modifier"><i class="bi bi-pencil"></i></div>
+                    <div class="bouton-action supprimer" (click)="supprimerTrajet(trajet.id)" title="Supprimer"><i class="bi bi-trash"></i></div>
+                  </div>
+                </td>
               </tr>
             } @empty {
               <tr><td colspan="5" class="etat-tableau">Aucun trajet trouvé.</td></tr>

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TrajetResponseDTO } from '../../../../models/trajet.model';
 import { TrajetService } from '../../../../services/trajet/trajet.service';
 
 @Component({
   selector: 'app-trajet-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './trajet-list.component.html',
   styleUrl: './trajet-list.component.scss'
 })
@@ -21,10 +22,19 @@ export class TrajetListComponent implements OnInit {
   totalPages = 1;
   isLoading = true;
   errorMessage = '';
+  successMessage = '';
 
-  constructor(private trajetService: TrajetService) {}
+  constructor(
+    private trajetService: TrajetService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.successMessage = this.route.snapshot.queryParamMap.get('message') || '';
+    if (this.successMessage) {
+      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+    }
     this.chargerTrajets();
   }
 
@@ -62,6 +72,20 @@ export class TrajetListComponent implements OnInit {
     }
     this.page = page;
     this.mettreAJourAffichage();
+  }
+
+  supprimerTrajet(id: number): void {
+    if (!confirm('Voulez-vous vraiment supprimer ce trajet ?')) {
+      return;
+    }
+
+    this.trajetService.deleteTrajet(id).subscribe({
+      next: () => {
+        this.successMessage = 'Trajet supprimé avec succès.';
+        this.chargerTrajets();
+      },
+      error: (error) => this.errorMessage = error.message
+    });
   }
 
   get nombreVilles(): number {
