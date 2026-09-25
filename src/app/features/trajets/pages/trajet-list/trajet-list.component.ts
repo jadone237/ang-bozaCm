@@ -14,6 +14,7 @@ import { TrajetService } from '../../../../services/trajet/trajet.service';
 })
 export class TrajetListComponent implements OnInit {
   trajets: TrajetResponseDTO[] = [];
+  resultatsRecherche: TrajetResponseDTO[] = [];
   trajetsAffiches: TrajetResponseDTO[] = [];
   recherche = '';
   page = 1;
@@ -33,6 +34,7 @@ export class TrajetListComponent implements OnInit {
     this.trajetService.getAllTrajets().subscribe({
       next: (trajets) => {
         this.trajets = trajets;
+        this.resultatsRecherche = trajets;
         this.page = 1;
         this.mettreAJourAffichage();
         this.isLoading = false;
@@ -46,7 +48,7 @@ export class TrajetListComponent implements OnInit {
 
   rechercherTrajets(): void {
     const terme = this.recherche.trim().toLowerCase();
-    this.trajetsAffiches = this.trajets.filter((trajet) =>
+    this.resultatsRecherche = this.trajets.filter((trajet) =>
       !terme ||
       trajet.depart.toLowerCase().includes(terme) ||
       trajet.arrivee.toLowerCase().includes(terme)
@@ -77,9 +79,7 @@ export class TrajetListComponent implements OnInit {
   private mettreAJourAffichage(): void {
     const debut = (this.page - 1) * this.taillePage;
     const fin = debut + this.taillePage;
-    this.totalPages = Math.max(1, Math.ceil(this.trajetsAffiches.length / this.taillePage));
-    this.trajetsAffiches = this.trajetsAffiches.length || this.recherche.trim()
-      ? this.trajetsAffiches.slice(debut, fin)
-      : this.trajets.slice(debut, fin);
+    this.totalPages = Math.max(1, Math.ceil(this.resultatsRecherche.length / this.taillePage));
+    this.trajetsAffiches = this.resultatsRecherche.slice(debut, fin);
   }
 }
