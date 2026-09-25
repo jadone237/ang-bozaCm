@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TrajetRequestDTO } from '../../../../models/trajet.model';
 import { TrajetService } from '../../../../services/trajet/trajet.service';
 
 @Component({
   selector: 'app-trajet-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './trajet-form.component.html',
   styleUrl: './trajet-form.component.scss'
 })
@@ -59,6 +59,10 @@ export class TrajetFormComponent implements OnInit {
         this.isSubmitting = false;
       }
     });
+  }
+
+  annuler(): void {
+    this.router.navigate(['/trajets']);
   }
 
   private chargerTrajet(): void {

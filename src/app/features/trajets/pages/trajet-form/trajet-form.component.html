@@ -22,7 +22,7 @@
   </div>
 
   <div class="actions-formulaire-trajet">
-    <div class="bouton-annuler" routerLink="/trajets">Annuler</div>
+    <div class="bouton-annuler" (click)="annuler()">Annuler</div>
     <div
       class="bouton-enregistrer"
       [class.desactive]="isSubmitting"
