@@ -88,6 +88,11 @@
     font-size: 14px;
     cursor: pointer;
 
+    &.desactive {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
     &:hover {
         background-color: #f8fafc;
     }
