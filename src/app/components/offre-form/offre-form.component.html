@@ -1,0 +1,63 @@
+<div class="offre-form-page">
+  <div class="offre-form-card">
+    <div class="offre-form-header">
+      <div class="offre-form-eyebrow">Gestion des offres</div>
+      <div class="offre-form-title">{{ isEditMode ? 'Modifier l’offre' : 'Nouvelle offre' }}</div>
+      <div class="offre-form-description">Complétez les informations de l’offre de voyage.</div>
+    </div>
+
+    @if (errorMessage) { <div class="offre-form-error">{{ errorMessage }}</div> }
+
+    <div class="offre-form-fields">
+      <div class="offre-field">
+        <div class="offre-field-label">Titre de l’offre</div>
+        <input type="text" [(ngModel)]="offre.titre" placeholder="Ex. VIP Yaoundé → Douala">
+      </div>
+      <div class="offre-field">
+        <div class="offre-field-label">Description</div>
+        <textarea [(ngModel)]="offre.description" placeholder="Détails de l’offre"></textarea>
+      </div>
+      <div class="offre-field-row">
+        <div class="offre-field">
+          <div class="offre-field-label">Prix (F CFA)</div>
+          <input type="number" min="1" [(ngModel)]="offre.prix" placeholder="5000">
+        </div>
+        <div class="offre-field">
+          <div class="offre-field-label">Date de départ</div>
+          <input type="date" [(ngModel)]="offre.dateDepart">
+        </div>
+      </div>
+      <div class="offre-field-row">
+        <div class="offre-field">
+          <div class="offre-field-label">Nombre de places</div>
+          <input type="number" min="1" [(ngModel)]="offre.nombrePlaces">
+        </div>
+        <div class="offre-field">
+          <div class="offre-field-label">Agence partenaire</div>
+          <select [(ngModel)]="offre.agenceId">
+            <option [ngValue]="0">Choisir une agence</option>
+            @for (agence of agences; track agence.id) {
+              <option [ngValue]="agence.id">{{ agence.nom }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="offre-field">
+        <div class="offre-field-label">Trajet</div>
+        <select [(ngModel)]="offre.trajetId">
+          <option [ngValue]="0">Choisir un trajet</option>
+          @for (trajet of trajets; track trajet.id) {
+            <option [ngValue]="trajet.id">{{ trajet.villeDepart }} → {{ trajet.villeArrivee }} · {{ trajet.duree }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="offre-form-actions">
+      <div class="offre-cancel" (click)="annuler()">Annuler</div>
+      <div class="offre-save" [class.offre-save-disabled]="isSubmitting" (click)="enregistrer()">
+        {{ isSubmitting ? 'Enregistrement...' : (isEditMode ? 'Enregistrer les modifications' : 'Créer l’offre') }}
+      </div>
+    </div>
+  </div>
+</div>

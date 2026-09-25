@@ -19,6 +19,7 @@ export class OffreListComponent implements OnInit {
   offresFiltrees: OffreResponseDTO[] = [];
   agences: AgenceResponseDTO[] = [];
   recherche = '';
+  villeSelectionnee = '';
   agenceSelectionnee = '';
   page = 1;
   readonly taillePage = 4;
@@ -64,11 +65,12 @@ export class OffreListComponent implements OnInit {
         offre.titre,
         offre.description,
         offre.agence.nom,
-        offre.trajet.depart,
-        offre.trajet.arrivee
+        offre.trajet.villeDepart,
+        offre.trajet.villeArrivee
       ].some((valeur) => valeur?.toLocaleLowerCase().includes(terme));
+      const correspondVille = !this.villeSelectionnee || offre.trajet.villeDepart === this.villeSelectionnee;
       const correspondAgence = !this.agenceSelectionnee || offre.agence.id === Number(this.agenceSelectionnee);
-      return correspondAuTexte && correspondAgence;
+      return correspondAuTexte && correspondVille && correspondAgence;
     });
     this.page = 1;
   }
@@ -80,6 +82,14 @@ export class OffreListComponent implements OnInit {
 
   get nombrePages(): number {
     return Math.max(1, Math.ceil(this.offresFiltrees.length / this.taillePage));
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.nombrePages }, (_, index) => index + 1);
+  }
+
+  get villesDepart(): string[] {
+    return [...new Set(this.offres.map((offre) => offre.trajet.villeDepart))].sort();
   }
 
   get nombreOffresActives(): number {

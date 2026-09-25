@@ -41,10 +41,12 @@
   <div class="tableau-offres">
     <div class="barre-filtres-offres">
       <div class="filtres-gauche">
-        <div class="filtre-ville">
-          <i class="bi bi-geo-alt"></i>
-          <input type="search" [(ngModel)]="recherche" (input)="filtrerOffres()" placeholder="Toutes les villes">
-        </div>
+        <select [(ngModel)]="villeSelectionnee" (change)="filtrerOffres()">
+          <option value="">Toutes les villes</option>
+          @for (ville of villesDepart; track ville) {
+            <option [value]="ville">{{ ville }}</option>
+          }
+        </select>
         <select [(ngModel)]="agenceSelectionnee" (change)="filtrerOffres()">
           <option value="">Toutes les agences</option>
           @for (agence of agences; track agence.id) {
@@ -68,7 +70,7 @@
         <div class="ligne-offre">
           <div class="titre-cellule-offre">
             <div>{{ offre.titre }}</div>
-            <small>{{ offre.trajet.depart }} → {{ offre.trajet.arrivee }} · {{ offre.dateDepart | date:'short' }}</small>
+            <small>{{ offre.trajet.villeDepart }} → {{ offre.trajet.villeArrivee }} · {{ offre.dateDepart | date:'short' }}</small>
           </div>
           <div class="type-offre"><i class="bi bi-signpost-2"></i></div>
           <div>{{ offre.agence.nom }}</div>
@@ -84,8 +86,8 @@
 
     <div class="pagination-offres">
       <div class="bouton-page" [class.page-desactive]="page === 1" (click)="changerPage(page - 1)"><i class="bi bi-chevron-left"></i></div>
-      @for (numero of [].constructor(nombrePages); track $index) {
-        <div class="bouton-page" [class.page-active]="page === $index + 1" (click)="changerPage($index + 1)">{{ $index + 1 }}</div>
+      @for (numero of pages; track numero) {
+        <div class="bouton-page" [class.page-active]="page === numero" (click)="changerPage(numero)">{{ numero }}</div>
       }
       <div class="bouton-page" [class.page-desactive]="page === nombrePages" (click)="changerPage(page + 1)"><i class="bi bi-chevron-right"></i></div>
     </div>
