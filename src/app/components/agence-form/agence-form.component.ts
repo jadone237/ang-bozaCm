@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AgenceRequestDTO } from '../../models/agence.model';
 import { AgenceService } from '../../services/agence/agence.service';
@@ -8,25 +8,32 @@ import { AgenceService } from '../../services/agence/agence.service';
 @Component({
   selector: 'app-agence-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './agence-form.component.html',
   styleUrls: ['./agence-form.component.scss']
 })
 export class AgenceFormComponent implements OnInit {
-  agenceForm: AgenceRequestDTO = this.nouvelleAgence();
+  agenceForm!: FormGroup;
   isEditMode = false;
   agenceId?: number;
   isSubmitting = false;
   errorMessage = '';
 
   constructor(
+    private fb: FormBuilder,
     private agenceService: AgenceService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Création du formulaire et de ses règles
+    this.agenceForm = this.fb.group({
+      nom: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      telephone: ['', [Validators.required]],
+      adresse: ['', [Validators.required]]
+    });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode = true;
@@ -35,15 +42,17 @@ export class AgenceFormComponent implements OnInit {
     }
   }
 
+  get f() {
+    return this.agenceForm.controls;
+  }
+
   soumettreFormulaire(): void {
-    if (!this.agenceForm.nom.trim() || this.agenceForm.nom.trim().length < 3 ||
-        !this.agenceForm.email.trim() || !this.agenceForm.telephone.trim() ||
-        !this.agenceForm.adresse.trim()) {
-      this.errorMessage = 'Veuillez renseigner correctement tous les champs obligatoires.';
+    if (this.agenceForm.invalid) {
+      this.agenceForm.markAllAsTouched();
       return;
     }
 
-    const donneesAgence: AgenceRequestDTO = this.agenceForm;
+    const donneesAgence: AgenceRequestDTO = this.agenceForm.value;
     this.isSubmitting = true;
     this.errorMessage = '';
 
@@ -72,12 +81,8 @@ export class AgenceFormComponent implements OnInit {
     }
 
     this.agenceService.getAgenceById(this.agenceId).subscribe({
-      next: (agence) => this.agenceForm = { ...agence },
+      next: (agence) => this.agenceForm.patchValue(agence),
       error: (err) => this.errorMessage = err.message
     });
-  }
-
-  private nouvelleAgence(): AgenceRequestDTO {
-    return { nom: '', email: '', telephone: '', adresse: '' };
   }
 }
