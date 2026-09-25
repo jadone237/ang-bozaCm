@@ -9,13 +9,13 @@
     <div class="message-erreur">{{ errorMessage }}</div>
   }
 
-  <form [formGroup]="agenceForm" (ngSubmit)="soumettreFormulaire()" class="formulaire-simple">
+  <form #formulaire="ngForm" (ngSubmit)="soumettreFormulaire(formulaire)" class="formulaire-simple" novalidate>
     
     <!-- Champ Nom -->
     <div class="groupe-champ">
       <label for="nom">Nom de l'agence</label>
-      <input type="text" id="nom" formControlName="nom" placeholder="Ex: Transcam Voyages">
-      @if (f['nom'].touched && f['nom'].invalid) {
+      <input type="text" id="nom" name="nom" [(ngModel)]="agenceForm.nom" required minlength="3" #nom="ngModel" placeholder="Ex: Transcam Voyages">
+      @if (nom.touched && nom.invalid) {
         <span class="message-erreur">Le nom de l'agence est requis (minimum 3 caractères).</span>
       }
     </div>
@@ -23,8 +23,8 @@
     <!-- Champ Email -->
     <div class="groupe-champ">
       <label for="email">Email professionnel</label>
-      <input type="email" id="email" formControlName="email" placeholder="Ex: contact@transcam.cm">
-      @if (f['email'].touched && f['email'].invalid) {
+      <input type="email" id="email" name="email" [(ngModel)]="agenceForm.email" required email #email="ngModel" placeholder="Ex: contact@transcam.cm">
+      @if (email.touched && email.invalid) {
         <span class="message-erreur">Veuillez entrer une adresse email valide.</span>
       }
     </div>
@@ -32,8 +32,8 @@
     <!-- Champ Téléphone -->
     <div class="groupe-champ">
       <label for="telephone">Téléphone</label>
-      <input type="text" id="telephone" formControlName="telephone" placeholder="Ex: 691234567">
-      @if (f['telephone'].touched && f['telephone'].invalid) {
+      <input type="text" id="telephone" name="telephone" [(ngModel)]="agenceForm.telephone" required #telephone="ngModel" placeholder="Ex: 691234567">
+      @if (telephone.touched && telephone.invalid) {
         <span class="message-erreur">Le numéro de téléphone est obligatoire.</span>
       }
     </div>
@@ -41,8 +41,8 @@
     <!-- Champ Adresse -->
     <div class="groupe-champ">
       <label for="adresse">Adresse</label>
-      <input type="text" id="adresse" formControlName="adresse" placeholder="Ex: Akwa, Douala">
-      @if (f['adresse'].touched && f['adresse'].invalid) {
+      <input type="text" id="adresse" name="adresse" [(ngModel)]="agenceForm.adresse" required #adresse="ngModel" placeholder="Ex: Akwa, Douala">
+      @if (adresse.touched && adresse.invalid) {
         <span class="message-erreur">L'adresse de l'agence est obligatoire.</span>
       }
     </div>
