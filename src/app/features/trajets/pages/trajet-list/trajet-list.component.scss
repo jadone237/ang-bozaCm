@@ -1,7 +1,3 @@
-.page-trajets {
-  color: #12233f;
-}
-
 .entete-trajets {
   display: flex;
   justify-content: space-between;
@@ -58,7 +54,6 @@
   font-weight: 700;
 }
 
-.bouton-principal i { margin-right: 6px; }
 .bouton-principal { cursor: pointer; }
 .message-succes {
   margin-bottom: 20px;
@@ -128,7 +123,7 @@
 
 .titre-liste { margin: 0; font-size: 15px; color: #0b2550; font-weight: 700; }
 .outils-bloc { gap: 14px; }
-.outils-bloc button, .bouton-action, .pagination button {
+.bouton-action, .pagination button {
   border: 0;
   background: transparent;
   color: #8a9ab2;
