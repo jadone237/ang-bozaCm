@@ -19,7 +19,7 @@
   color: #0b2550;
 }
 
-.actions-entete, .recherche-trajet, .outils-bloc, .pagination {
+.actions-entete, .recherche-trajet, .pagination {
   display: flex;
   align-items: center;
 }
@@ -122,7 +122,6 @@
 }
 
 .titre-liste { margin: 0; font-size: 15px; color: #0b2550; font-weight: 700; }
-.outils-bloc { gap: 14px; }
 .bouton-action, .pagination button {
   border: 0;
   background: transparent;
