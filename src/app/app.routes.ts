@@ -4,6 +4,8 @@ import { AgenceListComponent } from './features/agences/pages/agence-list/agence
 import { AgenceFormComponent } from './components/agence-form/agence-form.component';
 import { TrajetListComponent } from './features/trajets/pages/trajet-list/trajet-list.component';
 import { TrajetFormComponent } from './components/trajet-form/trajet-form.component';
+import { OffreListComponent } from './features/offres/pages/offre-list/offre-list.component';
+import { OffreFormComponent } from './components/offre-form/offre-form.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +14,9 @@ export const routes: Routes = [
     children: [
       { path: 'agences', component: AgenceListComponent },
       { path: 'trajets', component: TrajetListComponent },
+      { path: 'offres', component: OffreListComponent },
+      { path: 'ajouter-offre', component: OffreFormComponent },
+      { path: 'modifier-offre/:id', component: OffreFormComponent },
       { path: 'ajouter-trajet', component: TrajetFormComponent },
       { path: 'modifier-trajet/:id', component: TrajetFormComponent },
       { path: 'ajouter-agence', component: AgenceFormComponent },
