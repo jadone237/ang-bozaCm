@@ -93,11 +93,8 @@ export class TrajetListComponent implements OnInit {
     return new Set(this.trajets.flatMap((trajet) => [trajet.villeDepart, trajet.villeArrivee])).size;
   }
 
-  get nombreTypes(): number {
-    const types = this.trajets
-      .map((trajet) => trajet.type)
-      .filter((type): type is string => Boolean(type));
-    return new Set(types).size;
+  get nombreDureesRenseignees(): number {
+    return this.trajets.filter((trajet) => trajet.duree.trim().length > 0).length;
   }
 
   private mettreAJourAffichage(): void {
