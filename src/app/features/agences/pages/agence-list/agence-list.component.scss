@@ -242,3 +242,81 @@
     border-radius: 8px;
     font-size: 14px;
 }
+
+.actions-agence {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    cursor: pointer;
+}
+
+.pagination-agences {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 18px;
+    color: #8a9ab2;
+    font-size: 12px;
+}
+
+.boutons-pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bouton-page {
+    display: flex;
+    min-width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    background: #fff;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.bouton-page.page-active {
+    border-color: #0f766e;
+    background: #0f766e;
+    color: #fff;
+}
+
+.bouton-page.page-desactive {
+    opacity: .45;
+    pointer-events: none;
+}
+
+@media (max-width: 700px) {
+    .pagination-agences {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .grille-statistiques {
+        grid-template-columns: 1fr;
+    }
+
+    .barre-recherche-titre {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .champ-recherche {
+        width: 100%;
+    }
+}

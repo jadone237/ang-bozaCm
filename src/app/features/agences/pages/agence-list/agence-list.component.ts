@@ -16,6 +16,8 @@ export class AgenceListComponent implements OnInit {
   agences: AgenceResponseDTO[] = [];
   filteredAgences: AgenceResponseDTO[] = [];
   searchTerm: string = '';
+  page = 1;
+  readonly pageSize = 4;
   totalOffres = 0;
   totalReservations = 0;
 
@@ -43,6 +45,7 @@ export class AgenceListComponent implements OnInit {
       next: (data) => {
         this.agences = data;
         this.filteredAgences = data;
+        this.page = 1;
         this.isLoading = false;
       },
       error: (err) => {
@@ -54,6 +57,7 @@ export class AgenceListComponent implements OnInit {
 
   onSearch(): void {
     const term = this.searchTerm.trim().toLowerCase();
+    this.page = 1;
 
     if (!term) {
       this.filteredAgences = this.agences;
@@ -65,6 +69,25 @@ export class AgenceListComponent implements OnInit {
       agence.email.toLowerCase().includes(term) ||
       agence.telephone.toLowerCase().includes(term)
     );
+  }
+
+  get agencesAffichees(): AgenceResponseDTO[] {
+    const debut = (this.page - 1) * this.pageSize;
+    return this.filteredAgences.slice(debut, debut + this.pageSize);
+  }
+
+  get nombrePages(): number {
+    return Math.max(1, Math.ceil(this.filteredAgences.length / this.pageSize));
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.nombrePages }, (_, index) => index + 1);
+  }
+
+  changerPage(nouvellePage: number): void {
+    if (nouvellePage >= 1 && nouvellePage <= this.nombrePages) {
+      this.page = nouvellePage;
+    }
   }
 
   getInitials(name: string): string {
