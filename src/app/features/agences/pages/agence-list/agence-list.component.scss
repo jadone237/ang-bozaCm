@@ -7,7 +7,6 @@
     width: 100%;
 }
 
-/* En-tête */
 .en-tete-page {
     display: flex;
     justify-content: space-between;
@@ -92,7 +91,6 @@
     }
 }
 
-/* Conteneur Tableau */
 .conteneur-tableau {
     background: #FFFFFF;
     border: 0.5px solid #e2e8f0;
@@ -115,7 +113,6 @@
     }
 }
 
-/* Champ de recherche */
 .champ-recherche {
     position: relative;
     width: 280px;
@@ -145,7 +142,6 @@
     }
 }
 
-/* Tableau simple */
 .tableau-simple {
     width: 100%;
     border-collapse: collapse;
@@ -197,7 +193,6 @@
     text-align: right;
 }
 
-/* Boutons d'action du tableau */
 .btn-action {
     padding: 6px 12px;
     border-radius: 6px;
@@ -247,16 +242,6 @@
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-}
-
-.btn-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    cursor: pointer;
 }
 
 .pagination-agences {
