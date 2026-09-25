@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AgenceRequestDTO } from '../../models/agence.model';
 import { AgenceService } from '../../services/agence/agence.service';
@@ -35,9 +35,11 @@ export class AgenceFormComponent implements OnInit {
     }
   }
 
-  soumettreFormulaire(formulaire: NgForm): void {
-    if (formulaire.invalid) {
-      formulaire.control.markAllAsTouched();
+  soumettreFormulaire(): void {
+    if (!this.agenceForm.nom.trim() || this.agenceForm.nom.trim().length < 3 ||
+        !this.agenceForm.email.trim() || !this.agenceForm.telephone.trim() ||
+        !this.agenceForm.adresse.trim()) {
+      this.errorMessage = 'Veuillez renseigner correctement tous les champs obligatoires.';
       return;
     }
 
