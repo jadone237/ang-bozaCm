@@ -1,0 +1,109 @@
+/* ==========================================
+   1. STRUCTURE GLOBALE DU DASHBOARD
+   ========================================== */
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8fafc;
+}
+
+/* ==========================================
+   2. BARRE LATÉRALE (SIDEBAR)
+   ========================================== */
+.sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background-color: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 16px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.02);
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    font-size: 14px;
+    color: #64748b;
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: #f1f5f9;
+        color: #0f766e;
+    }
+
+    &.active {
+        background-color: #f0fdf4;
+        color: #0d9488;
+        font-weight: 600;
+    }
+}
+
+/* ==========================================
+   3. CONTENU PRINCIPAL & CLASSES UTILITAIRES
+   ========================================== */
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+    overflow-x: auto;
+    max-width: calc(100vw - 260px);
+}
+
+/* Boutons et badges spécifiques au thème */
+.btn-teal {
+    background-color: #0d9488;
+    border-color: #0d9488;
+    color: #ffffff;
+
+    &:hover {
+        background-color: #0f766e;
+        border-color: #0f766e;
+    }
+}
+
+.bg-light-teal { 
+    background-color: #ccfbf1; 
+}
+
+.text-teal { 
+    color: #0d9488; 
+}
+
+.fs-7 { 
+    font-size: 0.85rem; 
+}
+
+.fs-8 { 
+    font-size: 0.75rem; 
+}
+
+.tracking-wider { 
+    letter-spacing: 0.05em; 
+}
+
+/* ==========================================
+   4. GESTION DU RESPONSIVE
+   ========================================== */
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100% !important;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .main-content {
+        max-width: 100% !important;
+        padding: 15px !important;
+    }
+}

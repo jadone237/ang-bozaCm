@@ -1,0 +1,106 @@
+<!-- SECTION GLOBALE DE GESTION DES AGENCES -->
+<div class="section-agence">
+  
+  <!-- EN-TÊTE AVEC TITRE ET BOUTON NOUVELLE AGENCE -->
+  <div class="en-tete-page">
+    <h2>Gestion des agences</h2>
+    <button class="btn-nouvelle-agence" routerLink="/ajouter-agence">
+    <i class="fa-solid fa-plus"></i> Nouvelle agence
+  </button>
+  </div>
+
+  @if (successMessage) {
+    <div class="alerte-succes">{{ successMessage }}</div>
+  }
+
+  <div class="grille-statistiques">
+    <div class="carte-stat">
+      <div>
+        <span class="titre-stat">Total Agences</span>
+        <h3>{{ agences.length }}</h3>
+        <p class="texte-tendance">Agences enregistrées</p>
+      </div>
+      <div class="icone-stat"><i class="fa-solid fa-briefcase"></i></div>
+    </div>
+
+    <div class="carte-stat">
+      <div>
+        <span class="titre-stat">Offres publiées</span>
+        <h3>{{ totalOffres }}</h3>
+        <p class="texte-tendance vert">Actives</p>
+      </div>
+      <div class="icone-stat"><i class="fa-solid fa-bullhorn"></i></div>
+    </div>
+
+    <div class="carte-stat">
+      <div>
+        <span class="titre-stat">Réservations</span>
+        <h3>{{ totalReservations }}</h3>
+        <p class="texte-tendance orange">En cours</p>
+      </div>
+      <div class="icone-stat"><i class="fa-regular fa-calendar"></i></div>
+    </div>
+  </div>
+
+  <!-- CONTENEUR DU TABLEAU ET DE LA RECHERCHE -->
+  <div class="conteneur-tableau">
+    
+    <div class="barre-recherche-titre">
+      <h3>Liste des agences partenaires</h3>
+      <div class="champ-recherche">
+        <i class="fa-solid fa-search"></i>
+        <input 
+          type="text" 
+          placeholder="Rechercher une agence..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+        />
+      </div>
+    </div>
+
+    @if (isLoading) {
+      <div class="texte-centre">Chargement...</div>
+    } @else if (errorMessage) {
+      <div class="alerte-erreur">{{ errorMessage }}</div>
+    } @else {
+      <table class="tableau-simple">
+        <thead>
+          <tr>
+            <th>Nom de l'agence</th>
+            <th>Email professionnel</th>
+            <th>Téléphone</th>
+            <th>Adresse</th>
+            <th class="aligne-droite">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (agence of filteredAgences; track agence.id) {
+            <tr>
+              <td>
+                <div class="ligne-nom">
+                  <div class="avatar-cercle">{{ getInitials(agence.nom) }}</div>
+                  <span class="gras">{{ agence.nom }}</span>
+                </div>
+              </td>
+              <td>{{ agence.email }}</td>
+              <td>{{ agence.telephone }}</td>
+              <td>{{ agence.adresse }}</td>
+              <td class="aligne-droite">
+                <button class="btn-action modifier" [routerLink]="['/modifier-agence', agence.id]">
+                  <i class="fa-solid fa-pen"></i> Modifier
+                </button>
+                <button class="btn-action supprimer" (click)="deleteAgence(agence.id)">
+                  <i class="fa-solid fa-trash"></i> Supprimer
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="texte-centre vide">Aucune agence trouvée.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

@@ -1,0 +1,109 @@
+.conteneur-formulaire {
+    background: #FFFFFF;
+    border: 0.5px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.en-tete-formulaire {
+    margin-bottom: 25px;
+
+    h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #181818;
+        margin: 0 0 5px 0;
+    }
+
+    p {
+        font-size: 14px;
+        color: #626060;
+        margin: 0;
+    }
+}
+
+.formulaire-simple {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.groupe-champ {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #181818;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background-color: #f8fafc;
+        font-size: 14px;
+        color: #181818;
+        outline: none;
+        transition: border-color 0.2s;
+
+        &:focus {
+            background-color: #ffffff;
+            border-color: #0f766e;
+        }
+    }
+}
+
+.message-erreur {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 2px;
+}
+
+.actions-formulaire {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-annuler {
+    background-color: transparent;
+    color: #626060;
+    border: 1px solid #e2e8f0;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f8fafc;
+    }
+}
+
+.btn-valider {
+    background-color: #0f766e;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #0d9488;
+    }
+}

@@ -1,0 +1,244 @@
+
+
+.section-agence {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+}
+
+/* En-tête */
+.en-tete-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+        font-size: 26px;
+        font-weight: 700;
+        color: #181818;
+        margin: 0;
+    }
+}
+
+.btn-nouvelle-agence {
+    background-color: #0f766e;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &:hover {
+        background-color: #0d9488;
+    }
+}
+
+.grille-statistiques {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.carte-stat {
+    background: #FFFFFF;
+    border: 0.5px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+
+    .titre-stat {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #626060;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+    }
+
+    h3 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #181818;
+        margin: 5px 0;
+    }
+
+    .texte-tendance {
+        font-size: 12px;
+        color: #0f766e;
+        margin: 0;
+
+        &.vert { color: #10b981; }
+        &.orange { color: #f59e0b; }
+    }
+
+    .icone-stat {
+        width: 40px;
+        height: 40px;
+        background-color: #f0fdf4;
+        color: #0f766e;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+}
+
+/* Conteneur Tableau */
+.conteneur-tableau {
+    background: #FFFFFF;
+    border: 0.5px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.barre-recherche-titre {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #181818;
+        margin: 0;
+    }
+}
+
+/* Champ de recherche */
+.champ-recherche {
+    position: relative;
+    width: 280px;
+
+    i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #626060;
+        font-size: 13px;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px 12px 8px 36px;
+        border-radius: 20px;
+        border: 0.5px solid #e2e8f0;
+        background-color: #f8fafc;
+        font-size: 14px;
+        outline: none;
+
+        &:focus {
+            background-color: #ffffff;
+            border-color: #0f766e;
+        }
+    }
+}
+
+/* Tableau simple */
+.tableau-simple {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+
+    th {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #626060;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e2e8f0;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+    }
+
+    td {
+        padding: 16px 0;
+        color: #181818;
+        font-size: 14px;
+        border-bottom: 1px solid #f8fafc;
+        vertical-align: middle;
+    }
+}
+
+.ligne-nom {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-cercle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #f0fdf4;
+    color: #0f766e;
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gras {
+    font-weight: 700;
+}
+
+.aligne-droite {
+    text-align: right;
+}
+
+/* Boutons d'action du tableau */
+.btn-action {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    margin-left: 6px;
+
+    &.modifier {
+        background-color: #f1f5f9;
+        color: #304966;
+        &:hover { background-color: #e2e8f0; }
+    }
+
+    &.supprimer {
+        background-color: #fef2f2;
+        color: #dc2626;
+        &:hover { background-color: #fee2e2; }
+    }
+}
+
+.texte-centre {
+    text-align: center;
+    padding: 30px;
+    color: #626060;
+    &.vide { font-style: italic; }
+}
+
+.alerte-erreur {
+    background-color: #fef2f2;
+    color: #dc2626;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.alerte-succes {
+    background-color: #f0fdf4;
+    color: #15803d;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}

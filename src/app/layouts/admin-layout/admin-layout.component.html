@@ -1,0 +1,85 @@
+<div class="dashboard-wrapper">
+  
+  <!-- ================= 1. LA BARRE LATÉRALE (SIDEBAR) ================= -->
+  <aside class="sidebar bg-white border-end d-flex flex-column justify-content-between p-3">
+    <div>
+      <!-- Logo et Titre de l'application -->
+      <div class="mb-4 px-2">
+        <h4 class="fw-bold text-dark mb-0">Cameroun Voyage</h4>
+        <p class="fw-bold text-muted mb-0">Plateforme d'administration</p>
+      </div>
+
+      <!-- Menu de navigation principal -->
+      <ul class="nav nav-pills flex-column gap-1">
+        <li class="nav-item">
+          <a routerLink="/agences" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+            <i class="bi bi-building"></i> Agences
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/trajets" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+            <i class="bi bi-signpost-split"></i> Trajets
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/offres" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+            <i class="bi bi-tag"></i> Offres
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/reservations" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+            <i class="bi bi-journal-text"></i> Réservations
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/statistiques" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+            <i class="bi bi-bar-chart"></i> Statistiques
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/rapports" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+            <i class="bi bi-file-earmark-text"></i> Rapports
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Pied de la sidebar (Paramètres et Déconnexion) -->
+    <div class="border-top pt-3">
+      <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2 mb-2">
+        <i class="bi bi-gear"></i> Paramètres
+      </a>
+      <a href="#" class="nav-link text-danger d-flex align-items-center gap-2">
+        <i class="bi bi-box-arrow-right"></i> Déconnexion
+      </a>
+    </div>
+  </aside>
+
+  <!-- ================= 2. CONTENU PRINCIPAL ================= -->
+  <main class="main-content flex-grow-1 p-4">
+    
+    <!-- En-tête supérieur (Header fixe) -->
+    <header class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold text-dark fs-4 mb-0"></h2>
+      
+      <div class="d-flex align-items-center gap-3">
+        <!-- Boutons de notification / aide -->
+        <button class="btn btn-light text-secondary border rounded-circle p-2"><i class="bi bi-bell"></i></button>
+        <button class="btn btn-light text-secondary border rounded-circle p-2"><i class="bi bi-question-circle"></i></button>
+        
+        <!-- Profil Administrateur -->
+        <div class="d-flex align-items-center gap-2 border-start ps-3">
+          <div class="text-end">
+            <h6 class="mb-0 fw-bold fs-7">Administrateur</h6>
+            <small class="text-muted fs-8">Super Admin</small>
+          </div>
+          <img src="https://ui-avatars.com/api/?name=Admin+Voyage&background=0d9488&color=fff" class="rounded-circle" width="38" height="38" alt="Avatar">
+        </div>
+      </div>
+    </header>
+
+    <!-- ZONE D'INJECTION DYNAMIQUE (C'est ici que s'affichera Agences, Trajets, Offres...) -->
+    <router-outlet></router-outlet>
+    
+  </main>
+</div>
