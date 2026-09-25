@@ -1,11 +1,11 @@
 <section class="page-trajets">
   <div class="entete-trajets">
     <div>
-      <p class="sur-titre">Administration</p>
-      <h1>Gestion des trajets</h1>
+        <div class="sur-titre">Administration</div>
+        <div class="titre-principal">Gestion des trajets</div>
     </div>
     <div class="actions-entete">
-      <label class="recherche-trajet">
+        <div class="recherche-trajet">
         <i class="bi bi-search"></i>
         <input
           type="search"
@@ -13,11 +13,11 @@
           (input)="rechercherTrajets()"
           placeholder="Rechercher un trajet..."
         />
-      </label>
-      <button type="button" class="bouton-principal">
+        </div>
+        <div class="bouton-principal">
         <i class="bi bi-plus-lg"></i>
         Nouveau trajet
-      </button>
+        </div>
     </div>
   </div>
 
@@ -55,9 +55,9 @@
     </div>
 
     @if (isLoading) {
-      <p class="etat-tableau">Chargement des trajets...</p>
+        <div class="etat-tableau">Chargement des trajets...</div>
     } @else if (errorMessage) {
-      <p class="etat-tableau erreur">{{ errorMessage }}</p>
+        <div class="etat-tableau erreur">{{ errorMessage }}</div>
     } @else {
       <div class="tableau-responsive">
         <table>
