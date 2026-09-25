@@ -1,14 +1,14 @@
 export interface TrajetRequestDTO {
-  depart: string;
-  arrivee: string;
+  villeDepart: string;
+  villeArrivee: string;
+  duree: string;
 }
 
 export interface TrajetResponseDTO {
   id: number;
-  depart: string;
-  arrivee: string;
-  type?: string;
-  duree?: string;
+  villeDepart: string;
+  villeArrivee: string;
+  duree: string;
 }
 
 export interface PageResponseDTO<T> {

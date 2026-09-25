@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TrajetRequestDTO } from '../../../../models/trajet.model';
-import { TrajetService } from '../../../../services/trajet/trajet.service';
+import { TrajetRequestDTO } from '../../models/trajet.model';
+import { TrajetService } from '../../services/trajet/trajet.service';
 
 @Component({
   selector: 'app-trajet-form',
@@ -13,7 +13,11 @@ import { TrajetService } from '../../../../services/trajet/trajet.service';
   styleUrls: ['./trajet-form.component.scss']
 })
 export class TrajetFormComponent implements OnInit {
-  trajet: TrajetRequestDTO = { depart: '', arrivee: '' };
+  trajet: TrajetRequestDTO = {
+    villeDepart: '',
+    villeArrivee: '',
+    duree: ''
+  };
   trajetId?: number;
   isEditMode = false;
   isSubmitting = false;
@@ -35,16 +39,28 @@ export class TrajetFormComponent implements OnInit {
   }
 
   enregistrer(): void {
-    if (!this.trajet.depart.trim() || !this.trajet.arrivee.trim()) {
-      this.errorMessage = 'Le départ et l’arrivée sont obligatoires.';
+    if (!this.trajet.villeDepart.trim() ||
+        !this.trajet.villeArrivee.trim() ||
+        !this.trajet.duree.trim()) {
+      this.errorMessage = 'Le départ, l’arrivée et la durée sont obligatoires.';
+      return;
+    }
+
+    if (this.trajet.villeDepart.trim().toLowerCase() === this.trajet.villeArrivee.trim().toLowerCase()) {
+      this.errorMessage = 'La ville de départ et la ville d’arrivée doivent être différentes.';
       return;
     }
 
     this.isSubmitting = true;
     this.errorMessage = '';
+    const donnees = {
+      villeDepart: this.trajet.villeDepart.trim(),
+      villeArrivee: this.trajet.villeArrivee.trim(),
+      duree: this.trajet.duree.trim()
+    };
     const requete = this.isEditMode && this.trajetId !== undefined
-      ? this.trajetService.updateTrajet(this.trajetId, this.trajet)
-      : this.trajetService.createTrajet(this.trajet);
+      ? this.trajetService.updateTrajet(this.trajetId, donnees)
+      : this.trajetService.createTrajet(donnees);
 
     requete.subscribe({
       next: () => this.router.navigate(['/trajets'], {
@@ -73,8 +89,9 @@ export class TrajetFormComponent implements OnInit {
     this.trajetService.getTrajetById(this.trajetId).subscribe({
       next: (trajet) => {
         this.trajet = {
-          depart: trajet.depart,
-          arrivee: trajet.arrivee
+          villeDepart: trajet.villeDepart,
+          villeArrivee: trajet.villeArrivee,
+          duree: trajet.duree
         };
       },
       error: (error) => this.errorMessage = error.message

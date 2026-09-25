@@ -59,8 +59,9 @@ export class TrajetListComponent implements OnInit {
     const terme = this.recherche.trim().toLowerCase();
     this.resultatsRecherche = this.trajets.filter((trajet) =>
       !terme ||
-      trajet.depart.toLowerCase().includes(terme) ||
-      trajet.arrivee.toLowerCase().includes(terme)
+      trajet.villeDepart.toLowerCase().includes(terme) ||
+      trajet.villeArrivee.toLowerCase().includes(terme) ||
+      trajet.duree.toLowerCase().includes(terme)
     );
     this.page = 1;
     this.mettreAJourAffichage();
@@ -89,7 +90,7 @@ export class TrajetListComponent implements OnInit {
   }
 
   get nombreVilles(): number {
-    return new Set(this.trajets.flatMap((trajet) => [trajet.depart, trajet.arrivee])).size;
+    return new Set(this.trajets.flatMap((trajet) => [trajet.villeDepart, trajet.villeArrivee])).size;
   }
 
   get nombreTypes(): number {

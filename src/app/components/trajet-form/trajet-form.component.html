@@ -2,7 +2,7 @@
   <div class="en-tete-formulaire-trajet">
     <div class="sur-titre">Gestion des trajets</div>
     <div class="titre-formulaire">{{ isEditMode ? 'Modifier le trajet' : 'Nouveau trajet' }}</div>
-    <div class="description-formulaire">Renseignez le départ et l’arrivée du trajet.</div>
+    <div class="description-formulaire">Renseignez le départ, l’arrivée et la durée du trajet.</div>
   </div>
 
   @if (errorMessage) {
@@ -12,12 +12,17 @@
   <div class="champs-trajet">
     <div class="groupe-champ-trajet">
       <div class="libelle-champ">Ville de départ</div>
-      <input type="text" [(ngModel)]="trajet.depart" placeholder="Ex : Douala">
+      <input type="text" [(ngModel)]="trajet.villeDepart" placeholder="Ex : Douala">
     </div>
 
     <div class="groupe-champ-trajet">
       <div class="libelle-champ">Ville d’arrivée</div>
-      <input type="text" [(ngModel)]="trajet.arrivee" placeholder="Ex : Yaoundé">
+      <input type="text" [(ngModel)]="trajet.villeArrivee" placeholder="Ex : Yaoundé">
+    </div>
+
+    <div class="groupe-champ-trajet">
+      <div class="libelle-champ">Durée du trajet</div>
+      <input type="text" [(ngModel)]="trajet.duree" placeholder="Ex : 3h 45min">
     </div>
   </div>
 

@@ -77,10 +77,10 @@
           <tbody>
             @for (trajet of trajetsAffiches; track trajet.id) {
               <tr>
-                <td><i class="bi bi-geo-alt"></i>{{ trajet.depart }}</td>
-                <td><i class="bi bi-geo-alt"></i>{{ trajet.arrivee }}</td>
-                <td><span class="badge-trajet">{{ trajet.type || 'Non défini' }}</span></td>
-                <td>{{ trajet.duree || 'Non définie' }}</td>
+                <td><i class="bi bi-geo-alt"></i>{{ trajet.villeDepart }}</td>
+                <td><i class="bi bi-geo-alt"></i>{{ trajet.villeArrivee }}</td>
+                <td><span class="badge-trajet">Trajet</span></td>
+                <td>{{ trajet.duree }}</td>
                 <td>
                   <div class="actions-trajet">
                     <div class="bouton-action" [routerLink]="['/modifier-trajet', trajet.id]" title="Modifier"><i class="bi bi-pencil"></i></div>

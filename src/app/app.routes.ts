@@ -3,7 +3,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { AgenceListComponent } from './features/agences/pages/agence-list/agence-list.component';
 import { AgenceFormComponent } from './components/agence-form/agence-form.component';
 import { TrajetListComponent } from './features/trajets/pages/trajet-list/trajet-list.component';
-import { TrajetFormComponent } from './features/trajets/pages/trajet-form/trajet-form.component';
+import { TrajetFormComponent } from './components/trajet-form/trajet-form.component';
 
 export const routes: Routes = [
   {
