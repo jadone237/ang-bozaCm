@@ -5,3 +5,29 @@
 * {
   font-family: 'Liberation Serif', 'Times New Roman', Times, serif !important;
 }
+
+.section-agence,
+.page-trajets,
+.page-offres {
+  font-family: 'Liberation Serif', 'Times New Roman', Times, serif !important;
+}
+
+.page-trajets { color: #181818; }
+.page-trajets .sur-titre,
+.page-trajets .libelle-statistique,
+.page-trajets th,
+.page-trajets .pied-tableau,
+.page-trajets .activite { color: #626060; }
+.page-trajets .titre-principal { font-size: 26px; font-weight: 700; color: #181818; }
+.page-trajets .recherche-trajet input,
+.page-trajets .bouton-principal,
+.page-trajets td,
+.page-trajets .texte-apercu { font-size: 14px; }
+.page-trajets .titre-liste { font-size: 18px; color: #181818; }
+.page-trajets .libelle-statistique,
+.page-trajets th { font-size: 12px; }
+.page-trajets td { color: #181818; }
+.page-trajets .pied-tableau,
+.page-trajets .activite,
+.page-trajets .badge-trajet { font-size: 12px; }
+.page-trajets .texte-apercu { color: #e0e7ef; }
