@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import {
-  PageResponseDTO,
-  TrajetRequestDTO,
-  TrajetResponseDTO
-} from '../../models/trajet.model';
+import { PageResponseDTO, TrajetRequestDTO, TrajetResponseDTO } from '../models/trajet.model';
+
 
 @Injectable({
   providedIn: 'root'

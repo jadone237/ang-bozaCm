@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AgenceResponseDTO } from '../../../../models/agence.model';
-import { AgenceService } from '../../../../services/agence/agence.service';
+import { AgenceResponseDTO } from '../../models/agence.model';
+import { AgenceService } from '../../data-access/agence.service';
 
 @Component({
   selector: 'app-agence-list',

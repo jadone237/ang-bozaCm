@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import { AgenceRequestDTO, AgenceResponseDTO, StatistiquesAgenceDetailDTO } from '../../models/agence.model';
+import { AgenceRequestDTO, AgenceResponseDTO, StatistiquesAgenceDetailDTO } from '../models/agence.model';
 
 @Injectable({
   providedIn: 'root'

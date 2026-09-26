@@ -1,5 +1,5 @@
-import { AgenceResponseDTO } from './agence.model';
-import { TrajetResponseDTO } from './trajet.model';
+import { AgenceResponseDTO } from '../../agences/models/agence.model';
+import { TrajetResponseDTO } from '../../trajets/models/trajet.model';
 
 export interface OffreRequestDTO {
   titre: string;

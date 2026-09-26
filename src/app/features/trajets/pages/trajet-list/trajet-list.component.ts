@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { TrajetResponseDTO } from '../../../../models/trajet.model';
-import { TrajetService } from '../../../../services/trajet/trajet.service';
+import { TrajetResponseDTO } from '../../models/trajet.model';
+import { TrajetService } from '../../data-access/trajet.service';
 
 @Component({
   selector: 'app-trajet-list',

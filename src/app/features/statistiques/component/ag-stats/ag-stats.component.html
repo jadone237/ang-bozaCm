@@ -1,0 +1,164 @@
+<div class="page-stats-agence">
+  <!-- En-tête supérieur avec bouton retour, titre et sous-titre -->
+  <div class="entete-stats">
+    <div class="titre-section-stats">
+      <div class="navigation-retour " (click)="retourListe()">
+        <i class="bi bi-arrow-left"></i> Retour aux agences
+      </div>
+      <h1>Statistiques des agences</h1>
+      @if (stats) {
+        <div class="sous-titre-agence-actuelle">
+          <span>{{ stats.agenceNom }}</span> · {{ stats.agenceAdresse }} · Rang #{{ stats.rang }}
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (errorMessage) {
+    <div class="message-erreur">{{ errorMessage }}</div>
+  }
+
+  @if (isLoading) {
+    <div class="etat-chargement">Chargement des données statistiques en cours...</div>
+  } @else if (stats) {
+    <!-- 4 Cartes d'indicateurs (KPIs) -->
+    <div class="grille-indicateurs">
+      <div class="carte-indicateur carte-indicateur-primaire">
+        <div class="ligne-haut-carte">
+          <div class="icone-indicateur"><i class="bi bi-buildings"></i></div>
+          <span class="badge-progression">Rang #{{ stats.rang }}</span>
+        </div>
+        <div class="libelle-indicateur">CLASSEMENT</div>
+        <div class="valeur-indicateur">{{ stats.rang }}</div>
+      </div>
+
+      <div class="carte-indicateur">
+        <div class="ligne-haut-carte">
+          <div class="icone-indicateur"><i class="bi bi-ticket-perforated"></i></div>
+          <span class="badge-progression">+{{ stats.nombreOffres }} offres</span>
+        </div>
+        <div class="libelle-indicateur">RÉSERVATIONS</div>
+        <div class="valeur-indicateur">{{ stats.nombreReservationsTotal }}</div>
+      </div>
+
+      <div class="carte-indicateur">
+        <div class="ligne-haut-carte">
+          <div class="icone-indicateur"><i class="bi bi-patch-check"></i></div>
+          <span class="badge-taux">{{ stats.tauxConfirmation | number:'1.0-1' }}%</span>
+        </div>
+        <div class="libelle-indicateur">CONFIRMÉES</div>
+        <div class="valeur-indicateur">{{ stats.nombreReservationsConfirmees }}</div>
+      </div>
+
+      <div class="carte-indicateur">
+        <div class="ligne-haut-carte">
+          <div class="icone-indicateur"><i class="bi bi-cash-stack"></i></div>
+          <span class="badge-progression">FCFA</span>
+        </div>
+        <div class="libelle-indicateur">CA (FCFA)</div>
+        <div class="valeur-indicateur">{{ stats.chiffreAffaire | number:'1.0-0' }}</div>
+      </div>
+    </div>
+
+    <!-- Section Centrale : Classement & Barres de progression -->
+    <div class="grille-analyse-principale">
+      <!-- Bloc Classement par CA (Dynamique) -->
+      <div class="panneau-carte panneau-classement">
+        <div class="entete-panneau">
+          <div class="titre-panneau"><i class="bi bi-trophy text-vert"></i> Classement par CA</div>
+          <div class="icone-filigrane"><i class="bi bi-bar-chart"></i></div>
+        </div>
+
+        <div class="liste-classement">
+          @for (item of classement; track item.agenceId) {
+            <div class="item-classement" [class.item-classement-premier]="item.agenceId === stats.agenceId">
+              <div class="badge-rang" [ngClass]="{
+                'premier': item.rang === 1,
+                'second': item.rang === 2,
+                'troisieme': item.rang >= 3
+              }">
+                {{ item.rang }}
+              </div>
+              <div class="details-item-classement">
+                <div class="nom-element">{{ item.agenceNom }}</div>
+                <small class="description-element">{{ item.agenceEmail }}</small>
+              </div>
+              <div class="chiffres-item-classement">
+                <div class="montant-classement">
+                  {{ item.chiffreAffaire | number:'1.0-0' }} <span class="unite-fcfa">FCFA</span>
+                </div>
+                <div [class.taux-vert]="item.tauxConfirmation >= 80" [class.taux-gris]="item.tauxConfirmation < 80">
+                  TAUX: {{ item.tauxConfirmation | number:'1.0-0' }}%
+                </div>
+              </div>
+            </div>
+          } @empty {
+            <div class="etat-vide">Aucun classement disponible.</div>
+          }
+        </div>
+      </div>
+
+      <!-- Bloc Réservations par agence (Dynamique) -->
+      <div class="panneau-carte panneau-reservations">
+        <div class="entete-panneau">
+          <div class="titre-panneau"><i class="bi bi-bar-chart-steps text-vert"></i> Réservations par agence</div>
+          <span class="etiquette-periode">TEMPS RÉEL</span>
+        </div>
+
+        <div class="corps-graphique-barres">
+          @for (item of classement; track item.agenceId) {
+            <div class="ligne-barre-stat">
+              <div class="entete-barre">
+                <span class="label-agence-barre">{{ item.agenceNom }}</span>
+                <span class="score-barre">{{ item.nombreReservationsTotal }}</span>
+              </div>
+              <div class="piste-barre">
+                <div 
+                  class="progression-barre" 
+                  [class.principale]="item.agenceId === stats.agenceId"
+                  [style.width.%]="calculerPourcentage(item.nombreReservationsTotal)">
+                </div>
+              </div>
+            </div>
+          } @empty {
+            <div class="etat-vide">Aucune donnée de réservation.</div>
+          }
+
+          <!-- Graduations X -->
+          <div class="axe-graduations-x">
+            <span>0</span>
+            <span>{{ (maxReservations * 0.25) | number:'1.0-0' }}</span>
+            <span>{{ (maxReservations * 0.5) | number:'1.0-0' }}</span>
+            <span>{{ (maxReservations * 0.75) | number:'1.0-0' }}</span>
+            <span>{{ maxReservations }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Inférieure : Analyse & Fiche Agence -->
+    <div class="grille-analyse-inferieure">
+      <!-- Bannière sombre Analyse de Performance -->
+      <div class="carte-analyse-sombre">
+        <div class="contenu-analyse-sombre">
+          <h2>Analyse de Performance</h2>
+          <p>
+            L'agence <strong>{{ stats.agenceNom }}</strong> enregistre un prix moyen par offre de <strong>{{ stats.prixMoyen | number:'1.0-0' }} FCFA</strong> 
+            (fourchette de {{ stats.prixMin | number:'1.0-0' }} à {{ stats.prixMax | number:'1.0-0' }} FCFA) avec {{ stats.nombreOffres }} offre(s) publiée(s).
+          </p>
+        </div>
+        <div class="filigrane-fleche-croissance"><i class="bi bi-graph-up-arrow"></i></div>
+      </div>
+
+      <!-- Carte Contact Agence -->
+      <div class="carte-meilleur-agent">
+        <div class="cercle-icone-etoile">
+          <i class="bi bi-telephone-inbound"></i>
+        </div>
+        <div class="nom-section-agent">Contact Agence</div>
+        <div class="nom-agent-valeur">{{ stats.agenceTelephone || 'Non renseigné' }}</div>
+        <div class="badge-satisfaction">{{ stats.agenceEmail }}</div>
+      </div>
+    </div>
+  }
+</div>

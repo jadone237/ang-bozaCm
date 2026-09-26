@@ -1,0 +1,473 @@
+.page-stats-agence {
+  padding: 12px 20px 40px;
+  color: #17345e;
+  font-family: 'Liberation Serif', 'Times New Roman', Times, serif !important;
+}
+
+/* En-tête */
+.entete-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.titre-section-stats {
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #0d213f;
+  }
+
+  .sous-titre-agence-actuelle {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #7a8b9e;
+
+    span {
+      color: #007f78;
+      font-weight: 700;
+    }
+  }
+}
+
+.actions-haut-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.barre-recherche-arrondie {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: #edf1f6;
+  color: #8c9ba5;
+  width: 230px;
+
+  input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 12px;
+    width: 100%;
+    color: #17345e;
+  }
+}
+
+.btn-icone-nav {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #72849a;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.avatar-profil {
+  img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+/* Grille 4 Cartes KPI */
+.grille-indicateurs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.carte-indicateur {
+  background: #fff;
+  border: 1px solid #edf0f5;
+  border-radius: 12px;
+  padding: 16px 20px;
+
+  &.carte-indicateur-primaire {
+    border-left: 3px solid #007f78;
+  }
+}
+
+.ligne-haut-carte {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.icone-indicateur {
+  font-size: 18px;
+  color: #1b355a;
+}
+
+.badge-progression {
+  color: #00877a;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.badge-taux {
+  color: #00877a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.libelle-indicateur {
+  color: #8b99ad;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.valeur-indicateur {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0b2247;
+}
+
+/* Grille Principale (Classement & Barres) */
+.grille-analyse-principale {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.panneau-carte {
+  background: #fff;
+  border: 1px solid #edf0f5;
+  border-radius: 14px;
+  padding: 22px 24px;
+}
+
+.entete-panneau {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.titre-panneau {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0e2444;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .text-vert {
+    color: #007f78;
+  }
+}
+
+.icone-filigrane {
+  font-size: 26px;
+  color: #e5ebf3;
+}
+
+.etiquette-periode {
+  font-size: 9px;
+  font-weight: 700;
+  background: #eef3f7;
+  color: #7b8c9e;
+  padding: 5px 9px;
+  border-radius: 12px;
+  letter-spacing: 0.06em;
+}
+
+/* Liste de Classement */
+.liste-classement {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item-classement {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: #f7f9fb;
+  border-radius: 10px;
+
+  &.item-classement-premier {
+    border-left: 3px solid #007f78;
+  }
+}
+
+.badge-rang {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+
+  &.premier {
+    background: #007f78;
+    color: #fff;
+  }
+
+  &.second,
+  &.troisieme {
+    background: #eef2f6;
+    color: #495e79;
+  }
+}
+
+.details-item-classement {
+  flex: 1;
+
+  .nom-element {
+    font-weight: 700;
+    color: #0b2247;
+    font-size: 13px;
+  }
+
+  .description-element {
+    color: #8c9caa;
+    font-size: 11px;
+  }
+}
+
+.chiffres-item-classement {
+  text-align: right;
+
+  .montant-classement {
+    font-weight: 700;
+    color: #0b2247;
+    font-size: 14px;
+
+    .unite-fcfa {
+      font-size: 9px;
+      color: #7a8b9e;
+    }
+  }
+
+  .taux-vert {
+    color: #00877a;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  .taux-gris {
+    color: #8c9ba5;
+    font-size: 9px;
+    font-weight: 700;
+  }
+}
+
+/* Graphique à barres horizontales */
+.corps-graphique-barres {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.ligne-barre-stat {
+  .entete-barre {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 6px;
+
+    .label-agence-barre {
+      color: #17345e;
+    }
+
+    .score-barre {
+      color: #007f78;
+    }
+  }
+
+  .piste-barre {
+    width: 100%;
+    height: 8px;
+    background: #f0f3f6;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .progression-barre {
+    height: 100%;
+    background: #1f365d;
+    border-radius: 6px;
+
+    &.principale {
+      background: #142e56;
+    }
+
+    &.foncee {
+      background: #50688a;
+    }
+  }
+}
+
+.axe-graduations-x {
+  display: flex;
+  justify-content: space-between;
+  color: #9aa9bb;
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+/* Section Inférieure (Bannière sombre & Agent) */
+.grille-analyse-inferieure {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.carte-analyse-sombre {
+  background: #0d2247;
+  color: #fff;
+  border-radius: 14px;
+  padding: 26px 30px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+
+  .contenu-analyse-sombre {
+    position: relative;
+    z-index: 1;
+    max-width: 78%;
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0 0 18px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #b7c7de;
+    }
+  }
+
+  .bouton-rapport {
+    background: #007f78;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 15px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .filigrane-fleche-croissance {
+    position: absolute;
+    right: 18px;
+    bottom: -15px;
+    font-size: 110px;
+    color: rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+  }
+}
+
+.carte-meilleur-agent {
+  background: #f7f9fb;
+  border: 1px solid #edf0f5;
+  border-radius: 14px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  .cercle-icone-etoile {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #e1e7f0;
+    display: grid;
+    place-items: center;
+    color: #007f78;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .nom-section-agent {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0b2247;
+    margin-bottom: 4px;
+  }
+
+  .nom-agent-valeur {
+    font-size: 11px;
+    color: #7b8c9e;
+    margin-bottom: 14px;
+  }
+
+  .badge-satisfaction {
+    background: #e2f4f1;
+    color: #007f78;
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+}
+
+.etat-chargement {
+  padding: 40px;
+  text-align: center;
+  color: #7a8b9e;
+  font-size: 14px;
+}
+
+.navigation-retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #007f78;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+
+  i {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 900px) {
+  .grille-indicateurs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grille-analyse-principale,
+  .grille-analyse-inferieure {
+    grid-template-columns: 1fr;
+  }
+  .entete-stats {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .actions-haut-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

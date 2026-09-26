@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import {
-  OffrePageResponseDTO,
-  OffreRequestDTO,
-  OffreResponseDTO,
-  RechercheOffreDTO
-} from '../../models/offre.model';
+import { OffrePageResponseDTO, OffreRequestDTO, OffreResponseDTO, RechercheOffreDTO } from '../models/offre.model';
+
 
 @Injectable({ providedIn: 'root' })
 export class OffreService {

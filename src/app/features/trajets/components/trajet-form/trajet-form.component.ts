@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TrajetRequestDTO } from '../../models/trajet.model';
-import { TrajetService } from '../../services/trajet/trajet.service';
+import { TrajetService } from '../../data-access/trajet.service';
 
 @Component({
   selector: 'app-trajet-form',

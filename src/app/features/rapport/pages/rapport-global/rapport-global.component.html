@@ -1,0 +1,181 @@
+<div class="page-rapport-global">
+  <!-- En-tête -->
+  <div class="entete-rapport">
+    <div class="titre-bloc">
+      <h1>Rapport global du système</h1>
+      <p class="sous-titre">Vue d'ensemble des activités et performances de la plateforme.</p>
+    </div>
+  </div>
+
+  @if (errorMessage) {
+    <div class="message-erreur">{{ errorMessage }}</div>
+  }
+
+  @if (isLoading) {
+    <div class="etat-chargement">Chargement des données du système...</div>
+  } @else if (rapport) {
+    <!-- Ligne de 6 cartes KPIs -->
+    <div class="grille-kpi-global">
+      <div class="carte-kpi">
+        <div class="icone-kpi"><i class="bi bi-briefcase"></i></div>
+        <div class="libelle-kpi">AGENCES</div>
+        <div class="valeur-kpi">{{ rapport.totalAgences }}</div>
+      </div>
+
+      <div class="carte-kpi">
+        <div class="icone-kpi"><i class="bi bi-airplane"></i></div>
+        <div class="libelle-kpi">TRAJETS</div>
+        <div class="valeur-kpi">{{ rapport.totalTrajets }}</div>
+      </div>
+
+      <div class="carte-kpi">
+        <div class="icone-kpi"><i class="bi bi-tag"></i></div>
+        <div class="libelle-kpi">OFFRES</div>
+        <div class="valeur-kpi">{{ rapport.totalOffres }}</div>
+      </div>
+
+      <div class="carte-kpi">
+        <div class="icone-kpi"><i class="bi bi-ticket-perforated"></i></div>
+        <div class="libelle-kpi">RÉSERVATIONS</div>
+        <div class="valeur-kpi">{{ rapport.totalReservations }}</div>
+      </div>
+
+      <div class="carte-kpi">
+        <div class="icone-kpi vert"><i class="bi bi-patch-check"></i></div>
+        <div class="libelle-kpi">CONFIRMÉES</div>
+        <div class="valeur-kpi">{{ rapport.totalConfirmees }}</div>
+      </div>
+
+      <div class="carte-kpi">
+        <div class="icone-kpi rouge"><i class="bi bi-x-circle"></i></div>
+        <div class="libelle-kpi">ANNULÉES</div>
+        <div class="valeur-kpi">{{ rapport.totalAnnulees }}</div>
+      </div>
+    </div>
+
+    <!-- Section Intermédiaire : Top Performances & Graphique Circulaire -->
+    <div class="grille-intermediaire">
+      <!-- Bloc Top Performances -->
+      <div class="panneau-carte">
+        <div class="entete-panneau">
+          <h2>Top performances</h2>
+          <i class="bi bi-three-dots icone-options"></i>
+        </div>
+
+        <div class="liste-performances">
+          <!-- 1. Offre la plus réservée -->
+          <div class="carte-performance">
+            <div class="icone-perf cyan">
+              <i class="bi bi-star-fill"></i>
+            </div>
+            <div class="details-perf">
+              <div class="label-perf">OFFRE LA PLUS RÉSERVÉE</div>
+              <div class="valeur-perf">{{ rapport.offreLaPlusReservee || 'Aucune offre' }}</div>
+            </div>
+            <div class="indicateur-perf">
+              <div class="nombre-perf">{{ rapport.totalConfirmees }}</div>
+              <small>réservations</small>
+            </div>
+          </div>
+
+          <!-- 2. Agence la plus active -->
+          <div class="carte-performance">
+            <div class="icone-perf marine">
+              <i class="bi bi-buildings-fill"></i>
+            </div>
+            <div class="details-perf">
+              <div class="label-perf">AGENCE LA PLUS ACTIVE</div>
+              <div class="valeur-perf">{{ rapport.agenceLaPlusActive || 'Aucune agence' }}</div>
+            </div>
+            <div class="indicateur-perf">
+              <div class="nombre-perf">{{ rapport.chiffreAffairesTotal | number:'1.0-0' }}</div>
+              <small>FCFA</small>
+            </div>
+          </div>
+
+          <!-- 3. Trajet le plus emprunté -->
+          <div class="carte-performance">
+            <div class="icone-perf gris">
+              <i class="bi bi-signpost-split-fill"></i>
+            </div>
+            <div class="details-perf">
+              <div class="label-perf">TRAJET LE PLUS EMPRUNTÉ</div>
+              <div class="valeur-perf">{{ rapport.trajetLePlusEmprunte || 'Aucun trajet' }}</div>
+            </div>
+            <div class="indicateur-perf">
+              <div class="nombre-perf">{{ rapport.totalReservations }}</div>
+              <small>fois</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloc Taux de Confirmation -->
+      <div class="panneau-carte panneau-taux">
+        <div class="entete-panneau">
+          <h2>Taux de confirmation</h2>
+          <i class="bi bi-info-circle icone-info"></i>
+        </div>
+
+        <div class="contenu-taux">
+          <!-- Graphique circulaire moderne pur CSS via conic-gradient -->
+          <div class="donught-chart" [style.background]="jaugeConique">
+            <div class="donught-centre">
+              <div class="taux-pourcent">{{ rapport.tauxConfirmation | number:'1.0-0' }}%</div>
+              <div class="taux-label">CONFIRMÉ</div>
+            </div>
+          </div>
+
+          <!-- Légende en dessous -->
+          <div class="legende-taux">
+            <div class="item-legende">
+              <div class="info-gauche">
+                <span class="point-legende vert"></span>
+                <span>Confirmé</span>
+              </div>
+              <strong>{{ rapport.tauxConfirmation | number:'1.0-0' }}%</strong>
+            </div>
+
+            <div class="item-legende">
+              <div class="info-gauche">
+                <span class="point-legende orange"></span>
+                <span>En attente</span>
+              </div>
+              <strong>{{ tauxEnAttente }}%</strong>
+            </div>
+
+            <div class="item-legende">
+              <div class="info-gauche">
+                <span class="point-legende rouge"></span>
+                <span>Annulé</span>
+              </div>
+              <strong>{{ tauxAnnulees }}%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bannière Inférieure : Chiffre d'affaires Total -->
+    <div class="banniere-ca-sombre">
+      <div class="info-ca">
+        <div class="label-ca">CHIFFRE D'AFFAIRES TOTAL</div>
+        <div class="valeur-ca">
+          {{ rapport.chiffreAffairesTotal | number:'1.0-0' }} <span class="unite-fcfa">FCFA</span>
+        </div>
+        <div class="mention-confirmation">
+          <i class="bi bi-patch-check"></i> Sur réservations confirmées uniquement
+        </div>
+      </div>
+
+      <div class="actions-banniere">
+        <button class="bouton-export" (click)="exporterBilan()">
+          Exporter le bilan
+        </button>
+        <button class="bouton-details-agences" (click)="allerVersAgences()">
+          Détails par agence
+        </button>
+      </div>
+    </div>
+  }
+</div>

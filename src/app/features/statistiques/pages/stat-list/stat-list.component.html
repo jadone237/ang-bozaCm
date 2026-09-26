@@ -1,0 +1,115 @@
+<div class="page-offres">
+  <div class="entete-offres">
+    <div>
+      <div class="surtitre-offres">Administration</div>
+      <div class="titre-offres">Gestion des agences</div>
+      <div class="description-offres">Supervisez vos agences partenaires, leurs coordonnées et leurs performances.</div>
+    </div>
+    <div class="actions-haut-offres">
+      <div class="recherche-offres">
+        <i class="bi bi-search"></i>
+        <input type="search" [(ngModel)]="recherche" (input)="filtrerAgences()" placeholder="Rechercher une agence...">
+      </div>
+      <div class="bouton-nouvelle-offre" routerLink="/ajouter-agence">
+        <i class="bi bi-plus-lg"></i> Nouvelle agence
+      </div>
+      <i class="bi bi-bell icone-entete"></i>
+      <i class="bi bi-gear icone-entete"></i>
+    </div>
+  </div>
+
+  @if (successMessage) { 
+    <div class="message-succes">{{ successMessage }}</div> 
+  }
+  @if (errorMessage && !isLoading) { 
+    <div class="message-erreur">{{ errorMessage }}</div> 
+  }
+
+  <!-- KPIs récapitulatifs -->
+  <div class="statistiques-offres">
+    <div class="carte-offre-stat carte-stat-accent">
+      <div>
+        <div class="libelle-stat-offre">Total agences</div>
+        <div class="valeur-stat-offre">{{ totalAgences }}</div>
+      </div>
+      <div class="icone-stat-offre cyan"><i class="bi bi-buildings"></i></div>
+    </div>
+    <div class="carte-offre-stat">
+      <div>
+        <div class="libelle-stat-offre">Villes couvertes</div>
+        <div class="valeur-stat-offre">{{ villesDisponibles.length }}</div>
+      </div>
+      <div class="icone-stat-offre bleu"><i class="bi bi-geo-alt"></i></div>
+    </div>
+    <div class="carte-offre-stat">
+      <div>
+        <div class="libelle-stat-offre">Résultats filtrés</div>
+        <div class="valeur-stat-offre">{{ agencesFiltrees.length }}</div>
+      </div>
+      <div class="icone-stat-offre vert"><i class="bi bi-funnel"></i></div>
+    </div>
+  </div>
+
+  <!-- Tableau des agences -->
+  <div class="tableau-offres">
+    <div class="barre-filtres-offres">
+      <div class="filtres-gauche">
+        <select [(ngModel)]="villeSelectionnee" (change)="filtrerAgences()">
+          <option value="">Toutes les villes</option>
+          @for (ville of villesDisponibles; track ville) {
+            <option [value]="ville">{{ ville }}</option>
+          }
+        </select>
+      </div>
+      <div class="compteur-offres">
+        Affichage de {{ agencesFiltrees.length ? (page - 1) * taillePage + 1 : 0 }}–{{ (page - 1) * taillePage + agencesAffichees.length }} sur {{ agencesFiltrees.length }} agences
+      </div>
+    </div>
+
+    <div class="entete-ligne-offre entete-ligne-agence">
+      <div>Agence</div>
+      <div>Ville</div>
+      <div>Téléphone</div>
+      <div>Adresse</div>
+      <div>Statistiques</div>
+    </div>
+
+    @if (isLoading) {
+      <div class="etat-offres">Chargement des agences...</div>
+    } @else if (agencesAffichees.length === 0) {
+      <div class="etat-offres">Aucune agence trouvée.</div>
+    } @else {
+      @for (agence of agencesAffichees; track agence.id) {
+        <div class="ligne-offre ligne-agence">
+          <div class="titre-cellule-offre">
+            <div>{{ agence.nom }}</div>
+            <small>{{ agence.email }}</small>
+          </div>
+          <div>{{ agence.ville || 'Non renseignée' }}</div>
+          <div>{{ agence.telephone }}</div>
+          <div>{{ agence.adresse }}</div>
+          <div>
+            <button class="bouton-stats-agence" (click)="voirStatistiques(agence.id)">
+              <i class="bi bi-bar-chart-line-fill"></i> Voir stats
+            </button>
+          </div>
+        </div>
+      }
+    }
+
+    <!-- Pagination -->
+    <div class="pagination-offres">
+      <div class="bouton-page" [class.page-desactive]="page === 1" (click)="changerPage(page - 1)">
+        <i class="bi bi-chevron-left"></i>
+      </div>
+      @for (numero of pages; track numero) {
+        <div class="bouton-page" [class.page-active]="page === numero" (click)="changerPage(numero)">
+          {{ numero }}
+        </div>
+      }
+      <div class="bouton-page" [class.page-desactive]="page === nombrePages" (click)="changerPage(page + 1)">
+        <i class="bi bi-chevron-right"></i>
+      </div>
+    </div>
+  </div>
+</div>

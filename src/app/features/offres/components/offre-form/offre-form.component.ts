@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AgenceResponseDTO } from '../../models/agence.model';
 import { OffreRequestDTO } from '../../models/offre.model';
-import { TrajetResponseDTO } from '../../models/trajet.model';
-import { AgenceService } from '../../services/agence/agence.service';
-import { OffreService } from '../../services/offre/offre.service';
-import { TrajetService } from '../../services/trajet/trajet.service';
+import { AgenceResponseDTO } from '../../../agences/models/agence.model';
+import { TrajetResponseDTO } from '../../../trajets/models/trajet.model';
+import { OffreService } from '../../data-access/offre.service';
+import { AgenceService } from '../../../agences/data-access/agence.service';
+import { TrajetService } from '../../../trajets/data-access/trajet.service';
 
 @Component({
   selector: 'app-offre-form',

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AgenceResponseDTO } from '../../../../models/agence.model';
-import { OffreResponseDTO } from '../../../../models/offre.model';
-import { AgenceService } from '../../../../services/agence/agence.service';
-import { OffreService } from '../../../../services/offre/offre.service';
+import { OffreResponseDTO } from '../../models/offre.model';
+import { AgenceResponseDTO } from '../../../agences/models/agence.model';
+import { OffreService } from '../../data-access/offre.service';
+import { AgenceService } from '../../../agences/data-access/agence.service';
 
 @Component({
   selector: 'app-offre-list',
@@ -112,7 +112,7 @@ export class OffreListComponent implements OnInit {
         this.successMessage = 'Offre supprimée avec succès.';
         this.chargerOffres();
       },
-      error: (error) => this.errorMessage = error.message
+      error: (error: any) => this.errorMessage = error.message
     });
   }
 }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AgenceRequestDTO } from '../../models/agence.model';
-import { AgenceService } from '../../services/agence/agence.service';
+import { AgenceService } from '../../data-access/agence.service';
 
 @Component({
   selector: 'app-agence-form',
