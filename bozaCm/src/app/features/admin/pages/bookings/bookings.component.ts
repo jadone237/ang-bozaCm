@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -47,11 +47,23 @@ export class BookingsComponent implements OnInit {
     { icon: 'bi-x-circle', iconBg: '#fcebeb', iconColor: '#a32d2d', label: 'ANNULÉES', value: '4', valueColor: '#a32d2d', subtitle: 'Pertes enregistrées', subtitleColor: '#a32d2d' },
   ];
 
-  reservations: Reservation[] = [
+  reservations = signal<Reservation[]>([
     { initiales: 'SA', avatarBg: '#c7d2fe', nom: 'Serge Atangana', offre: 'VIP Ydé -> Dla', typeIcon: 'bi-bus-front', typeLabel: 'BUS', date: '25/03/2026', statut: 'CONFIRMEE' },
     { initiales: 'FM', avatarBg: '#a7f3d0', nom: 'Florence Mvondo', offre: 'Vol Dla -> Garoua', typeIcon: 'bi-airplane', typeLabel: 'AVION', date: '26/03/2026', statut: 'EN_ATTENTE' },
     { initiales: 'EB', avatarBg: '#e5e7eb', nom: 'Estelle Beyala', offre: 'Express Baf -> Bda', typeIcon: 'bi-bus-front', typeLabel: 'BUS', date: '28/03/2026', statut: 'ANNULEE' },
-  ];
+  ]);
+
+  // Filtrage client-side sur les données affichées (le tableau reste en dur, cf. limite déjà connue).
+  filteredReservations = computed(() => {
+    const statut = this.statutFilter();
+    const type = this.typeFilter();
+
+    return this.reservations().filter((r) => {
+      const matchStatut = statut === 'Tous statuts' || this.badgeLabel(r.statut).toLowerCase() === statut.toLowerCase();
+      const matchType = type === 'Tous types' || r.typeLabel.toLowerCase() === type.toLowerCase();
+      return matchStatut && matchType;
+    });
+  });
 
   constructor(private fb: FormBuilder, private reservationService: ReservationAdminService) {
     this.busForm = this.fb.group({
@@ -106,6 +118,25 @@ export class BookingsComponent implements OnInit {
       case 'ANNULEE': return 'ANNULÉE';
       default: return '';
     }
+  }
+
+  // NB : le tableau est en dur (pas de vrai GET /reservations pour l'instant), donc ces actions
+  // ne mettent à jour que l'état local affiché — aucun PATCH backend n'est envoyé. À câbler plus
+  // tard sur un vrai endpoint de changement de statut quand il existera côté API.
+  confirmReservation(cible: Reservation) {
+    this.reservations.update((liste) =>
+      liste.map((r) => (r === cible ? { ...r, statut: 'CONFIRMEE' as const } : r))
+    );
+  }
+
+  cancelReservation(cible: Reservation) {
+    this.reservations.update((liste) =>
+      liste.map((r) => (r === cible ? { ...r, statut: 'ANNULEE' as const } : r))
+    );
+  }
+
+  voirBillet(r: Reservation) {
+    alert(`Billet — ${r.nom} (${r.offre})\nFonctionnalité pas encore branchée au backend.`);
   }
 
   openModal() {
