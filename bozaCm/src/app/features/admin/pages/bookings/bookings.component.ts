@@ -1,8 +1,12 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ReservationAdminService } from '../../services/reservation-admin.service';
+import { RapportService } from '../../../../core/services/rapport.service';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 interface StatCard {
   icon: string; iconBg: string; iconColor: string;
@@ -15,6 +19,8 @@ interface Reservation {
   typeIcon: string; typeLabel: string; date: string;
   statut: 'CONFIRMEE' | 'EN_ATTENTE' | 'ANNULEE';
 }
+
+const AVATAR_COLORS = ['#c7d2fe', '#a7f3d0', '#fbcfe8', '#fde68a', '#bfdbfe'];
 
 @Component({
   selector: 'app-bookings',
@@ -40,18 +46,15 @@ export class BookingsComponent implements OnInit {
   trainForm: FormGroup;
   avionForm: FormGroup;
 
-  stats: StatCard[] = [
-    { icon: 'bi-graph-up', iconBg: '#e6f1fb', iconColor: '#0c447c', label: 'TOTAL', value: '34', valueColor: '#0f1e3d', subtitle: 'Volume global mensuel', subtitleColor: '#6b7280' },
-    { icon: 'bi-check-circle', iconBg: '#e1f5ee', iconColor: '#0f6e56', label: 'CONFIRMÉES', value: '20', valueColor: '#0f6e56', subtitle: '62% du volume total', subtitleColor: '#6b7280' },
-    { icon: 'bi-emoji-neutral', iconBg: '#faeeda', iconColor: '#854f0b', label: 'EN ATTENTE', value: '10', valueColor: '#854f0b', subtitle: 'Nécessite action', subtitleColor: '#b45309' },
-    { icon: 'bi-x-circle', iconBg: '#fcebeb', iconColor: '#a32d2d', label: 'ANNULÉES', value: '4', valueColor: '#a32d2d', subtitle: 'Pertes enregistrées', subtitleColor: '#a32d2d' },
-  ];
+  // Plus aucune donnée en dur : les stats et le tableau ne s'affichent que si le
+  // backend répond réellement (voir ngOnInit). Vide/zéro tant qu'il n'y a rien à charger.
+  stats = signal<StatCard[]>([]);
+  isLoadingStats = signal(true);
+  statsError = signal('');
 
-  reservations = signal<Reservation[]>([
-    { initiales: 'SA', avatarBg: '#c7d2fe', nom: 'Serge Atangana', offre: 'VIP Ydé -> Dla', typeIcon: 'bi-bus-front', typeLabel: 'BUS', date: '25/03/2026', statut: 'CONFIRMEE' },
-    { initiales: 'FM', avatarBg: '#a7f3d0', nom: 'Florence Mvondo', offre: 'Vol Dla -> Garoua', typeIcon: 'bi-airplane', typeLabel: 'AVION', date: '26/03/2026', statut: 'EN_ATTENTE' },
-    { initiales: 'EB', avatarBg: '#e5e7eb', nom: 'Estelle Beyala', offre: 'Express Baf -> Bda', typeIcon: 'bi-bus-front', typeLabel: 'BUS', date: '28/03/2026', statut: 'ANNULEE' },
-  ]);
+  reservations = signal<Reservation[]>([]);
+  isLoadingReservations = signal(true);
+  reservationsError = signal('');
 
   // Filtrage client-side sur les données affichées (le tableau reste en dur, cf. limite déjà connue).
   filteredReservations = computed(() => {
@@ -65,7 +68,12 @@ export class BookingsComponent implements OnInit {
     });
   });
 
-  constructor(private fb: FormBuilder, private reservationService: ReservationAdminService) {
+  constructor(
+    private fb: FormBuilder,
+    private reservationService: ReservationAdminService,
+    private rapportService: RapportService,
+    private authService: AuthService
+  ) {
     this.busForm = this.fb.group({
       clientId: ['', Validators.required],
       offreId: ['', Validators.required],
@@ -100,6 +108,84 @@ export class BookingsComponent implements OnInit {
     this.reservationService.getOffres().subscribe({
       next: (res) => this.offres.set(res),
     });
+
+    this.rapportService.getGlobal().subscribe({
+      next: (rapport) => {
+        this.stats.set(this.mapRapportToStats(rapport));
+        this.isLoadingStats.set(false);
+      },
+      error: () => {
+        this.statsError.set('Statistiques indisponibles pour le moment.');
+        this.isLoadingStats.set(false);
+      },
+    });
+
+    // Pas d'endpoint unifié : bus/train/avion sont 3 contrôleurs séparés. On appelle
+    // les 3 en parallèle et on fusionne. Un échec individuel (catchError → []) ne
+    // bloque pas l'affichage des 2 autres types.
+    forkJoin({
+      bus: this.reservationService.getAllBus().pipe(catchError(() => of([]))),
+      train: this.reservationService.getAllTrain().pipe(catchError(() => of([]))),
+      avion: this.reservationService.getAllAvion().pipe(catchError(() => of([]))),
+    }).subscribe(({ bus, train, avion }) => {
+      const liste = [
+        ...this.extraireListe(bus).map((r: any, i: number) => this.mapReservation(r, i, 'BUS')),
+        ...this.extraireListe(train).map((r: any, i: number) => this.mapReservation(r, i, 'TRAIN')),
+        ...this.extraireListe(avion).map((r: any, i: number) => this.mapReservation(r, i, 'AVION')),
+      ];
+      this.reservations.set(liste);
+      this.isLoadingReservations.set(false);
+    });
+  }
+
+  private extraireListe(res: any): any[] {
+    const liste = res?.data ?? res;
+    return Array.isArray(liste) ? liste : [];
+  }
+
+  // ⚠️ Mapping défensif : noms de champs devinés (non vérifiés contre le vrai DTO
+  // RapportGlobal). Chaque valeur retombe sur 0 si le champ attendu n'existe pas,
+  // plutôt que d'afficher un chiffre inventé.
+  private mapRapportToStats(r: any): StatCard[] {
+    const total = r?.total ?? r?.totalReservations ?? 0;
+    const confirmees = r?.confirmees ?? r?.totalConfirmees ?? 0;
+    const enAttente = r?.enAttente ?? r?.totalEnAttente ?? 0;
+    const annulees = r?.annulees ?? r?.totalAnnulees ?? 0;
+    const pctConfirmees = total > 0 ? Math.round((confirmees / total) * 100) : 0;
+
+    return [
+      { icon: 'bi-graph-up', iconBg: '#e6f1fb', iconColor: '#0c447c', label: 'TOTAL', value: String(total), valueColor: '#0f1e3d', subtitle: 'Volume global', subtitleColor: '#6b7280' },
+      { icon: 'bi-check-circle', iconBg: '#e1f5ee', iconColor: '#0f6e56', label: 'CONFIRMÉES', value: String(confirmees), valueColor: '#0f6e56', subtitle: total > 0 ? `${pctConfirmees}% du volume total` : '—', subtitleColor: '#6b7280' },
+      { icon: 'bi-emoji-neutral', iconBg: '#faeeda', iconColor: '#854f0b', label: 'EN ATTENTE', value: String(enAttente), valueColor: '#854f0b', subtitle: enAttente > 0 ? 'Nécessite action' : '—', subtitleColor: '#b45309' },
+      { icon: 'bi-x-circle', iconBg: '#fcebeb', iconColor: '#a32d2d', label: 'ANNULÉES', value: String(annulees), valueColor: '#a32d2d', subtitle: annulees > 0 ? 'Pertes enregistrées' : '—', subtitleColor: '#a32d2d' },
+    ];
+  }
+
+  // ⚠️ Mapping défensif : noms de champs devinés (non vérifiés contre le vrai DTO
+  // Reservation). À ajuster dès que la forme réelle de /v1/reservations/get_all est connue.
+  // Le type (BUS/TRAIN/AVION) est désormais connu avec certitude — il vient de
+  // l'endpoint d'origine (getAllBus/getAllTrain/getAllAvion), plus besoin de le
+  // deviner dans le corps de la réponse. Seuls les autres champs restent devinés.
+  private mapReservation(r: any, index: number, type: 'BUS' | 'TRAIN' | 'AVION'): Reservation {
+    const nom = r?.clientNom ?? r?.nom ?? r?.client?.nom ?? '';
+    const prenom = r?.clientPrenom ?? r?.prenom ?? r?.client?.prenom ?? '';
+    const nomComplet = `${nom} ${prenom}`.trim() || 'Client inconnu';
+    const initiales = (nom?.[0] ?? '?').toUpperCase() + (prenom?.[0] ?? '').toUpperCase();
+
+    return {
+      initiales,
+      avatarBg: AVATAR_COLORS[index % AVATAR_COLORS.length],
+      nom: nomComplet,
+      offre: r?.offreTitre ?? r?.offre?.titre ?? '—',
+      typeIcon: type === 'AVION' ? 'bi-airplane' : type === 'TRAIN' ? 'bi-train-front' : 'bi-bus-front',
+      typeLabel: type,
+      date: r?.dateReservation ?? r?.date ?? '—',
+      statut: (r?.statut ?? 'EN_ATTENTE') as Reservation['statut'],
+    };
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   badgeClass(statut: string): string {
@@ -179,12 +265,11 @@ export class BookingsComponent implements OnInit {
       offreId: Number(raw.offreId),
     };
 
-    let request$;
-    switch (this.typeTransport()) {
-      case 'BUS': request$ = this.reservationService.createBus(payload); break;
-      case 'TRAIN': request$ = this.reservationService.createTrain(payload); break;
-      case 'AVION': request$ = this.reservationService.createAvion(payload); break;
-    }
+    const request$ = this.typeTransport() === 'BUS'
+      ? this.reservationService.createBus(payload)
+      : this.typeTransport() === 'TRAIN'
+        ? this.reservationService.createTrain(payload)
+        : this.reservationService.createAvion(payload);
 
     request$.subscribe({
       next: () => {

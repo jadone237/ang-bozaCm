@@ -19,7 +19,7 @@
     </nav>
 
     <div class="sidebar-footer">
-      <a class="nav-link-item" routerLink="/login"><i class="bi bi-box-arrow-right"></i> Logout</a>
+      <a class="nav-link-item" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Logout</a>
     </div>
   </aside>
 
@@ -49,17 +49,23 @@
     </div>
 
     <div class="stats-row">
-      @for (stat of stats; track stat.label) {
-        <div class="stat-card">
-          <div class="d-flex justify-content-between align-items-start">
-            <div class="stat-icon" [style.background]="stat.iconBg" [style.color]="stat.iconColor">
-              <i class="bi" [ngClass]="stat.icon"></i>
+      @if (isLoadingStats()) {
+        <p class="text-muted small">Chargement des statistiques...</p>
+      } @else if (statsError()) {
+        <p class="text-danger small">{{ statsError() }}</p>
+      } @else {
+        @for (stat of stats(); track stat.label) {
+          <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="stat-icon" [style.background]="stat.iconBg" [style.color]="stat.iconColor">
+                <i class="bi" [ngClass]="stat.icon"></i>
+              </div>
+              <span class="stat-label">{{ stat.label }}</span>
             </div>
-            <span class="stat-label">{{ stat.label }}</span>
+            <div class="stat-value" [style.color]="stat.valueColor">{{ stat.value }}</div>
+            <div class="stat-sub" [style.color]="stat.subtitleColor">{{ stat.subtitle }}</div>
           </div>
-          <div class="stat-value" [style.color]="stat.valueColor">{{ stat.value }}</div>
-          <div class="stat-sub" [style.color]="stat.subtitleColor">{{ stat.subtitle }}</div>
-        </div>
+        }
       }
     </div>
 
@@ -96,6 +102,11 @@
           </tr>
         </thead>
         <tbody>
+          @if (isLoadingReservations()) {
+            <tr><td colspan="6" class="text-muted small text-center py-4">Chargement des réservations...</td></tr>
+          } @else if (reservationsError()) {
+            <tr><td colspan="6" class="text-danger small text-center py-4">{{ reservationsError() }}</td></tr>
+          } @else {
           @for (r of filteredReservations(); track r.nom) {
             <tr>
               <td>
@@ -126,17 +137,20 @@
               <td colspan="6" class="text-muted small text-center py-4">Aucune réservation ne correspond à ce filtre.</td>
             </tr>
           }
+          }
         </tbody>
       </table>
 
       <div class="table-footer">
         <span class="text-muted small">Affichage de {{ filteredReservations().length }} sur {{ reservations().length }} réservations</span>
-        <div class="pagination-nav">
-          <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn">2</button>
-          <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
-        </div>
+        @if (reservations().length > 0) {
+          <div class="pagination-nav">
+            <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
+          </div>
+        }
       </div>
     </div>
 

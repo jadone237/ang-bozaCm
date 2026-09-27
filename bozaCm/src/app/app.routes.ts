@@ -3,6 +3,7 @@ import { LoginComponent } from './features/auth/pages/login/login.component';
 import { RegisterComponent } from './features/auth/pages/register/register.component';
 import { AccueilComponent } from './features/client/pages/accueil/accueil.component';
 import { BookingsComponent } from './features/admin/pages/bookings/bookings.component';
+import { ReservationComponent } from './features/client/pages/reservation/reservation.component';
 
 
 
@@ -14,4 +15,5 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'accueil', component: AccueilComponent },
   { path: 'admin/bookings', component: BookingsComponent },
+  { path: 'reservation/:type/:offreId', component: ReservationComponent },
 ];
