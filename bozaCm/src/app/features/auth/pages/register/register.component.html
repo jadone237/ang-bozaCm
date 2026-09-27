@@ -23,6 +23,10 @@
       </button>
     </div>
 
+    @if (errorMessage()) {
+        <div class="alert alert-danger">{{ errorMessage() }}</div>
+      }
+
     @if (registerType() === 'CLIENT') {
       <form [formGroup]="clientForm" (ngSubmit)="submit()" class="p-4">
 
