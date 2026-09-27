@@ -1,0 +1,285 @@
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo-icon"><i class="bi bi-briefcase"></i></div>
+      <div>
+        <div class="sidebar-brand">BozaCM</div>
+        <div class="sidebar-subtitle">Executive Portal</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-link-item"><i class="bi bi-building"></i> Agencies</a>
+      <a class="nav-link-item"><i class="bi bi-map"></i> Trips</a>
+      <a class="nav-link-item"><i class="bi bi-tag"></i> Offers</a>
+      <a class="nav-link-item active"><i class="bi bi-ticket-perforated"></i> Bookings</a>
+      <a class="nav-link-item"><i class="bi bi-graph-up-arrow"></i> Stats</a>
+      <a class="nav-link-item"><i class="bi bi-bar-chart"></i> Reports</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a class="nav-link-item" routerLink="/login"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+
+    <div class="admin-header">
+      <h1 class="admin-title">Réservations</h1>
+
+      <div class="admin-search">
+        <div class="input-group">
+          <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+          <input type="text" class="form-control border-start-0" placeholder="Rechercher une réservation...">
+        </div>
+      </div>
+
+      <div class="admin-header-actions">
+        <i class="bi bi-bell fs-5"></i>
+        <i class="bi bi-gear fs-5"></i>
+        <div class="admin-user">
+          <div class="text-end">
+            <div class="fw-semibold small">Admin</div>
+            <div class="text-muted" style="font-size: 11px;">BozaCM Executive</div>
+          </div>
+          <div class="admin-avatar"><i class="bi bi-person-fill"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      @for (stat of stats; track stat.label) {
+        <div class="stat-card">
+          <div class="d-flex justify-content-between align-items-start">
+            <div class="stat-icon" [style.background]="stat.iconBg" [style.color]="stat.iconColor">
+              <i class="bi" [ngClass]="stat.icon"></i>
+            </div>
+            <span class="stat-label">{{ stat.label }}</span>
+          </div>
+          <div class="stat-value" [style.color]="stat.valueColor">{{ stat.value }}</div>
+          <div class="stat-sub" [style.color]="stat.subtitleColor">{{ stat.subtitle }}</div>
+        </div>
+      }
+    </div>
+
+    <div class="filters-bar">
+      <div class="d-flex gap-2">
+        <select class="form-select form-select-sm filter-select">
+          <option>Tous statuts</option>
+          <option>Confirmée</option>
+          <option>En attente</option>
+          <option>Annulée</option>
+        </select>
+        <select class="form-select form-select-sm filter-select">
+          <option>Tous types</option>
+          <option>Bus</option>
+          <option>Avion</option>
+          <option>Train</option>
+        </select>
+      </div>
+      <button class="btn btn-new-reservation" (click)="openModal()">
+        <i class="bi bi-plus-lg"></i> Nouvelle Réservation
+      </button>
+    </div>
+
+    <div class="table-container">
+      <table class="table admin-table">
+        <thead>
+          <tr>
+            <th>CLIENT</th>
+            <th>OFFRE</th>
+            <th>TYPE</th>
+            <th>DATE</th>
+            <th>STATUT</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of reservations; track r.nom) {
+            <tr>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <div class="client-avatar" [style.background]="r.avatarBg">{{ r.initiales }}</div>
+                  <span class="fw-semibold">{{ r.nom }}</span>
+                </div>
+              </td>
+              <td class="text-muted small">{{ r.offre }}</td>
+              <td>
+                <span class="type-pill"><i class="bi" [ngClass]="r.typeIcon"></i> {{ r.typeLabel }}</span>
+              </td>
+              <td class="text-muted small">{{ r.date }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="badgeClass(r.statut)">{{ badgeLabel(r.statut) }}</span>
+              </td>
+              <td>
+                @if (r.statut === 'CONFIRMEE') {
+                  <button class="btn btn-sm btn-outline-navy">Billet</button>
+                } @else {
+                  <button class="btn btn-sm btn-teal-fill">Confirmer</button>
+                }
+                <button class="btn btn-sm btn-text-danger">Annuler</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="table-footer">
+        <span class="text-muted small">Affichage de 1-3 sur 34 réservations</span>
+        <div class="pagination-nav">
+          <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  @if (showModal()) {
+    <div class="modal-overlay" (click)="closeModal()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+          <h5 class="fw-bold mb-0">Nouvelle réservation</h5>
+          <button class="btn-close-modal" (click)="closeModal()">&times;</button>
+        </div>
+
+        <div class="type-tabs">
+          <button type="button" class="type-tab" [class.active]="typeTransport() === 'BUS'" (click)="setTypeTransport('BUS')">
+            <i class="bi bi-bus-front"></i> Bus
+          </button>
+          <button type="button" class="type-tab" [class.active]="typeTransport() === 'TRAIN'" (click)="setTypeTransport('TRAIN')">
+            <i class="bi bi-train-front"></i> Train
+          </button>
+          <button type="button" class="type-tab" [class.active]="typeTransport() === 'AVION'" (click)="setTypeTransport('AVION')">
+            <i class="bi bi-airplane"></i> Avion
+          </button>
+        </div>
+
+        @if (formError()) { <div class="alert alert-danger py-2 small">{{ formError() }}</div> }
+        @if (formSuccess()) { <div class="alert alert-success py-2 small">{{ formSuccess() }}</div> }
+
+        @if (typeTransport() === 'BUS') {
+          <form [formGroup]="busForm" (ngSubmit)="submit()">
+            <label class="form-label small fw-semibold">CLIENT</label>
+            <select class="form-select mb-2" formControlName="clientId">
+              <option value="" disabled>Choisir un client</option>
+              @for (c of clients(); track c.idClient) {
+                <option [value]="c.idClient">{{ c.nom }} {{ c.prenom }}</option>
+              }
+            </select>
+
+            <label class="form-label small fw-semibold">OFFRE</label>
+            <select class="form-select mb-2" formControlName="offreId">
+              <option value="" disabled>Choisir une offre</option>
+              @for (o of offres(); track o.id) {
+                <option [value]="o.id">{{ o.titre }} — {{ o.prix }} FCFA</option>
+              }
+            </select>
+
+            <label class="form-label small fw-semibold">COMPAGNIE DE BUS</label>
+            <input type="text" class="form-control mb-2" formControlName="compagnieBus" placeholder="Ex: General Express">
+
+            <label class="form-label small fw-semibold">TYPE DE BUS</label>
+            <select class="form-select mb-2" formControlName="typeBus">
+              <option value="STANDARD">Standard</option>
+              <option value="VIP">VIP</option>
+            </select>
+
+            <div class="form-check mb-3">
+              <input type="checkbox" class="form-check-input" formControlName="climatisation" id="clim">
+              <label class="form-check-label small" for="clim">Climatisation</label>
+            </div>
+
+            <button type="submit" class="btn btn-new-reservation w-100" [disabled]="isSubmitting()">
+              {{ isSubmitting() ? 'Création...' : 'Créer la réservation' }}
+            </button>
+          </form>
+        }
+
+        @if (typeTransport() === 'TRAIN') {
+          <form [formGroup]="trainForm" (ngSubmit)="submit()">
+            <label class="form-label small fw-semibold">CLIENT</label>
+            <select class="form-select mb-2" formControlName="clientId">
+              <option value="" disabled>Choisir un client</option>
+              @for (c of clients(); track c.idClient) {
+                <option [value]="c.idClient">{{ c.nom }} {{ c.prenom }}</option>
+              }
+            </select>
+
+            <label class="form-label small fw-semibold">OFFRE</label>
+            <select class="form-select mb-2" formControlName="offreId">
+              <option value="" disabled>Choisir une offre</option>
+              @for (o of offres(); track o.id) {
+                <option [value]="o.id">{{ o.titre }} — {{ o.prix }} FCFA</option>
+              }
+            </select>
+
+            <label class="form-label small fw-semibold">COMPAGNIE DE TRAIN</label>
+            <input type="text" class="form-control mb-2" formControlName="compagnieTrain" placeholder="Ex: CAMRAIL">
+
+            <label class="form-label small fw-semibold">NUMÉRO DE WAGON</label>
+            <input type="text" class="form-control mb-2" formControlName="numeroWagon" placeholder="Ex: A">
+
+            <label class="form-label small fw-semibold">CLASSE</label>
+            <select class="form-select mb-3" formControlName="classeTrain">
+              <option value="SECONDE">Seconde</option>
+              <option value="PREMIERE">Première</option>
+            </select>
+
+            <button type="submit" class="btn btn-new-reservation w-100" [disabled]="isSubmitting()">
+              {{ isSubmitting() ? 'Création...' : 'Créer la réservation' }}
+            </button>
+          </form>
+        }
+
+        @if (typeTransport() === 'AVION') {
+          <form [formGroup]="avionForm" (ngSubmit)="submit()">
+            <label class="form-label small fw-semibold">CLIENT</label>
+            <select class="form-select mb-2" formControlName="clientId">
+              <option value="" disabled>Choisir un client</option>
+              @for (c of clients(); track c.idClient) {
+                <option [value]="c.idClient">{{ c.nom }} {{ c.prenom }}</option>
+              }
+            </select>
+
+            <label class="form-label small fw-semibold">OFFRE</label>
+            <select class="form-select mb-2" formControlName="offreId">
+              <option value="" disabled>Choisir une offre</option>
+              @for (o of offres(); track o.id) {
+                <option [value]="o.id">{{ o.titre }} — {{ o.prix }} FCFA</option>
+              }
+            </select>
+
+            <label class="form-label small fw-semibold">COMPAGNIE AÉRIENNE</label>
+            <input type="text" class="form-control mb-2" formControlName="compagnieAerienne" placeholder="Ex: Camair-Co">
+
+            <label class="form-label small fw-semibold">NUMÉRO DE VOL</label>
+            <input type="text" class="form-control mb-2" formControlName="numeroVol" placeholder="Ex: KP123">
+
+            <label class="form-label small fw-semibold">CLASSE</label>
+            <select class="form-select mb-2" formControlName="classeAvion">
+              <option value="ECONOMIE">Économique</option>
+              <option value="AFFAIRES">Affaires</option>
+              <option value="PREMIERE">Première</option>
+            </select>
+
+            <label class="form-label small fw-semibold">POIDS MAX BAGAGES (KG)</label>
+            <input type="number" class="form-control mb-2" formControlName="poidsMaxBagages">
+
+            <label class="form-label small fw-semibold">TERMINAL (optionnel)</label>
+            <input type="text" class="form-control mb-3" formControlName="numeroTerminal">
+
+            <button type="submit" class="btn btn-new-reservation w-100" [disabled]="isSubmitting()">
+              {{ isSubmitting() ? 'Création...' : 'Créer la réservation' }}
+            </button>
+          </form>
+        }
+
+      </div>
+    </div>
+  }
+</div>

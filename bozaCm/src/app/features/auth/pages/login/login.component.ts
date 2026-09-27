@@ -50,15 +50,22 @@ export class LoginComponent {
     const { email, password } = this.form.value;
 
     this.authService.login(email, password).subscribe({
-      next: (response) => {
-        this.authService.saveSession(response);
-        this.isLoading.set(false);
-        if (response.role === 'CLIENT') {
-          this.router.navigateByUrl('/accueil');
-        } else {
-          this.router.navigateByUrl('/login');
-        }
-      },
+     next: (response) => {
+    this.authService.saveSession(response);
+    this.isLoading.set(false);
+    switch (response.role) {
+      case 'ADMIN':
+        this.router.navigateByUrl('/admin/bookings');
+        break;
+      case 'CLIENT':
+        this.router.navigateByUrl('/accueil');
+        break;
+      case 'AGENCE':
+        // TODO: dashboard agence à construire (Naomie)
+        this.router.navigateByUrl('/login');
+        break;
+    }
+  },
       error: () => {
         this.isLoading.set(false);
         this.errorMessage.set('Email ou mot de passe incorrect');
