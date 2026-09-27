@@ -336,15 +336,34 @@
 
 @media (max-width: 420px) {
     .grille-statistiques {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
     }
 
     .carte-stat:last-child {
         grid-column: auto;
     }
 
+    .carte-stat {
+        padding: 12px;
+    }
+
+    .carte-stat h3 {
+        font-size: 23px;
+    }
+
+    .carte-stat .titre-stat {
+        font-size: 10px;
+    }
+
     .en-tete-page h2 {
         font-size: 22px;
+    }
+}
+
+@media (max-width: 350px) {
+    .grille-statistiques {
+        grid-template-columns: 1fr;
     }
 }
 

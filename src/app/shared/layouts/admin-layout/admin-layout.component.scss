@@ -110,32 +110,28 @@
 
         .nav {
             flex-direction: row !important;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             gap: 6px !important;
-            margin: 0 -4px;
-            padding: 2px 4px 8px;
-            overflow-x: auto;
-            overscroll-behavior-x: contain;
-            scrollbar-width: thin;
+            margin: 0;
+            padding: 2px 0 8px;
+            overflow: visible;
         }
 
         .nav-item {
-            flex: 0 0 auto;
+            flex: 1 1 calc(33.333% - 6px);
+            min-width: 0;
         }
 
         .nav-link {
-            white-space: nowrap;
-            padding: 9px 12px;
+            justify-content: center;
+            white-space: normal;
+            text-align: center;
+            padding: 9px 6px;
+            font-size: 12px;
         }
 
         .border-top.pt-3 {
-            display: flex;
-            gap: 10px;
-            padding-top: 10px !important;
-        }
-
-        .border-top .nav-link {
-            margin: 0 !important;
+            display: none;
         }
     }
 
@@ -146,8 +142,7 @@
         overflow-x: hidden;
 
         > header {
-            justify-content: flex-end !important;
-            margin-bottom: 18px !important;
+            display: none !important;
         }
     }
 }
@@ -167,15 +162,5 @@
 
     .main-content {
         padding: 14px 12px !important;
-
-        > header .btn {
-            width: 34px;
-            height: 34px;
-            padding: 6px !important;
-        }
-
-        > header .border-start {
-            padding-left: 10px !important;
-        }
     }
 }
