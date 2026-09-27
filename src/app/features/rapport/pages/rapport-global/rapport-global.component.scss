@@ -401,3 +401,31 @@
     }
   }
 }
+
+@media (max-width: 520px) {
+  .page-rapport-global { padding: 6px 0 24px; }
+  .entete-rapport .titre-bloc h1 { font-size: 22px; }
+  .grille-kpi-global { gap: 10px; }
+  .carte-kpi { padding: 12px; }
+  .carte-kpi .valeur-kpi { font-size: 22px; }
+  .panneau-carte { min-width: 0; padding: 16px; }
+  .entete-panneau h2 { font-size: 16px; }
+  .carte-performance { align-items: flex-start; gap: 10px; padding: 12px; }
+  .carte-performance .icone-perf { flex: 0 0 36px; width: 36px; height: 36px; }
+  .carte-performance .details-perf .valeur-perf { font-size: 13px; overflow-wrap: anywhere; }
+  .carte-performance .indicateur-perf .nombre-perf { font-size: 17px; }
+  .donught-chart { width: 150px; height: 150px; }
+  .donught-centre { width: 120px; height: 120px; }
+  .donught-centre .taux-pourcent { font-size: 27px; }
+  .banniere-ca-sombre { padding: 20px 16px; }
+  .banniere-ca-sombre .info-ca .valeur-ca { font-size: 30px; overflow-wrap: anywhere; }
+  .banniere-ca-sombre .info-ca .valeur-ca .unite-fcfa { font-size: 15px; }
+  .banniere-ca-sombre .actions-banniere button { min-height: 44px; }
+}
+
+@media (max-width: 380px) {
+  .grille-kpi-global { grid-template-columns: 1fr; }
+  .carte-performance { flex-wrap: wrap; }
+  .carte-performance .details-perf { min-width: 0; }
+  .carte-performance .indicateur-perf { margin-left: auto; }
+}

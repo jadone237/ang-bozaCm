@@ -315,3 +315,65 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 520px) {
+  .entete-offres { margin: 0 0 18px; gap: 14px; }
+  .titre-offres { font-size: 23px; }
+  .actions-haut-offres { gap: 10px; }
+  .bouton-nouvelle-offre { justify-content: center; min-height: 44px; }
+  .statistiques-offres { gap: 10px; margin-bottom: 18px; }
+  .carte-offre-stat { min-width: 0; padding: 12px; }
+  .libelle-stat-offre { font-size: 10px; }
+  .valeur-stat-offre { font-size: 23px; }
+  .barre-filtres-offres { padding: 13px; }
+  .filtres-gauche { width: 100%; align-items: stretch; flex-direction: column; }
+  .filtres-gauche select { width: 100%; max-width: none; min-height: 42px; }
+  .compteur-offres { line-height: 1.5; }
+  .entete-ligne-agence { padding: 11px 14px; }
+  .ligne-agence { padding: 12px 14px; }
+  .bouton-stats-agence { min-height: 38px; }
+}
+
+@media (max-width: 360px) {
+  .statistiques-offres { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .tableau-offres { overflow: visible; }
+  .entete-ligne-agence { display: none; }
+  .ligne-agence {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 14px;
+    min-width: 0;
+    margin: 10px;
+    padding: 14px;
+    border: 1px solid #e7edf2;
+    border-radius: 12px;
+  }
+  .ligne-agence > div { min-width: 0; overflow-wrap: anywhere; }
+  .ligne-agence > div:first-child,
+  .ligne-agence > div:nth-child(4),
+  .ligne-agence > div:last-child { grid-column: 1 / -1; }
+  .ligne-agence > div:nth-child(2)::before,
+  .ligne-agence > div:nth-child(3)::before,
+  .ligne-agence > div:nth-child(4)::before {
+    display: block;
+    margin-bottom: 3px;
+    color: #8798b1;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .ligne-agence > div:nth-child(2)::before { content: 'Ville'; }
+  .ligne-agence > div:nth-child(3)::before { content: 'Téléphone'; }
+  .ligne-agence > div:nth-child(4)::before { content: 'Adresse'; }
+  .ligne-agence > div:last-child { text-align: right; }
+  .bouton-stats-agence { min-height: 40px; }
+  .pagination-offres { padding: 10px; }
+}
+
+@media (max-width: 360px) {
+  .ligne-agence { grid-template-columns: 1fr; }
+  .ligne-agence > div { grid-column: 1 / -1; }
+}

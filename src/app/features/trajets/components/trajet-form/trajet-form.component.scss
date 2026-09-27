@@ -63,3 +63,14 @@
 .bouton-annuler { border: 1px solid #dfe5ec; color: #53647b; background: #fff; }
 .bouton-enregistrer { color: #fff; background: #007f78; }
 .bouton-enregistrer.desactive { opacity: .6; pointer-events: none; }
+
+@media (max-width: 600px) {
+  .conteneur-formulaire-trajet {
+    margin: 8px auto;
+    padding: 20px 16px;
+  }
+
+  .titre-formulaire { font-size: 21px; }
+  .actions-formulaire-trajet { flex-direction: column-reverse; }
+  .bouton-annuler, .bouton-enregistrer { min-height: 44px; text-align: center; }
+}

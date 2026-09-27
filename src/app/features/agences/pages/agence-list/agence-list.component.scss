@@ -92,6 +92,8 @@
 }
 
 .conteneur-tableau {
+    min-width: 0;
+    overflow-x: auto;
     background: #FFFFFF;
     border: 0.5px solid #e2e8f0;
     border-radius: 16px;
@@ -144,6 +146,7 @@
 
 .tableau-simple {
     width: 100%;
+    min-width: 680px;
     border-collapse: collapse;
     text-align: left;
 
@@ -286,13 +289,34 @@
 }
 
 @media (max-width: 700px) {
+    .en-tete-page {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .btn-nouvelle-agence {
+        justify-content: center;
+        min-height: 44px;
+    }
+
     .pagination-agences {
         align-items: flex-start;
         flex-direction: column;
+        min-width: 640px;
     }
 
     .grille-statistiques {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .carte-stat {
+        padding: 15px;
+    }
+
+    .carte-stat:last-child {
+        grid-column: 1 / -1;
     }
 
     .barre-recherche-titre {
@@ -303,5 +327,113 @@
 
     .champ-recherche {
         width: 100%;
+    }
+
+    .conteneur-tableau {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 420px) {
+    .grille-statistiques {
+        grid-template-columns: 1fr;
+    }
+
+    .carte-stat:last-child {
+        grid-column: auto;
+    }
+
+    .en-tete-page h2 {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 600px) {
+    .conteneur-tableau {
+        overflow: visible;
+        padding: 14px;
+    }
+
+    .tableau-simple,
+    .tableau-simple tbody,
+    .tableau-simple tr,
+    .tableau-simple td {
+        display: block;
+        width: 100%;
+    }
+
+    .tableau-simple {
+        min-width: 0;
+    }
+
+    .tableau-simple thead {
+        display: none;
+    }
+
+    .tableau-simple tbody tr {
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        border: 1px solid #e7edf2;
+        border-radius: 12px;
+        background: #fff;
+    }
+
+    .tableau-simple td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 9px 0;
+        border-bottom: 1px solid #f0f3f6;
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
+
+    .tableau-simple td::before {
+        content: attr(data-label);
+        flex: 0 0 42%;
+        color: #7b8b9f;
+        font-size: 10px;
+        font-weight: 700;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    .tableau-simple td:last-child {
+        border-bottom: 0;
+    }
+
+    .tableau-simple td:last-child::before {
+        content: 'Actions';
+    }
+
+    .tableau-simple .ligne-nom {
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .avatar-cercle {
+        flex: 0 0 32px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .actions-agence {
+        gap: 8px;
+    }
+
+    .btn-action {
+        min-width: 38px;
+        min-height: 38px;
+        margin: 0;
+    }
+
+    .tableau-simple .texte-centre {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .tableau-simple .texte-centre::before {
+        display: none;
     }
 }

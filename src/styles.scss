@@ -1,6 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
+
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
 /* S'applique à absolument tous les éléments du projet d'un seul coup */
 * {
   font-family: 'Liberation Serif', 'Times New Roman', Times, serif !important;
@@ -31,3 +66,9 @@
 .page-trajets .activite,
 .page-trajets .badge-trajet { font-size: 12px; }
 .page-trajets .texte-apercu { color: #e0e7ef; }
+
+@media (max-width: 768px) {
+  .main-content > router-outlet + * {
+    min-width: 0;
+  }
+}

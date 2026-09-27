@@ -76,15 +76,15 @@
         <tbody>
           @for (agence of agencesAffichees; track agence.id) {
             <tr>
-              <td>
+              <td data-label="Agence">
                 <div class="ligne-nom">
                   <div class="avatar-cercle">{{ getInitials(agence.nom) }}</div>
                   <span class="gras">{{ agence.nom }}</span>
                 </div>
               </td>
-              <td>{{ agence.email }}</td>
-              <td>{{ agence.telephone }}</td>
-              <td>{{ agence.adresse }}</td>
+              <td data-label="Email professionnel">{{ agence.email }}</td>
+              <td data-label="Téléphone">{{ agence.telephone }}</td>
+              <td data-label="Adresse">{{ agence.adresse }}</td>
               <td class="aligne-droite">
                 <div class="actions-agence">
                   <div class="btn-action modifier" [routerLink]="['/modifier-agence', agence.id]" title="Modifier">

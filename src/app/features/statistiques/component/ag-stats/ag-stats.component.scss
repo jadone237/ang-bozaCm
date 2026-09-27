@@ -471,3 +471,25 @@
     justify-content: space-between;
   }
 }
+
+@media (max-width: 600px) {
+  .page-stats-agence { padding: 6px 0 24px; }
+  .titre-section-stats h1 { font-size: 21px; }
+  .titre-section-stats .sous-titre-agence-actuelle { line-height: 1.5; }
+  .grille-indicateurs { gap: 10px; }
+  .carte-indicateur { padding: 13px; }
+  .valeur-indicateur { font-size: 22px; }
+  .panneau-carte { min-width: 0; padding: 16px; }
+  .titre-panneau { font-size: 16px; }
+  .item-classement { gap: 9px; padding: 10px; }
+  .chiffres-item-classement .montant-classement { font-size: 12px; }
+  .carte-analyse-sombre { padding: 20px; }
+  .carte-analyse-sombre .contenu-analyse-sombre { max-width: 100%; }
+  .carte-analyse-sombre .filigrane-fleche-croissance { font-size: 72px; }
+}
+
+@media (max-width: 380px) {
+  .grille-indicateurs { grid-template-columns: 1fr; }
+  .item-classement { align-items: flex-start; }
+  .chiffres-item-classement { max-width: 45%; overflow-wrap: anywhere; }
+}

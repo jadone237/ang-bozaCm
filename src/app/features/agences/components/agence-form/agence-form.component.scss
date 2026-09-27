@@ -112,3 +112,24 @@
         background-color: #0d9488;
     }
 }
+
+@media (max-width: 600px) {
+    .conteneur-formulaire {
+        padding: 20px 16px;
+        border-radius: 12px;
+    }
+
+    .en-tete-formulaire h2 {
+        font-size: 20px;
+    }
+
+    .actions-formulaire {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+    .actions-formulaire button {
+        width: 100%;
+        min-height: 44px;
+    }
+}

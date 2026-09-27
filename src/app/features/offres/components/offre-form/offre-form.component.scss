@@ -135,4 +135,14 @@
   .offre-field-row {
     grid-template-columns: 1fr;
   }
+
+  .offre-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .offre-cancel,
+  .offre-save {
+    min-height: 44px;
+    text-align: center;
+  }
 }
