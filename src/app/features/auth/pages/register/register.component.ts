@@ -83,7 +83,9 @@ export class RegisterComponent {
     request$.subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigateByUrl('/login');
+        this.router.navigate(['/login'], {
+          queryParams: { type: this.registerType() }
+        });
       },
       error: (err) => {
         this.isLoading.set(false);

@@ -17,33 +17,42 @@ export const routes: Routes = [
     loadComponent: () => import('./features/client/pages/accueil/accueil.component').then(m => m.AccueilComponent) 
   },
 
-  // --- Zone Administration (Sous ton AdminLayout avec Sidebar) ---
+  // --- Espace Dashboard Admin (AdminLayoutComponent) ---
   {
-    path: '',
+    path: 'admin',
     component: AdminLayoutComponent,
     children: [
+      // Redirections automatiques vers la page d'accueil du dashboard (agences)
+      { path: '', redirectTo: 'agences', pathMatch: 'full' },
+      { path: 'dashboard', redirectTo: 'agences', pathMatch: 'full' },
+
+      // 1. Agences
       { path: 'agences', loadComponent: () => import('./features/agences/pages/agence-list/agence-list.component').then(m => m.AgenceListComponent) },
       { path: 'ajouter-agence', loadComponent: () => import('./features/agences/components/agence-form/agence-form.component').then(m => m.AgenceFormComponent) },
       { path: 'modifier-agence/:id', loadComponent: () => import('./features/agences/components/agence-form/agence-form.component').then(m => m.AgenceFormComponent) },
 
+      // 2. Trajets
       { path: 'trajets', loadComponent: () => import('./features/trajets/pages/trajet-list/trajet-list.component').then(m => m.TrajetListComponent) },
       { path: 'ajouter-trajet', loadComponent: () => import('./features/trajets/components/trajet-form/trajet-form.component').then(m => m.TrajetFormComponent) },
       { path: 'modifier-trajet/:id', loadComponent: () => import('./features/trajets/components/trajet-form/trajet-form.component').then(m => m.TrajetFormComponent) },
 
+      // 3. Offres
       { path: 'offres', loadComponent: () => import('./features/offres/pages/offre-list/offre-list.component').then(m => m.OffreListComponent) },
       { path: 'ajouter-offre', loadComponent: () => import('./features/offres/components/offre-form/offre-form.component').then(m => m.OffreFormComponent) },
       { path: 'modifier-offre/:id', loadComponent: () => import('./features/offres/components/offre-form/offre-form.component').then(m => m.OffreFormComponent) },
 
+      // 4. Statistiques
       { path: 'statistiques', loadComponent: () => import('./features/statistiques/pages/stat-list/stat-list.component').then(m => m.StatListComponent) },
       { path: 'statistiques/:id/statistiques', loadComponent: () => import('./features/statistiques/component/ag-stats/ag-stats.component').then(m => m.AgStatsComponent) },
 
+      // 5. Rapports
       { path: 'rapports', loadComponent: () => import('./features/rapport/pages/rapport-global/rapport-global.component').then(m => m.RapportGlobalComponent) },
 
-      // Module Réservations (issu du travail de ton camarade)
+      // 6. Réservations
       { path: 'reservations', loadComponent: () => import('./features/admin/pages/bookings/bookings.component').then(m => m.BookingsComponent) }
     ]
   },
 
-  // Redirection par défaut si route inconnue
+  // Route fallback
   { path: '**', redirectTo: 'login' }
 ];

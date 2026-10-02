@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
 
@@ -23,8 +23,14 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService
   ) {
+    const requestedType = this.route.snapshot.queryParamMap.get('type');
+    if (requestedType === 'CLIENT') {
+      this.activeTab.set('CLIENT');
+    }
+
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -55,20 +61,18 @@ export class LoginComponent {
         this.authService.saveSession(response);
         this.isLoading.set(false);
 
-        switch (response.role) {
+        switch (response.role.replace(/^ROLE_/, '')) {
           case 'ADMIN':
-            // Redirection vers le tableau de bord d'administration (Agences)
-            this.router.navigateByUrl('/agences');
+            this.router.navigateByUrl('/admin/dashboard');
             break;
           case 'CLIENT':
             this.router.navigateByUrl('/accueil');
             break;
           case 'AGENCE':
-            // Espace agence si nécessaire plus tard
             this.router.navigateByUrl('/login');
             break;
           default:
-            this.router.navigateByUrl('/agences');
+            this.router.navigateByUrl('/login');
             break;
         }
       },
