@@ -180,7 +180,7 @@
             <select class="form-select mb-2" formControlName="offreId">
               <option value="" disabled>Choisir une offre</option>
               @for (o of offres(); track o.id) {
-                <option [value]="o.id">{{ o.titre }} — {{ o.prix }} FCFA</option>
+                <option [ngValue]="o.id">{{ o.titre }} ({{ o.trajet.villeDepart }} → {{ o.trajet.villeArrivee }}) - {{ o.prix | number:'1.0-0' }} FCFA</option>
               }
             </select>
 
@@ -218,7 +218,7 @@
             <select class="form-select mb-2" formControlName="offreId">
               <option value="" disabled>Choisir une offre</option>
               @for (o of offres(); track o.id) {
-                <option [value]="o.id">{{ o.titre }} — {{ o.prix }} FCFA</option>
+                <option [ngValue]="o.id">{{ o.titre }} ({{ o.trajet.villeDepart }} → {{ o.trajet.villeArrivee }}) - {{ o.prix | number:'1.0-0' }} FCFA</option>
               }
             </select>
 
@@ -254,7 +254,7 @@
             <select class="form-select mb-2" formControlName="offreId">
               <option value="" disabled>Choisir une offre</option>
               @for (o of offres(); track o.id) {
-                <option [value]="o.id">{{ o.titre }} — {{ o.prix }} FCFA</option>
+                <option [ngValue]="o.id">{{ o.titre }} ({{ o.trajet.villeDepart }} → {{ o.trajet.villeArrivee }}) - {{ o.prix | number:'1.0-0' }} FCFA</option>
               }
             </select>
 

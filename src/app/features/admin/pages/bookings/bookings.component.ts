@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ReservationAdminService } from '../../services/reservation-admin.service';
+import { OffreService } from '../../../offres/data-access/offre.service';
+import { OffreResponseDTO } from '../../../offres/models/offre.model';
 
 interface StatCard {
   icon: string; iconBg: string; iconColor: string;
@@ -34,7 +36,7 @@ export class BookingsComponent implements OnInit {
   typeTransport = signal<'BUS' | 'TRAIN' | 'AVION'>('BUS');
 
   clients = signal<any[]>([]);
-  offres = signal<any[]>([]);
+  offres = signal<OffreResponseDTO[]>([]);
 
   busForm: FormGroup;
   trainForm: FormGroup;
@@ -65,7 +67,11 @@ export class BookingsComponent implements OnInit {
     });
   });
 
-  constructor(private fb: FormBuilder, private reservationService: ReservationAdminService) {
+  constructor(
+    private fb: FormBuilder,
+    private reservationService: ReservationAdminService,
+    private offreService: OffreService
+  ) {
     this.busForm = this.fb.group({
       clientId: ['', Validators.required],
       offreId: ['', Validators.required],
@@ -97,8 +103,9 @@ export class BookingsComponent implements OnInit {
     this.reservationService.getClients().subscribe({
       next: (res) => this.clients.set(res.data ?? res),
     });
-    this.reservationService.getOffres().subscribe({
-      next: (res) => this.offres.set(res),
+    this.offreService.getAllOffres().subscribe({
+      next: (offres) => this.offres.set(offres),
+      error: (err) => this.formError.set(err.message || 'Impossible de charger les offres.'),
     });
   }
 

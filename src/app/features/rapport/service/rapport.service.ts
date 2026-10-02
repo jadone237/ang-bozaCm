@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { RapportGlobalDTO } from '../model/rapport.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RapportService {
   // Ajuste l'URL selon la route exacte configurée dans ton backend (ex: /api/v1/rapports ou /api/v1/stats/global)
-  private readonly apiUrl = 'http://localhost:8080/api/v1/rapport';
+  private readonly apiUrl = `${environment.apiUrl}/v1/rapport`;
 
   constructor(private http: HttpClient) {}
 

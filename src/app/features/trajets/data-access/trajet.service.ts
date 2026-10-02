@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { PageResponseDTO, TrajetRequestDTO, TrajetResponseDTO } from '../models/trajet.model';
+import { environment } from '../../../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrajetService {
-  private readonly apiUrl = 'http://localhost:8080/api/v1/trajets';
+  private readonly apiUrl = `${environment.apiUrl}/v1/trajets`;
 
   constructor(private http: HttpClient) {}
 

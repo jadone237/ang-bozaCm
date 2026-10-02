@@ -50,28 +50,44 @@
 <section class="container py-5">
   <h2 class="fw-bold border-bottom pb-3 mb-4">Offres disponibles</h2>
 
-  <div class="row g-4">
-    @for (offre of offres; track offre.titre) {
-      <div class="col-sm-6 col-lg-4">
-        <div class="offer-card" [ngClass]="offre.accentClass">
-          <div class="d-flex justify-content-between align-items-start mb-3">
-            <div class="offer-icon"><i class="bi" [ngClass]="offre.icon"></i></div>
-            <span class="badge-pill" [ngClass]="offre.badgeClass">{{ offre.badge }}</span>
-          </div>
-          <h5 class="fw-bold">{{ offre.titre }}</h5>
-          <p class="text-muted small mb-4"><i class="bi bi-clock"></i> {{ offre.duree }} - {{ offre.compagnie }}</p>
-
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <div class="small text-muted">À PARTIR DE</div>
-              <div class="fw-bold fs-5">{{ offre.prix }}</div>
+  @if (isLoadingOffres) {
+    <p class="text-muted" role="status">Chargement des offres...</p>
+  } @else if (offresError) {
+    <div class="alert alert-danger" role="alert">{{ offresError }}</div>
+  } @else {
+    <div class="row g-4">
+      @for (offre of offres; track offre.id) {
+        <div class="col-sm-6 col-lg-4">
+          <article class="offer-card accent-navy">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="offer-icon"><i class="bi bi-ticket-perforated"></i></div>
+              <span class="badge-pill badge-green">{{ offre.placesDisponibles }} place(s)</span>
             </div>
-            <button class="btn" [ngClass]="offre.boutonClass">Réserver</button>
+            <h5 class="fw-bold">{{ offre.titre }}</h5>
+            <p class="text-muted small mb-2">
+              <i class="bi bi-signpost-2"></i>
+              {{ offre.trajet.villeDepart }} → {{ offre.trajet.villeArrivee }}
+            </p>
+            <p class="text-muted small mb-4">
+              <i class="bi bi-building"></i> {{ offre.agence.nom }}
+              <span class="mx-1">·</span>
+              <i class="bi bi-calendar-event"></i> {{ offre.dateDepart | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+
+            <div class="d-flex justify-content-between align-items-center gap-2">
+              <div>
+                <div class="small text-muted">PRIX</div>
+                <div class="fw-bold fs-5">{{ offre.prix | number:'1.0-0' }} FCFA</div>
+              </div>
+              <button type="button" class="btn btn-navy">Réserver</button>
+            </div>
           </div>
         </div>
+      } @empty {
+        <p class="text-muted">Aucune offre disponible pour le moment.</p>
       </div>
-    }
-  </div>
+    </div>
+  }
 </section>
 
 <footer class="border-top py-4 px-4 d-flex justify-content-between flex-wrap gap-3">

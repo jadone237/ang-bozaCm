@@ -2,12 +2,13 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { AgenceClassementDTO, AgenceStatistiqueDTO } from '../model/stat.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SatsService {
-  private readonly apiUrl = 'http://localhost:8080/api/v1/agences';
+  private readonly apiUrl = `${environment.apiUrl}/v1/agences`;
 
   constructor(private http: HttpClient) {}
 
