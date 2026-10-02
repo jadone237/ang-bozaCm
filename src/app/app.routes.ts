@@ -35,7 +35,7 @@ export const routes: Routes = [
       { path: 'modifier-offre/:id', loadComponent: () => import('./features/offres/components/offre-form/offre-form.component').then(m => m.OffreFormComponent) },
 
       { path: 'statistiques', loadComponent: () => import('./features/statistiques/pages/stat-list/stat-list.component').then(m => m.StatListComponent) },
-      { path: 'agences/:id/statistiques', loadComponent: () => import('./features/statistiques/component/ag-stats/ag-stats.component').then(m => m.AgStatsComponent) },
+      { path: 'statistiques/:id/statistiques', loadComponent: () => import('./features/statistiques/component/ag-stats/ag-stats.component').then(m => m.AgStatsComponent) },
 
       { path: 'rapports', loadComponent: () => import('./features/rapport/pages/rapport-global/rapport-global.component').then(m => m.RapportGlobalComponent) },
 
