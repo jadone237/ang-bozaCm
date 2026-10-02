@@ -12,6 +12,9 @@
   @if (successMessage) {
     <div class="alerte-succes">{{ successMessage }}</div>
   }
+  @if (statsErrorMessage) {
+    <div class="alerte-erreur">{{ statsErrorMessage }}</div>
+  }
 
   <div class="grille-statistiques">
     <div class="carte-stat">

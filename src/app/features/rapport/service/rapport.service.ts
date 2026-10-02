@@ -23,14 +23,14 @@ export class RapportService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    let message = 'Une erreur est survenue sur le serveur.';
+    let message: string;
     if (error.error instanceof ErrorEvent) {
       message = `Erreur client : ${error.error.message}`;
     } else {
       const backendMessage = typeof error.error === 'string'
         ? error.error
         : error.error?.message || error.error?.error;
-      message = backendMessage || `Erreur ${error.status} : ${error.message}`;
+      message = `Erreur HTTP ${error.status} sur ${error.url || 'le service de rapport'} : ${backendMessage || error.message}`;
     }
     return throwError(() => new Error(message));
   }

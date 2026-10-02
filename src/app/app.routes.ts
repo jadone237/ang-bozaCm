@@ -17,6 +17,21 @@ export const routes: Routes = [
     loadComponent: () => import('./features/client/pages/accueil/accueil.component').then(m => m.AccueilComponent) 
   },
 
+  // Compatibilité avec les liens absolus présents dans les listes et formulaires.
+  { path: 'agences', redirectTo: '/admin/agences', pathMatch: 'full' },
+  { path: 'ajouter-agence', redirectTo: '/admin/ajouter-agence', pathMatch: 'full' },
+  { path: 'modifier-agence/:id', redirectTo: '/admin/modifier-agence/:id', pathMatch: 'full' },
+  { path: 'trajets', redirectTo: '/admin/trajets', pathMatch: 'full' },
+  { path: 'ajouter-trajet', redirectTo: '/admin/ajouter-trajet', pathMatch: 'full' },
+  { path: 'modifier-trajet/:id', redirectTo: '/admin/modifier-trajet/:id', pathMatch: 'full' },
+  { path: 'offres', redirectTo: '/admin/offres', pathMatch: 'full' },
+  { path: 'ajouter-offre', redirectTo: '/admin/ajouter-offre', pathMatch: 'full' },
+  { path: 'modifier-offre/:id', redirectTo: '/admin/modifier-offre/:id', pathMatch: 'full' },
+  { path: 'statistiques', redirectTo: '/admin/statistiques', pathMatch: 'full' },
+  { path: 'statistiques/:id/statistiques', redirectTo: '/admin/statistiques/:id/statistiques', pathMatch: 'full' },
+  { path: 'rapports', redirectTo: '/admin/rapports', pathMatch: 'full' },
+  { path: 'reservations', redirectTo: '/admin/reservations', pathMatch: 'full' },
+
   // --- Espace Dashboard Admin (AdminLayoutComponent) ---
   {
     path: 'admin',

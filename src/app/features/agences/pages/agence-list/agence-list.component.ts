@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AgenceResponseDTO } from '../../models/agence.model';
 import { AgenceService } from '../../data-access/agence.service';
+import { OffreService } from '../../../offres/data-access/offre.service';
+import { ReservationAdminService } from '../../../admin/services/reservation-admin.service';
 
 @Component({
   selector: 'app-agence-list',
@@ -20,6 +22,7 @@ export class AgenceListComponent implements OnInit {
   readonly pageSize = 4;
   totalOffres = 0;
   totalReservations = 0;
+  statsErrorMessage = '';
 
   isLoading: boolean = true;
   errorMessage: string = '';
@@ -27,6 +30,8 @@ export class AgenceListComponent implements OnInit {
 
   constructor(
     private agenceService: AgenceService,
+    private offreService: OffreService,
+    private reservationService: ReservationAdminService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -37,6 +42,37 @@ export class AgenceListComponent implements OnInit {
       this.router.navigate([], { queryParams: {}, replaceUrl: true });
     }
     this.loadAgences();
+    this.loadSummaryCounts();
+  }
+
+  private loadSummaryCounts(): void {
+    this.offreService.getAllOffres().subscribe({
+      next: (offres) => this.totalOffres = offres.length,
+      error: () => this.statsErrorMessage = 'Impossible de charger le nombre d’offres.'
+    });
+
+    this.reservationService.getAllReservations().subscribe({
+      next: (response) => this.totalReservations = this.countRecords(response),
+      error: () => this.statsErrorMessage = 'Impossible de charger le nombre de réservations.'
+    });
+  }
+
+  private countRecords(response: unknown): number {
+    if (Array.isArray(response)) return response.length;
+    if (!response || typeof response !== 'object') return 0;
+
+    const result = response as {
+      data?: unknown;
+      content?: unknown;
+      total?: unknown;
+      totalElements?: unknown;
+    };
+
+    if (Array.isArray(result.data)) return result.data.length;
+    if (Array.isArray(result.content)) return result.content.length;
+    if (typeof result.totalElements === 'number') return result.totalElements;
+    if (typeof result.total === 'number') return result.total;
+    return 0;
   }
 
   loadAgences(): void {
