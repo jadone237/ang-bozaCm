@@ -63,7 +63,7 @@ export class TrajetFormComponent implements OnInit {
       : this.trajetService.createTrajet(donnees);
 
     requete.subscribe({
-      next: () => this.router.navigate(['/trajets'], {
+      next: () => this.router.navigate(['/admin/trajets'], {
         queryParams: {
           message: this.isEditMode
             ? 'Trajet modifié avec succès.'
@@ -78,7 +78,7 @@ export class TrajetFormComponent implements OnInit {
   }
 
   annuler(): void {
-    this.router.navigate(['/trajets']);
+    this.router.navigate(['/admin/trajets']);
   }
 
   private chargerTrajet(): void {

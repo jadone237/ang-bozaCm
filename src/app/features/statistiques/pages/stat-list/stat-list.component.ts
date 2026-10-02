@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -12,7 +12,7 @@ import { AgenceService } from '../../../agences/data-access/agence.service';
   templateUrl: './stat-list.component.html',
   styleUrl: './stat-list.component.scss'
 })
-export class StatListComponent implements OnInit {
+export class StatListComponent implements OnInit, OnDestroy {
   agences: AgenceResponseDTO[] = [];
   agencesFiltrees: AgenceResponseDTO[] = [];
 
@@ -25,6 +25,7 @@ export class StatListComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
   successMessage = '';
+  private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
     private agenceService: AgenceService,
@@ -35,9 +36,30 @@ export class StatListComponent implements OnInit {
   ngOnInit(): void {
     this.successMessage = this.route.snapshot.queryParamMap.get('message') || '';
     if (this.successMessage) {
-      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+      this.afficherSucces(this.successMessage);
     }
     this.chargerAgences();
+  }
+
+  ngOnDestroy(): void {
+    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
+  }
+
+  private afficherSucces(message: string): void {
+    this.successMessage = message;
+    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
+    this.feedbackTimer = setTimeout(() => {
+      this.successMessage = '';
+      this.feedbackTimer = undefined;
+      if (this.route.snapshot.queryParamMap.has('message')) {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { message: null },
+          queryParamsHandling: 'merge',
+          replaceUrl: true
+        });
+      }
+    }, 4000);
   }
 
   chargerAgences(): void {
@@ -111,7 +133,7 @@ export class StatListComponent implements OnInit {
 
     this.agenceService.deleteAgence(id).subscribe({
       next: () => {
-        this.successMessage = 'Agence supprimée avec succès.';
+        this.afficherSucces('Agence supprimée avec succès.');
         this.chargerAgences();
       },
       error: (error: any) => {

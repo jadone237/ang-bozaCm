@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -12,7 +12,7 @@ import { TrajetService } from '../../data-access/trajet.service';
   templateUrl: './trajet-list.component.html',
   styleUrl: './trajet-list.component.scss'
 })
-export class TrajetListComponent implements OnInit {
+export class TrajetListComponent implements OnInit, OnDestroy {
   trajets: TrajetResponseDTO[] = [];
   resultatsRecherche: TrajetResponseDTO[] = [];
   trajetsAffiches: TrajetResponseDTO[] = [];
@@ -23,6 +23,7 @@ export class TrajetListComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
   successMessage = '';
+  private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
     private trajetService: TrajetService,
@@ -33,9 +34,30 @@ export class TrajetListComponent implements OnInit {
   ngOnInit(): void {
     this.successMessage = this.route.snapshot.queryParamMap.get('message') || '';
     if (this.successMessage) {
-      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+      this.afficherSucces(this.successMessage);
     }
     this.chargerTrajets();
+  }
+
+  ngOnDestroy(): void {
+    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
+  }
+
+  private afficherSucces(message: string): void {
+    this.successMessage = message;
+    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
+    this.feedbackTimer = setTimeout(() => {
+      this.successMessage = '';
+      this.feedbackTimer = undefined;
+      if (this.route.snapshot.queryParamMap.has('message')) {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { message: null },
+          queryParamsHandling: 'merge',
+          replaceUrl: true
+        });
+      }
+    }, 4000);
   }
 
   chargerTrajets(): void {
@@ -82,7 +104,7 @@ export class TrajetListComponent implements OnInit {
 
     this.trajetService.deleteTrajet(id).subscribe({
       next: () => {
-        this.successMessage = 'Trajet supprimé avec succès.';
+        this.afficherSucces('Trajet supprimé avec succès.');
         this.chargerTrajets();
       },
       error: (error) => this.errorMessage = error.message

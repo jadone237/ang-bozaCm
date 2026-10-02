@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -14,7 +14,7 @@ import { SatsService } from '../../../statistiques/service/sats.service';
   templateUrl: './agence-list.component.html',
   styleUrls: ['./agence-list.component.scss']
 })
-export class AgenceListComponent implements OnInit {
+export class AgenceListComponent implements OnInit, OnDestroy {
   agences: AgenceResponseDTO[] = [];
   filteredAgences: AgenceResponseDTO[] = [];
   searchTerm: string = '';
@@ -23,6 +23,7 @@ export class AgenceListComponent implements OnInit {
   totalOffres = 0;
   totalReservations = 0;
   statsErrorMessage = '';
+  private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   isLoading: boolean = true;
   errorMessage: string = '';
@@ -39,10 +40,31 @@ export class AgenceListComponent implements OnInit {
   ngOnInit(): void {
     this.successMessage = this.route.snapshot.queryParamMap.get('message') || '';
     if (this.successMessage) {
-      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+      this.afficherSucces(this.successMessage);
     }
     this.loadAgences();
     this.loadSummaryCounts();
+  }
+
+  ngOnDestroy(): void {
+    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
+  }
+
+  private afficherSucces(message: string): void {
+    this.successMessage = message;
+    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
+    this.feedbackTimer = setTimeout(() => {
+      this.successMessage = '';
+      this.feedbackTimer = undefined;
+      if (this.route.snapshot.queryParamMap.has('message')) {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { message: null },
+          queryParamsHandling: 'merge',
+          replaceUrl: true
+        });
+      }
+    }, 4000);
   }
 
   private loadSummaryCounts(): void {
@@ -133,7 +155,7 @@ export class AgenceListComponent implements OnInit {
     if (confirm('Voulez-vous vraiment supprimer cette agence ?')) {
       this.agenceService.deleteAgence(id).subscribe({
         next: () => {
-          this.successMessage = 'Agence supprimée avec succès.';
+          this.afficherSucces('Agence supprimée avec succès.');
           this.loadAgences();
         },
         error: (err) => {

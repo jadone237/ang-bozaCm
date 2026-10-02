@@ -66,7 +66,7 @@ export class OffreFormComponent implements OnInit {
       : this.offreService.createOffre(this.offre);
 
     requete.subscribe({
-      next: () => this.router.navigate(['/offres'], {
+      next: () => this.router.navigate(['/admin/offres'], {
         queryParams: { message: this.isEditMode ? 'Offre modifiée avec succès.' : 'Offre créée avec succès.' }
       }),
       error: (error) => {
@@ -77,7 +77,7 @@ export class OffreFormComponent implements OnInit {
   }
 
   annuler(): void {
-    this.router.navigate(['/offres']);
+    this.router.navigate(['/admin/offres']);
   }
 
   private chargerOffre(): void {

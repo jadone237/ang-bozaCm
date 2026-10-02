@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -14,7 +14,7 @@ import { AgenceService } from '../../../agences/data-access/agence.service';
   templateUrl: './offre-list.component.html',
   styleUrl: './offre-list.component.scss'
 })
-export class OffreListComponent implements OnInit {
+export class OffreListComponent implements OnInit, OnDestroy {
   offres: OffreResponseDTO[] = [];
   offresFiltrees: OffreResponseDTO[] = [];
   agences: AgenceResponseDTO[] = [];
@@ -26,6 +26,7 @@ export class OffreListComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
   successMessage = '';
+  private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
     private offreService: OffreService,
@@ -37,10 +38,31 @@ export class OffreListComponent implements OnInit {
   ngOnInit(): void {
     this.successMessage = this.route.snapshot.queryParamMap.get('message') || '';
     if (this.successMessage) {
-      this.router.navigate([], { queryParams: {}, replaceUrl: true });
+      this.afficherSucces(this.successMessage);
     }
     this.chargerOffres();
     this.agenceService.getAllAgences().subscribe({ next: (agences) => this.agences = agences });
+  }
+
+  ngOnDestroy(): void {
+    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
+  }
+
+  private afficherSucces(message: string): void {
+    this.successMessage = message;
+    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
+    this.feedbackTimer = setTimeout(() => {
+      this.successMessage = '';
+      this.feedbackTimer = undefined;
+      if (this.route.snapshot.queryParamMap.has('message')) {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { message: null },
+          queryParamsHandling: 'merge',
+          replaceUrl: true
+        });
+      }
+    }, 4000);
   }
 
   chargerOffres(): void {
@@ -109,7 +131,7 @@ export class OffreListComponent implements OnInit {
     if (!confirm('Voulez-vous vraiment supprimer cette offre ?')) return;
     this.offreService.deleteOffre(id).subscribe({
       next: () => {
-        this.successMessage = 'Offre supprimée avec succès.';
+        this.afficherSucces('Offre supprimée avec succès.');
         this.chargerOffres();
       },
       error: (error: any) => this.errorMessage = error.message

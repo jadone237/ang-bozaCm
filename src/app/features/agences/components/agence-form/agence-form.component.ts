@@ -61,7 +61,7 @@ export class AgenceFormComponent implements OnInit {
       : this.agenceService.createAgence(donneesAgence);
 
     requete.subscribe({
-      next: () => this.router.navigate(['/agences'], {
+      next: () => this.router.navigate(['/admin/agences'], {
         queryParams: {
           message: this.isEditMode
             ? 'Agence modifiée avec succès.'
