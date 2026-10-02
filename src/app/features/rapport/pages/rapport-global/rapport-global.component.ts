@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { catchError, forkJoin, of } from 'rxjs';
 import { RapportService } from '../../service/rapport.service';
 import { RapportGlobalDTO } from '../../model/rapport.model';
+import { SatsService } from '../../../statistiques/service/sats.service';
 
 @Component({
   selector: 'app-rapport-global',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './rapport-global.component.html',
   styleUrl: './rapport-global.component.scss'
 })
@@ -18,6 +20,7 @@ export class RapportGlobalComponent implements OnInit {
 
   constructor(
     private rapportService: RapportService,
+    private satsService: SatsService,
     private router: Router
   ) {}
 
@@ -29,9 +32,30 @@ export class RapportGlobalComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.rapportService.getRapportGlobal().subscribe({
-      next: (data) => {
-        this.rapport = data;
+    forkJoin({
+      rapport: this.rapportService.getRapportGlobal(),
+      classement: this.satsService.getClassementAgences().pipe(catchError(() => of([])))
+    }).subscribe({
+      next: ({ rapport, classement }) => {
+        const reservationsClassement = classement.reduce(
+          (total, agence) => total + agence.nombreReservationsTotal,
+          0
+        );
+        const confirmeesClassement = classement.reduce(
+          (total, agence) => total + agence.nombreReservationsConfirmees,
+          0
+        );
+        const totalReservations = Math.max(rapport.totalReservations || 0, reservationsClassement);
+        const totalConfirmees = Math.max(rapport.totalConfirmees || 0, confirmeesClassement);
+
+        this.rapport = {
+          ...rapport,
+          totalReservations,
+          totalConfirmees,
+          tauxConfirmation: rapport.tauxConfirmation || (totalReservations
+            ? Math.round((totalConfirmees / totalReservations) * 100)
+            : 0)
+        };
         this.isLoading = false;
       },
       error: (err) => {

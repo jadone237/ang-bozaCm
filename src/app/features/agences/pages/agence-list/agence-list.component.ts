@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AgenceResponseDTO } from '../../models/agence.model';
 import { AgenceService } from '../../data-access/agence.service';
 import { OffreService } from '../../../offres/data-access/offre.service';
-import { ReservationAdminService } from '../../../admin/services/reservation-admin.service';
+import { SatsService } from '../../../statistiques/service/sats.service';
 
 @Component({
   selector: 'app-agence-list',
@@ -31,7 +31,7 @@ export class AgenceListComponent implements OnInit {
   constructor(
     private agenceService: AgenceService,
     private offreService: OffreService,
-    private reservationService: ReservationAdminService,
+    private satsService: SatsService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -48,43 +48,25 @@ export class AgenceListComponent implements OnInit {
   private loadSummaryCounts(): void {
     this.offreService.getAllOffres().subscribe({
       next: (offres) => this.totalOffres = offres.length,
-      error: (error) => this.addStatsError('offres', error.status)
+      error: (error) => this.addStatsError('offres', error)
     });
 
-    this.reservationService.getAllReservations().subscribe({
-      next: (response) => this.totalReservations = this.countRecords(response),
-      error: (error) => this.addStatsError('réservations', error.status)
+    this.satsService.getClassementAgences().subscribe({
+      next: (classement) => {
+        this.totalReservations = classement.reduce(
+          (total, agence) => total + agence.nombreReservationsTotal,
+          0
+        );
+      },
+      error: (error) => this.addStatsError('réservations', error)
     });
   }
 
-  private addStatsError(resource: string, status: number): void {
-    const detail = status ? ` (HTTP ${status})` : '';
-    const message = `Impossible de charger le nombre de ${resource}${detail}.`;
-    this.statsErrorMessage = [this.statsErrorMessage, message].filter(Boolean).join(' ');
-  }
-
-  private countRecords(response: unknown): number {
-    if (Array.isArray(response)) return response.length;
-    if (!response || typeof response !== 'object') return 0;
-
-    const result = response as {
-      data?: unknown;
-      content?: unknown;
-      total?: unknown;
-      totalElements?: unknown;
-      totalReservations?: unknown;
-    };
-
-    if (typeof result.totalReservations === 'number') return result.totalReservations;
-    if (typeof result.totalElements === 'number') return result.totalElements;
-    if (typeof result.total === 'number') return result.total;
-    if (Array.isArray(result.data)) return result.data.length;
-    if (Array.isArray(result.content)) return result.content.length;
-    if (result.data && typeof result.data === 'object') {
-      const nestedCount = this.countRecords(result.data);
-      if (nestedCount > 0) return nestedCount;
-    }
-    return 0;
+  private addStatsError(resource: string, error: unknown): void {
+    const message = error instanceof Error ? error.message : '';
+    const detail = message ? ` (${message})` : '';
+    const errorMessage = `Impossible de charger le nombre de ${resource}${detail}.`;
+    this.statsErrorMessage = [this.statsErrorMessage, errorMessage].filter(Boolean).join(' ');
   }
 
   loadAgences(): void {

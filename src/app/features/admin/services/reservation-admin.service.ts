@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -13,10 +12,6 @@ export class ReservationAdminService {
 
   getOffres() {
     return this.http.get<any[]>(`${environment.apiUrl}/v1/offres/get_all`);
-  }
-
-  getAllReservations(): Observable<unknown> {
-    return this.http.get<unknown>(`${environment.apiUrl}/v1/reservations/get_all`);
   }
 
   createBus(payload: any) {

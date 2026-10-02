@@ -1,7 +1,6 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { ReservationAdminService } from '../../services/reservation-admin.service';
 import { OffreService } from '../../../offres/data-access/offre.service';
 import { OffreResponseDTO } from '../../../offres/models/offre.model';
@@ -21,7 +20,7 @@ interface Reservation {
 @Component({
   selector: 'app-bookings',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './bookings.component.html',
   styleUrl: './bookings.component.css',
 })
@@ -34,6 +33,7 @@ export class BookingsComponent implements OnInit {
   formError = signal<string | null>(null);
   formSuccess = signal<string | null>(null);
   typeTransport = signal<'BUS' | 'TRAIN' | 'AVION'>('BUS');
+  private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   clients = signal<any[]>([]);
   offres = signal<OffreResponseDTO[]>([]);
@@ -147,13 +147,24 @@ export class BookingsComponent implements OnInit {
   }
 
   openModal() {
+    this.clearFeedbackTimer();
     this.showModal.set(true);
     this.formError.set(null);
     this.formSuccess.set(null);
   }
 
   closeModal() {
+    this.clearFeedbackTimer();
+    this.formSuccess.set(null);
+    this.formError.set(null);
     this.showModal.set(false);
+  }
+
+  private clearFeedbackTimer(): void {
+    if (this.feedbackTimer) {
+      clearTimeout(this.feedbackTimer);
+      this.feedbackTimer = undefined;
+    }
   }
 
   setTypeTransport(type: 'BUS' | 'TRAIN' | 'AVION') {
@@ -197,11 +208,14 @@ export class BookingsComponent implements OnInit {
       next: () => {
         this.isSubmitting.set(false);
         this.formSuccess.set('Réservation créée avec succès.');
-        setTimeout(() => this.closeModal(), 1200);
+        this.clearFeedbackTimer();
+        this.feedbackTimer = setTimeout(() => this.closeModal(), 4000);
       },
       error: (err) => {
         this.isSubmitting.set(false);
         this.formError.set(err.error?.message || 'Erreur lors de la création de la réservation.');
+        this.clearFeedbackTimer();
+        this.feedbackTimer = setTimeout(() => this.formError.set(null), 5000);
       },
     });
   }
