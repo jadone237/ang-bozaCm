@@ -1,33 +1,49 @@
 import { Routes } from '@angular/router';
-import { AgenceListComponent } from './features/agences/pages/agence-list/agence-list.component';
-import { TrajetListComponent } from './features/trajets/pages/trajet-list/trajet-list.component';
-import { OffreListComponent } from './features/offres/pages/offre-list/offre-list.component';
 import { AdminLayoutComponent } from './shared/layouts/admin-layout/admin-layout.component';
-import { OffreFormComponent } from './features/offres/components/offre-form/offre-form.component';
-import { TrajetFormComponent } from './features/trajets/components/trajet-form/trajet-form.component';
-import { AgenceFormComponent } from './features/agences/components/agence-form/agence-form.component';
-import { AgStatsComponent } from './features/statistiques/component/ag-stats/ag-stats.component';
-import { StatListComponent } from './features/statistiques/pages/stat-list/stat-list.component';
-import { RapportGlobalComponent } from './features/rapport/pages/rapport-global/rapport-global.component';
+
 export const routes: Routes = [
+  // --- Zone Publique / Client & Auth ---
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { 
+    path: 'login', 
+    loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent) 
+  },
+  { 
+    path: 'register', 
+    loadComponent: () => import('./features/auth/pages/register/register.component').then(m => m.RegisterComponent) 
+  },
+  { 
+    path: 'accueil', 
+    loadComponent: () => import('./features/client/pages/accueil/accueil.component').then(m => m.AccueilComponent) 
+  },
+
+  // --- Zone Administration (Sous ton AdminLayout avec Sidebar) ---
   {
     path: '',
-    component: AdminLayoutComponent, // Le layout enveloppe toutes les routes ci-dessous
+    component: AdminLayoutComponent,
     children: [
-      { path: 'agences', component: AgenceListComponent },
-      { path: 'trajets', component: TrajetListComponent },
-      { path: 'offres', component: OffreListComponent },
-      { path: 'ajouter-offre', component: OffreFormComponent },
-      { path: 'modifier-offre/:id', component: OffreFormComponent },
-      { path: 'ajouter-trajet', component: TrajetFormComponent },
-      { path: 'modifier-trajet/:id', component: TrajetFormComponent },
-      { path: 'ajouter-agence', component: AgenceFormComponent },
-      { path: 'modifier-agence/:id', component: AgenceFormComponent },
-      { path: '', redirectTo: 'agences', pathMatch: 'full' },
-      {path: 'statistiques',component: StatListComponent},
-      {path: 'rapports',component: RapportGlobalComponent},
-      {path: 'statistiques/:id/statistiques',component: AgStatsComponent}
+      { path: 'agences', loadComponent: () => import('./features/agences/pages/agence-list/agence-list.component').then(m => m.AgenceListComponent) },
+      { path: 'ajouter-agence', loadComponent: () => import('./features/agences/components/agence-form/agence-form.component').then(m => m.AgenceFormComponent) },
+      { path: 'modifier-agence/:id', loadComponent: () => import('./features/agences/components/agence-form/agence-form.component').then(m => m.AgenceFormComponent) },
+
+      { path: 'trajets', loadComponent: () => import('./features/trajets/pages/trajet-list/trajet-list.component').then(m => m.TrajetListComponent) },
+      { path: 'ajouter-trajet', loadComponent: () => import('./features/trajets/components/trajet-form/trajet-form.component').then(m => m.TrajetFormComponent) },
+      { path: 'modifier-trajet/:id', loadComponent: () => import('./features/trajets/components/trajet-form/trajet-form.component').then(m => m.TrajetFormComponent) },
+
+      { path: 'offres', loadComponent: () => import('./features/offres/pages/offre-list/offre-list.component').then(m => m.OffreListComponent) },
+      { path: 'ajouter-offre', loadComponent: () => import('./features/offres/components/offre-form/offre-form.component').then(m => m.OffreFormComponent) },
+      { path: 'modifier-offre/:id', loadComponent: () => import('./features/offres/components/offre-form/offre-form.component').then(m => m.OffreFormComponent) },
+
+      { path: 'statistiques', loadComponent: () => import('./features/statistiques/pages/stat-list/stat-list.component').then(m => m.StatListComponent) },
+      { path: 'agences/:id/statistiques', loadComponent: () => import('./features/statistiques/component/ag-stats/ag-stats.component').then(m => m.AgStatsComponent) },
+
+      { path: 'rapports', loadComponent: () => import('./features/rapport/pages/rapport-global/rapport-global.component').then(m => m.RapportGlobalComponent) },
+
+      // Module Réservations (issu du travail de ton camarade)
+      { path: 'reservations', loadComponent: () => import('./features/admin/pages/bookings/bookings.component').then(m => m.BookingsComponent) }
     ]
   },
-  { path: '**', redirectTo: '' }
+
+  // Redirection par défaut si route inconnue
+  { path: '**', redirectTo: 'login' }
 ];

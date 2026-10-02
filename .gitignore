@@ -1,12 +1,10 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
 # Compiled output
 /dist
 /tmp
 /out-tsc
 /bazel-out
 
-# Node
+# Node dependencies
 /node_modules
 npm-debug.log
 yarn-error.log
@@ -34,13 +32,6 @@ yarn-error.log
 /connect.lock
 /coverage
 /libpeerconnection.log
-testem.log
-/typings
-
-# System files
+test.log
 .DS_Store
 Thumbs.db
-
-# Fichiers / dossiers ajoutés par la branche distante
-ang-bozaCm/
-.~lock.*

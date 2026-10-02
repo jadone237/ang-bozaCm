@@ -2,8 +2,8 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../../core/auth/auth.service';
 
-// validateur réutilisable pour les deux formulaires
 function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
   const pass = group.get('password')?.value;
   const confirm = group.get('confirmPassword')?.value;
@@ -20,12 +20,17 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 export class RegisterComponent {
   registerType = signal<'CLIENT' | 'AGENCE'>('CLIENT');
   showPassword = signal(false);
+  errorMessage = signal<string | null>(null);
+  isLoading = signal(false);
 
   clientForm: FormGroup;
   agenceForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    // champs alignés sur Client.java
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.clientForm = this.fb.group({
       nom: ['', Validators.required],
       prenom: ['', Validators.required],
@@ -36,7 +41,6 @@ export class RegisterComponent {
       confirmPassword: ['', Validators.required],
     }, { validators: passwordsMatchValidator });
 
-    // champs alignés sur Agence.java
     this.agenceForm = this.fb.group({
       nom: ['', Validators.required],
       adresse: ['', Validators.required],
@@ -65,9 +69,26 @@ export class RegisterComponent {
       form.markAllAsTouched();
       return;
     }
-    // TODO : appeler AuthService.register(this.registerType(), form.value)
-    // une fois le endpoint d'inscription confirmé avec Naomie
-    console.log('Inscription', this.registerType(), form.value);
-    this.router.navigateByUrl('/login');
+
+    this.errorMessage.set(null);
+    this.isLoading.set(true);
+
+    // le backend n'attend pas confirmPassword, on le retire avant l'envoi
+    const { confirmPassword, ...payload } = form.value;
+
+    const request$ = this.registerType() === 'CLIENT'
+      ? this.authService.registerClient(payload)
+      : this.authService.registerAgence(payload);
+
+    request$.subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigateByUrl('/login');
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(err.error || 'Une erreur est survenue, veuillez réessayer');
+      },
+    });
   }
 }
