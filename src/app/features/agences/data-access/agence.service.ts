@@ -82,16 +82,14 @@ export class AgenceService {
 
   // --- Gestion centralisée des erreurs HTTP ---
   private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Une erreur est survenue sur le serveur.';
+    let errorMessage: string;
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Erreur client : ${error.error.message}`;
     } else {
       const backendMessage = typeof error.error === 'string'
         ? error.error
         : error.error?.message || error.error?.error;
-      errorMessage = backendMessage
-        ? `${backendMessage}`
-        : `Erreur ${error.status} : ${error.message}`;
+      errorMessage = `Erreur HTTP ${error.status} sur ${error.url || 'le service agences'} : ${backendMessage || error.message}`;
     }
     console.error(errorMessage);
     return throwError(() => new Error(errorMessage));

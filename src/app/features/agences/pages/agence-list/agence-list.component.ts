@@ -48,13 +48,19 @@ export class AgenceListComponent implements OnInit {
   private loadSummaryCounts(): void {
     this.offreService.getAllOffres().subscribe({
       next: (offres) => this.totalOffres = offres.length,
-      error: () => this.statsErrorMessage = 'Impossible de charger le nombre d’offres.'
+      error: (error) => this.addStatsError('offres', error.status)
     });
 
     this.reservationService.getAllReservations().subscribe({
       next: (response) => this.totalReservations = this.countRecords(response),
-      error: () => this.statsErrorMessage = 'Impossible de charger le nombre de réservations.'
+      error: (error) => this.addStatsError('réservations', error.status)
     });
+  }
+
+  private addStatsError(resource: string, status: number): void {
+    const detail = status ? ` (HTTP ${status})` : '';
+    const message = `Impossible de charger le nombre de ${resource}${detail}.`;
+    this.statsErrorMessage = [this.statsErrorMessage, message].filter(Boolean).join(' ');
   }
 
   private countRecords(response: unknown): number {
@@ -66,12 +72,18 @@ export class AgenceListComponent implements OnInit {
       content?: unknown;
       total?: unknown;
       totalElements?: unknown;
+      totalReservations?: unknown;
     };
 
-    if (Array.isArray(result.data)) return result.data.length;
-    if (Array.isArray(result.content)) return result.content.length;
+    if (typeof result.totalReservations === 'number') return result.totalReservations;
     if (typeof result.totalElements === 'number') return result.totalElements;
     if (typeof result.total === 'number') return result.total;
+    if (Array.isArray(result.data)) return result.data.length;
+    if (Array.isArray(result.content)) return result.content.length;
+    if (result.data && typeof result.data === 'object') {
+      const nestedCount = this.countRecords(result.data);
+      if (nestedCount > 0) return nestedCount;
+    }
     return 0;
   }
 
