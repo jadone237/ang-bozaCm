@@ -76,7 +76,7 @@ Les routes métier sont des routes enfants du `AdminLayoutComponent` dans [src/a
 | `/rapports` | Rapport global de la plateforme |
 | URL inconnue | Redirection vers la route racine, puis vers les agences |
 
-[admin-layout.component.html](src/app/shared/layouts/admin-layout/admin-layout.component.html) construit la barre latérale, l’en-tête et le `<router-outlet>` des pages enfants. `RouterLink` réalise les navigations Angular sans rechargement complet de la page. `RouterLinkActive` ajoute une classe active au lien correspondant. Les styles de la mise en page et son adaptation mobile sont dans [admin-layout.component.scss](src/app/shared/layouts/admin-layout/admin-layout.component.scss).
+[admin-layout.component.html](src/app/shared/layouts/admin-layout/admin-layout.component.html) construit la barre latérale, l’en-tête et le `<router-outlet>` des pages enfants. `RouterLink` réalise les navigations Angular sans rechargement complet de la page. `RouterLinkActive` ajoute une classe active au lien correspondant. Le composant [admin-layout.component.ts](src/app/shared/layouts/admin-layout/admin-layout.component.ts) porte aussi l’état `isSidebarOpen` et les méthodes `toggleSidebar()` et `fermerSidebar()`. Sur téléphone, le bouton burger ouvre un tiroir latéral, un voile assombrit l’arrière-plan, et la navigation ou le bouton de fermeture referme le tiroir. Ces règles sont dans [admin-layout.component.scss](src/app/shared/layouts/admin-layout/admin-layout.component.scss).
 
 Les styles partagés, Bootstrap et les icônes Bootstrap sont chargés dans [src/styles.scss](src/styles.scss). Les styles détaillés des vues restent généralement locaux aux composants.
 
@@ -104,7 +104,7 @@ Le composant ne communique donc pas directement avec `fetch` ou une URL : il app
 
 ### 5.1 Gestion des agences
 
-La liste des agences est chargée depuis l’API via `AgenceService`. Elle permet de rechercher localement par nom, adresse e-mail ou téléphone, de parcourir les résultats par pages, d’ouvrir le formulaire d’ajout/modification et de supprimer une agence après confirmation.
+La liste des agences est chargée depuis l’API via `AgenceService`. Elle permet de rechercher localement par nom, adresse e-mail ou téléphone, de parcourir les résultats par pages, d’ouvrir le formulaire d’ajout/modification et de supprimer une agence après confirmation. Dans [agence-list.component.html](src/app/features/agences/pages/agence-list/agence-list.component.html), les cellules reçoivent aussi un attribut `data-label`. Sous 600 px, le CSS masque l’en-tête du tableau, transforme chaque ligne en fiche verticale et affiche ces libellés devant les valeurs. Les styles sont dans [agence-list.component.scss](src/app/features/agences/pages/agence-list/agence-list.component.scss).
 
 Le formulaire [agence-form.component.ts](src/app/features/agences/components/agence-form/agence-form.component.ts) est un **formulaire réactif**. Il crée les contrôles avec `FormBuilder`, applique les validateurs Angular (`required`, `minLength`, `email`), puis distingue ajout et édition en lisant le paramètre `id` de la route. En édition, `getAgenceById()` charge les données et `patchValue()` remplit le formulaire. À l’envoi, le composant choisit `createAgence()` ou `updateAgence()` selon le mode, puis revient à la liste avec un message de succès dans les paramètres de l’URL.
 
@@ -118,7 +118,7 @@ Le modèle correspondant, [trajet.model.ts](src/app/features/trajets/models/traj
 
 ### 5.3 Gestion des offres
 
-La liste [offre-list.component.ts](src/app/features/offres/pages/offre-list/offre-list.component.ts) affiche les offres avec le trajet et l’agence associés. Elle propose une recherche textuelle, des filtres par ville de départ et par agence, des indicateurs (offres, places, agences) et une pagination en mémoire. Elle permet aussi la modification et la suppression.
+La liste [offre-list.component.ts](src/app/features/offres/pages/offre-list/offre-list.component.ts) affiche les offres avec le trajet et l’agence associés. Elle propose une recherche textuelle, des filtres par ville de départ et par agence, des indicateurs (offres, places, agences) et une pagination en mémoire. Elle permet aussi la modification et la suppression. Sur téléphone, le tableau de [offre-list.component.html](src/app/features/offres/pages/offre-list/offre-list.component.html) est restylé en fiches : l’en-tête de colonnes est caché, les informations sont redisposées en grille et des libellés CSS sont ajoutés avant l’agence, le prix et les places ; les actions restent accessibles en bas de chaque fiche. Les règles figurent dans [offre-list.component.scss](src/app/features/offres/pages/offre-list/offre-list.component.scss).
 
 Le formulaire [offre-form.component.ts](src/app/features/offres/components/offre-form/offre-form.component.ts) utilise `[(ngModel)]` et charge les agences et les trajets pour alimenter les listes de sélection. En édition, l’offre reçue (qui contient des objets `agence` et `trajet`) est convertie en données de requête simples `agenceId` et `trajetId`. Avant l’envoi, le composant vérifie les champs, les valeurs positives et la présence des deux relations.
 
@@ -126,7 +126,7 @@ Les modèles de [offre.model.ts](src/app/features/offres/models/offre.model.ts) 
 
 ### 5.4 Statistiques par agence
 
-La page [stat-list.component.ts](src/app/features/statistiques/pages/stat-list/stat-list.component.ts) réutilise les données de `AgenceService` pour afficher les agences, proposer une recherche et un filtre par ville, et paginer la liste. Le bouton « Voir stats » navigue vers `/statistiques/:id/statistiques`.
+La page [stat-list.component.ts](src/app/features/statistiques/pages/stat-list/stat-list.component.ts) réutilise les données de `AgenceService` pour afficher les agences, proposer une recherche et un filtre par ville, et paginer la liste. Le bouton « Voir stats » navigue vers `/statistiques/:id/statistiques`. La feuille de style partagée avec la liste des offres agence adapte aussi cette liste : en écran étroit, chaque agence devient une fiche avec ville, téléphone, adresse et bouton d’accès aux statistiques plutôt qu’une ligne trop large.
 
 Le composant de détail [ag-stats.component.ts](src/app/features/statistiques/component/ag-stats/ag-stats.component.ts) lit l’ID dans l’URL et charge deux ressources : les statistiques détaillées de l’agence et le classement. Il combine ces appels avec `forkJoin`, puis le template [ag-stats.component.html](src/app/features/statistiques/component/ag-stats/ag-stats.component.html) affiche les indicateurs, le classement et des barres de comparaison. Le pourcentage de largeur des barres est calculé à partir de la valeur maximale des réservations.
 
@@ -267,7 +267,38 @@ Les templates conditionnent leur rendu avec `@if` et `@else`. Les services centr
 6. **Formulaires hétérogènes** : agences/auth utilisent les formulaires réactifs, tandis qu’offres/trajets utilisent `ngModel`. Une harmonisation pourrait simplifier la maintenance, sans être nécessaire pour le fonctionnement actuel.
 7. **Tests présents mais à compléter** : certains composants ont un test de création généré. Il serait utile d’ajouter des tests sur les validateurs, les calculs de pagination, les filtres et les interactions avec les services.
 
-## 11. Résumé mental du projet
+## 11. Mise en page responsive actuelle
+
+Le responsive est réalisé avec des media queries CSS/SCSS, sans librairie Angular supplémentaire. Les pages conservent leurs composants et leurs données ; seuls leur agencement et leur présentation changent selon la largeur disponible.
+
+### 11.1 Menu d’administration
+
+À partir de 768 px de large, la barre latérale devient un tiroir fixe placé hors de l’écran. Le bouton burger contrôle `isSidebarOpen` dans `AdminLayoutComponent`, la classe CSS `open` fait glisser le tiroir, et `sidebar-overlay` permet de le fermer en cliquant à l’extérieur. Les liens ferment également le menu après la navigation. Le titre du tableau de bord et les actions d’en-tête sont adaptés aux petits écrans. Les trois fichiers à consulter sont :
+
+- [admin-layout.component.ts](src/app/shared/layouts/admin-layout/admin-layout.component.ts) — état ouvert/fermé et fonctions de contrôle ;
+- [admin-layout.component.html](src/app/shared/layouts/admin-layout/admin-layout.component.html) — bouton burger, tiroir, bouton fermer et voile ;
+- [admin-layout.component.scss](src/app/shared/layouts/admin-layout/admin-layout.component.scss) — tiroir hors champ, transition et largeur mobile.
+
+### 11.2 Listes sur téléphone
+
+Les listes Agences, Offres et Statistiques ont été conçues pour éviter qu’un tableau de nombreuses colonnes réduise le contenu à une largeur illisible :
+
+- **Agences** : sous 600 px, l’en-tête du tableau est masqué et chaque agence apparaît comme une fiche verticale. Les attributs `data-label` dans le HTML fournissent les intitulés « Agence », « Email professionnel », « Téléphone » et « Adresse ».
+- **Offres** : sous 600 px, chaque offre devient une carte à deux colonnes. Le titre et les actions occupent toute la largeur ; l’agence, le prix et les places restent clairement identifiés.
+- **Statistiques – liste des agences** : chaque agence apparaît sous forme de carte, avec ville, téléphone, adresse et accès aux statistiques.
+- **Statistiques – détail d’une agence** : les cartes KPI, le classement, le graphique et la zone d’analyse passent sur une colonne ou une grille plus compacte ; les KPI deviennent une colonne sous 380 px.
+
+Les seuils principaux de la liste sont 850 px pour la réorganisation générale de l’en-tête et des filtres, 600 px pour les fiches mobiles, et 360 px pour les appareils très étroits. Les règles sont dans les feuilles de style des composants indiquées aux sections 5.1, 5.3 et 5.4.
+
+### 11.3 Formulaires et styles globaux
+
+Les formulaires d’agence, trajet et offre réduisent leurs marges et passent les actions en colonne sur téléphone. Les champs des offres qui sont côte à côte sur grand écran s’empilent sous 600 px. Les écrans d’authentification limitent la largeur de la carte et ajustent les onglets. [src/styles.scss](src/styles.scss) fixe notamment une largeur minimale de document de 320 px, limite les débordements globaux et règle le comportement de base des médias et champs.
+
+### 11.4 Comment vérifier le responsive
+
+Dans les outils de développement du navigateur, tester au minimum 320 px (petit téléphone), 390 px (téléphone courant), 768 px (tablette/transition) et une largeur de bureau. Vérifier séparément la largeur totale du document et le défilement volontaire d’un élément particulier : un document ne doit pas déborder horizontalement, mais un tableau très large peut garder un défilement local si sa présentation en cartes n’est pas activée. Vérifier également que le tiroir peut être ouvert, fermé par son bouton, par le voile et après navigation.
+
+## 12. Résumé mental du projet
 
 Pour comprendre ou modifier une fonctionnalité, suivre cette chaîne :
 

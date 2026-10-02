@@ -1,43 +1,54 @@
 <div class="dashboard-wrapper">
   
+  <!-- Voile sombre d'arrière-plan sur mobile -->
+  @if (isSidebarOpen) {
+    <div class="sidebar-overlay" (click)="fermerSidebar()"></div>
+  }
+
   <!-- ================= 1. LA BARRE LATÉRALE (SIDEBAR) ================= -->
-  <aside class="sidebar bg-white border-end d-flex flex-column justify-content-between p-3">
+  <aside class="sidebar" [class.open]="isSidebarOpen">
     <div>
-      <!-- Logo et Titre de l'application -->
-      <div class="mb-4 px-2">
-        <h4 class="fw-bold text-dark mb-0">Cameroun Voyage</h4>
-        <p class="fw-bold text-muted mb-0">Plateforme d'administration</p>
+      <!-- Logo, Titre et bouton de fermeture mobile -->
+      <div class="sidebar-header mb-4 px-2 d-flex justify-content-between align-items-center">
+        <div>
+          <h4 class="fw-bold text-dark mb-0">Cameroun Voyage</h4>
+          <p class="fw-bold text-muted mb-0">Plateforme d'administration</p>
+        </div>
+        <!-- Bouton pour fermer (visible uniquement sur mobile) -->
+        <button class="btn-close-sidebar d-md-none" (click)="fermerSidebar()" aria-label="Fermer">
+          <i class="bi bi-x-lg"></i>
+        </button>
       </div>
 
       <!-- Menu de navigation principal -->
       <ul class="nav nav-pills flex-column gap-1">
         <li class="nav-item">
-          <a routerLink="/agences" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+          <a routerLink="/agences" routerLinkActive="active" (click)="fermerSidebar()" class="nav-link">
             <i class="bi bi-building"></i> Agences
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/trajets" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+          <a routerLink="/trajets" routerLinkActive="active" (click)="fermerSidebar()" class="nav-link">
             <i class="bi bi-signpost-split"></i> Trajets
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/offres" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+          <a routerLink="/offres" routerLinkActive="active" (click)="fermerSidebar()" class="nav-link">
             <i class="bi bi-tag"></i> Offres
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/reservations" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+          <a routerLink="/reservations" routerLinkActive="active" (click)="fermerSidebar()" class="nav-link">
             <i class="bi bi-journal-text"></i> Réservations
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/statistiques" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+          <a routerLink="/statistiques" routerLinkActive="active" (click)="fermerSidebar()" class="nav-link">
             <i class="bi bi-bar-chart"></i> Statistiques
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/rapports" routerLinkActive="active" class="nav-link text-secondary d-flex align-items-center gap-2">
+          <a routerLink="/rapports" routerLinkActive="active" (click)="fermerSidebar()" class="nav-link">
             <i class="bi bi-file-earmark-text"></i> Rapports
           </a>
         </li>
@@ -56,20 +67,26 @@
   </aside>
 
   <!-- ================= 2. CONTENU PRINCIPAL ================= -->
-  <main class="main-content flex-grow-1 p-4">
+  <main class="main-content">
     
-    <!-- En-tête supérieur (Header fixe) -->
-    <header class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="fw-bold text-dark fs-4 mb-0"></h2>
+    <!-- En-tête supérieur avec bouton burger pour mobile -->
+    <header class="main-header d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex align-items-center gap-3">
+        <!-- Bouton Menu Burger (visible uniquement sur mobile < 768px) -->
+        <button class="btn-burger d-md-none" (click)="toggleSidebar()" aria-label="Menu">
+          <i class="bi bi-list"></i>
+        </button>
+        <h2 class="fw-bold text-dark fs-4 mb-0 titre-page-header">Tableau de bord</h2>
+      </div>
       
       <div class="d-flex align-items-center gap-3">
         <!-- Boutons de notification / aide -->
         <button class="btn btn-light text-secondary border rounded-circle p-2"><i class="bi bi-bell"></i></button>
-        <button class="btn btn-light text-secondary border rounded-circle p-2"><i class="bi bi-question-circle"></i></button>
+        <button class="btn btn-light text-secondary border rounded-circle p-2 d-none d-sm-inline-block"><i class="bi bi-question-circle"></i></button>
         
         <!-- Profil Administrateur -->
         <div class="d-flex align-items-center gap-2 border-start ps-3">
-          <div class="text-end">
+          <div class="text-end d-none d-sm-block">
             <h6 class="mb-0 fw-bold fs-7">Administrateur</h6>
             <small class="text-muted fs-8">Super Admin</small>
           </div>
@@ -78,7 +95,7 @@
       </div>
     </header>
 
-    <!-- ZONE D'INJECTION DYNAMIQUE (C'est ici que s'affichera Agences, Trajets, Offres...) -->
+    <!-- Zone d'injection dynamique -->
     <router-outlet></router-outlet>
     
   </main>

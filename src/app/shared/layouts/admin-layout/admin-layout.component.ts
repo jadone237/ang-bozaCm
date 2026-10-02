@@ -15,5 +15,13 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   styleUrls: ['./admin-layout.component.scss']
 })
 export class AdminLayoutComponent {
-  // Aucune logique complexe nécessaire ici pour l'instant, le layout sert de structure fixe.
+  isSidebarOpen = false;
+
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  fermerSidebar(): void {
+    this.isSidebarOpen = false;
+  }
 }
