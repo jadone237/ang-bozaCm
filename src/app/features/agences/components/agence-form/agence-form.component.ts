@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -13,6 +13,8 @@ import { AgenceService } from '../../data-access/agence.service';
   styleUrls: ['./agence-form.component.scss']
 })
 export class AgenceFormComponent implements OnInit {
+  private agenceService = inject(AgenceService);
+
   agenceForm!: FormGroup;
   isEditMode = false;
   agenceId?: number;
@@ -21,7 +23,6 @@ export class AgenceFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private agenceService: AgenceService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
