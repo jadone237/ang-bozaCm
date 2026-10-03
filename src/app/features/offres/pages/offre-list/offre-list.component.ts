@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -15,6 +15,9 @@ import { AgenceService } from '../../../agences/data-access/agence.service';
   styleUrl: './offre-list.component.scss'
 })
 export class OffreListComponent implements OnInit, OnDestroy {
+  private offreService = inject(OffreService);
+  private agenceService = inject(AgenceService);
+
   offres: OffreResponseDTO[] = [];
   offresFiltrees: OffreResponseDTO[] = [];
   agences: AgenceResponseDTO[] = [];
@@ -29,8 +32,6 @@ export class OffreListComponent implements OnInit, OnDestroy {
   private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
-    private offreService: OffreService,
-    private agenceService: AgenceService,
     private route: ActivatedRoute,
     private router: Router
   ) {}

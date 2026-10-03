@@ -20,7 +20,10 @@ export class AccueilComponent implements OnInit {
 
   searchForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private offreService: OffreService) {
+  constructor(
+    private fb: FormBuilder,
+    private offreService: OffreService
+  ) {
     this.searchForm = this.fb.group({
       depart: ['Douala'],
       destination: ['Douala'],
@@ -48,4 +51,5 @@ export class AccueilComponent implements OnInit {
   search() {
     console.log('Recherche', this.activeTransport(), this.searchForm.value);
   }
+
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,8 @@ import { TrajetService } from '../../data-access/trajet.service';
   styleUrls: ['./trajet-form.component.scss']
 })
 export class TrajetFormComponent implements OnInit {
+  private trajetService = inject(TrajetService);
+
   trajet: TrajetRequestDTO = {
     villeDepart: '',
     villeArrivee: '',
@@ -24,7 +26,6 @@ export class TrajetFormComponent implements OnInit {
   errorMessage = '';
 
   constructor(
-    private trajetService: TrajetService,
     private route: ActivatedRoute,
     private router: Router
   ) {}

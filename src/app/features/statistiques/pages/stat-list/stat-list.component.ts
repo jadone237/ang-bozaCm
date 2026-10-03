@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -13,6 +13,8 @@ import { AgenceService } from '../../../agences/data-access/agence.service';
   styleUrl: './stat-list.component.scss'
 })
 export class StatListComponent implements OnInit, OnDestroy {
+  private agenceService = inject(AgenceService);
+
   agences: AgenceResponseDTO[] = [];
   agencesFiltrees: AgenceResponseDTO[] = [];
 
@@ -28,7 +30,6 @@ export class StatListComponent implements OnInit, OnDestroy {
   private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
-    private agenceService: AgenceService,
     private route: ActivatedRoute,
     private router: Router
   ) {}

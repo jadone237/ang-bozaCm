@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -13,6 +13,8 @@ import { TrajetService } from '../../data-access/trajet.service';
   styleUrl: './trajet-list.component.scss'
 })
 export class TrajetListComponent implements OnInit, OnDestroy {
+  private trajetService = inject(TrajetService);
+
   trajets: TrajetResponseDTO[] = [];
   resultatsRecherche: TrajetResponseDTO[] = [];
   trajetsAffiches: TrajetResponseDTO[] = [];
@@ -26,7 +28,6 @@ export class TrajetListComponent implements OnInit, OnDestroy {
   private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
-    private trajetService: TrajetService,
     private route: ActivatedRoute,
     private router: Router
   ) {}

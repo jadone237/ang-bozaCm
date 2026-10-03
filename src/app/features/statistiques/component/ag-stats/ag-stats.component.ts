@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AgenceClassementDTO, AgenceStatistiqueDTO } from '../../model/stat.model';
 import { SatsService } from '../../service/sats.service';
@@ -8,11 +8,13 @@ import { SatsService } from '../../service/sats.service';
 @Component({
   selector: 'app-ag-stats',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './ag-stats.component.html',
   styleUrl: './ag-stats.component.scss'
 })
 export class AgStatsComponent implements OnInit {
+  private satsService = inject(SatsService);
+
   agenceId!: number;
   stats: AgenceStatistiqueDTO | null = null;
   classement: AgenceClassementDTO[] = [];
@@ -21,8 +23,7 @@ export class AgStatsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private satsService: SatsService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
