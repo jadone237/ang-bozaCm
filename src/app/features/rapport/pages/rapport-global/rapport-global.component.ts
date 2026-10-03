@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
@@ -14,13 +14,14 @@ import { SatsService } from '../../../statistiques/service/sats.service';
   styleUrl: './rapport-global.component.scss'
 })
 export class RapportGlobalComponent implements OnInit {
+  private rapportService = inject(RapportService);
+  private satsService = inject(SatsService);
+
   rapport: RapportGlobalDTO | null = null;
   isLoading = true;
   errorMessage = '';
 
   constructor(
-    private rapportService: RapportService,
-    private satsService: SatsService,
     private router: Router
   ) {}
 

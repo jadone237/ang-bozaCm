@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +17,10 @@ import { TrajetService } from '../../../trajets/data-access/trajet.service';
   styleUrl: './offre-form.component.scss'
 })
 export class OffreFormComponent implements OnInit {
+  private offreService = inject(OffreService);
+  private agenceService = inject(AgenceService);
+  private trajetService = inject(TrajetService);
+
   offre: OffreRequestDTO = this.nouvelleOffre();
   agences: AgenceResponseDTO[] = [];
   trajets: TrajetResponseDTO[] = [];
@@ -26,9 +30,6 @@ export class OffreFormComponent implements OnInit {
   errorMessage = '';
 
   constructor(
-    private offreService: OffreService,
-    private agenceService: AgenceService,
-    private trajetService: TrajetService,
     private route: ActivatedRoute,
     private router: Router
   ) {}

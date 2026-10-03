@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -15,6 +15,10 @@ import { SatsService } from '../../../statistiques/service/sats.service';
   styleUrls: ['./agence-list.component.scss']
 })
 export class AgenceListComponent implements OnInit, OnDestroy {
+  private agenceService = inject(AgenceService);
+  private offreService = inject(OffreService);
+  private satsService = inject(SatsService);
+
   agences: AgenceResponseDTO[] = [];
   filteredAgences: AgenceResponseDTO[] = [];
   searchTerm: string = '';
@@ -30,9 +34,6 @@ export class AgenceListComponent implements OnInit, OnDestroy {
   successMessage: string = '';
 
   constructor(
-    private agenceService: AgenceService,
-    private offreService: OffreService,
-    private satsService: SatsService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
