@@ -1,0 +1,66 @@
+<nav class="client-navbar">
+  <a class="brand" routerLink="/accueil">BozaCM</a>
+
+  <div class="nav-links">
+    <a class="nav-item" routerLink="/accueil" routerLinkActive="active">Accueil</a>
+    <a class="nav-item" routerLink="/client/mes-reservations" routerLinkActive="active">Mes réservations</a>
+    <a class="nav-item" href="#">Aide</a>
+  </div>
+
+  <div class="nav-actions">
+
+    <button type="button" class="icon-btn" (click)="themeService.toggle()"
+            [attr.aria-label]="themeService.theme() === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair'">
+      @if (themeService.theme() === 'light') {
+        <i class="bi bi-moon-stars"></i>
+      } @else {
+        <i class="bi bi-sun"></i>
+      }
+    </button>
+
+    <div class="menu-wrapper">
+      <button type="button" class="icon-btn" aria-label="Notifications" (click)="toggleNotifMenu($event)">
+        <i class="bi bi-bell"></i>
+        @if (reservationService.unreadCount() > 0) {
+          <span class="notif-badge">{{ reservationService.unreadCount() }}</span>
+        }
+      </button>
+      @if (isNotifMenuOpen()) {
+        <div class="dropdown-panel" (click)="$event.stopPropagation()">
+          <div class="dropdown-header">Notifications</div>
+          @if (reservationService.notifications().length === 0) {
+            <div class="dropdown-empty">Aucune notification pour le moment.</div>
+          } @else {
+            @for (n of reservationService.notifications(); track n.reservation.type + n.reservation.id) {
+              <a class="dropdown-item" [class.unread]="n.unread" routerLink="/client/mes-reservations">
+                <i class="bi" [ngClass]="n.reservation.type === 'AVION' ? 'bi-airplane' : n.reservation.type === 'TRAIN' ? 'bi-train-front' : 'bi-bus-front'"></i>
+                <div>
+                  <div class="small fw-semibold">{{ n.reservation.depart }} → {{ n.reservation.arrivee }}</div>
+                  <div class="item-sub">Réservation {{ statutLabel(n.reservation.statut) }}</div>
+                </div>
+              </a>
+            }
+          }
+          <a class="dropdown-footer-link" routerLink="/client/mes-reservations">Voir toutes mes réservations</a>
+        </div>
+      }
+    </div>
+
+    <div class="menu-wrapper">
+      <button type="button" class="avatar-btn" aria-label="Mon compte" (click)="toggleProfileMenu($event)">{{ initiale() }}</button>
+      @if (isProfileMenuOpen()) {
+        <div class="dropdown-panel" (click)="$event.stopPropagation()">
+          <div class="dropdown-header">
+            <div class="fw-semibold name">{{ nomAffiche() }}</div>
+            <div class="item-sub">{{ email() }}</div>
+          </div>
+          <a class="dropdown-item-btn" routerLink="/client/profil"><i class="bi bi-person"></i> Mon profil</a>
+          <a class="dropdown-item-btn" routerLink="/client/profil" [queryParams]="{ onglet: 'preferences' }"><i class="bi bi-gear"></i> Paramètres</a>
+          <a class="dropdown-item-btn" routerLink="/client/mes-reservations"><i class="bi bi-ticket-perforated"></i> Mes réservations</a>
+          <button type="button" class="dropdown-item-btn danger" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Déconnexion</button>
+        </div>
+      }
+    </div>
+
+  </div>
+</nav>

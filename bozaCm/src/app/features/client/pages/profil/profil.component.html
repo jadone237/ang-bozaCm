@@ -1,0 +1,95 @@
+<app-client-navbar />
+
+<main class="page">
+  <header class="page-header">
+    <h1>Mon compte</h1>
+    <p>Gérez vos informations et vos préférences.</p>
+  </header>
+
+  @if (!reservationService.client()) {
+    @if (reservationService.loadError()) {
+      <div class="state-box error">{{ reservationService.loadError() }}</div>
+    } @else {
+      <div class="state-box">Chargement du profil...</div>
+    }
+  } @else {
+
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" class="tab" [class.active]="onglet() === 'profil'" (click)="onglet.set('profil')">Profil</button>
+      <button type="button" role="tab" class="tab" [class.active]="onglet() === 'preferences'" (click)="onglet.set('preferences')">Préférences</button>
+    </div>
+
+    @if (onglet() === 'profil') {
+      <section class="card">
+        <div class="identity">
+          <div class="identity-avatar">{{ (reservationService.client()?.prenom?.[0] ?? '') + (reservationService.client()?.nom?.[0] ?? '') }}</div>
+          <div>
+            <div class="identity-name">{{ reservationService.client()?.prenom }} {{ reservationService.client()?.nom }}</div>
+            <div class="identity-email">{{ reservationService.client()?.email }}</div>
+          </div>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="enregistrer()">
+          <div class="row-2">
+            <div class="form-group">
+              <label for="prenom">Prénom</label>
+              <input id="prenom" type="text" formControlName="prenom">
+              @if (form.get('prenom')?.touched && form.get('prenom')?.invalid) { <span class="field-error">Prénom requis (min. 2 caractères).</span> }
+            </div>
+            <div class="form-group">
+              <label for="nom">Nom</label>
+              <input id="nom" type="text" formControlName="nom">
+              @if (form.get('nom')?.touched && form.get('nom')?.invalid) { <span class="field-error">Nom requis (min. 2 caractères).</span> }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="tel">Téléphone</label>
+            <input id="tel" type="tel" formControlName="numeroTelephone" placeholder="6XXXXXXXX">
+            @if (form.get('numeroTelephone')?.touched && form.get('numeroTelephone')?.invalid) {
+              <span class="field-error">Numéro invalide : 9 chiffres commençant par 6.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="adresse">Adresse</label>
+            <input id="adresse" type="text" formControlName="adresse">
+          </div>
+
+          <p class="hint"><i class="bi bi-info-circle"></i> L'email de connexion ne peut pas être modifié ici.</p>
+
+          @if (saveError()) { <div class="alert-error">{{ saveError() }}</div> }
+          @if (saveSuccess()) { <div class="alert-success">{{ saveSuccess() }}</div> }
+
+          <button type="submit" class="btn-main" [disabled]="isSaving()">{{ isSaving() ? 'Enregistrement...' : 'Enregistrer' }}</button>
+        </form>
+      </section>
+    }
+
+    @if (onglet() === 'preferences') {
+      <section class="card">
+        <div class="pref-row">
+          <div>
+            <div class="pref-title">Mode sombre</div>
+            <div class="pref-sub">Un affichage reposant pour les yeux, idéal le soir.</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [checked]="themeService.theme() === 'dark'" (change)="themeService.toggle()" aria-label="Mode sombre">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="pref-row">
+          <div>
+            <div class="pref-title">Notifications par email</div>
+            <div class="pref-sub">Être prévenu quand le statut d'une réservation change.</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [checked]="recevoirNotifsEmail()" (change)="toggleNotifsEmail()" aria-label="Notifications par email">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </section>
+    }
+  }
+</main>

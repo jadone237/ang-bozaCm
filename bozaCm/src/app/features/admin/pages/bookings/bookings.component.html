@@ -36,15 +36,54 @@
       </div>
 
       <div class="admin-header-actions">
-        <i class="bi bi-bell fs-5"></i>
-        <i class="bi bi-gear fs-5"></i>
-        <div class="admin-user">
-          <div class="text-end">
-            <div class="fw-semibold small">Admin</div>
-            <div class="text-muted" style="font-size: 11px;">BozaCM Executive</div>
-          </div>
-          <div class="admin-avatar"><i class="bi bi-person-fill"></i></div>
+
+        <div class="header-icon-wrapper" (click)="toggleNotifMenu($event)">
+          <i class="bi bi-bell fs-5"></i>
+          @if (pendingCount() > 0) {
+            <span class="notif-badge">{{ pendingCount() }}</span>
+          }
+          @if (isNotifMenuOpen()) {
+            <div class="dropdown-panel notif-dropdown" (click)="$event.stopPropagation()">
+              <div class="dropdown-header">Réservations en attente</div>
+              @if (pendingReservations().length === 0) {
+                <div class="dropdown-empty">Aucune réservation en attente.</div>
+              } @else {
+                @for (r of pendingReservations(); track r.nom) {
+                  <div class="dropdown-item">
+                    <div class="client-avatar" [style.background]="r.avatarBg">{{ r.initiales }}</div>
+                    <div>
+                      <div class="fw-semibold small">{{ r.nom }}</div>
+                      <div class="text-muted" style="font-size: 11px;">{{ r.offre }}</div>
+                    </div>
+                  </div>
+                }
+              }
+              <button class="dropdown-footer-link" (click)="voirReservationsEnAttente()">Voir toutes les réservations en attente</button>
+            </div>
+          }
         </div>
+
+        <div class="header-icon-wrapper" (click)="toggleProfileMenu($event)">
+          <div class="admin-user">
+            <div class="text-end">
+              <div class="fw-semibold small">{{ adminNom() }}</div>
+              <div class="text-muted" style="font-size: 11px;">BozaCM Executive</div>
+            </div>
+            @if (adminProfile()?.photoUrl) {
+              <img [src]="adminProfile()?.photoUrl" class="admin-avatar" alt="Photo de profil">
+            } @else {
+              <div class="admin-avatar">{{ adminInitiale() }}</div>
+            }
+          </div>
+          @if (isProfileMenuOpen()) {
+            <div class="dropdown-panel profile-dropdown" (click)="$event.stopPropagation()">
+              <div class="dropdown-header">{{ adminEmail() }}</div>
+              <a class="dropdown-item-btn" routerLink="/admin/profil"><i class="bi bi-person"></i> Mon profil</a>
+              <button class="dropdown-item-btn" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Déconnexion</button>
+            </div>
+          }
+        </div>
+
       </div>
     </div>
 

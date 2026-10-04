@@ -11,10 +11,12 @@ export interface Offre {
   dateDepart: string;
   nombrePlaces: number;
   placesDisponibles: number;
+  typeTransport?: 'BUS' | 'TRAIN' | 'AVION';
   agence: { id: number; nom: string; [key: string]: any };
   // Champs confirmés via BilletServiceImp.java (backend) : Trajet expose getDepart()/getArrivee()
-  // → noms JSON réels probables "depart"/"arrivee".
-  trajet: { id: number; depart?: string; arrivee?: string; [key: string]: any };
+  // → noms JSON réels probables "depart"/"arrivee". Optionnel : forme exacte de la réponse
+  // (présence de "trajet") non confirmée, d'où le fallback défensif dans le template.
+  trajet?: { id: number; depart?: string; arrivee?: string; [key: string]: any };
 }
 
 @Injectable({ providedIn: 'root' })

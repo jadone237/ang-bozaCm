@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { OffreService, Offre } from '../../../../core/services/offre.service';
+import { ClientNavbarComponent } from '../../../../shared/client-navbar/client-navbar.component';
 
 // Rotation purement visuelle (couleur de la carte / du badge) — aucune donnée fictive,
 // juste de la variété de style tant que le backend n'expose pas de catégorie d'offre.
@@ -13,7 +14,7 @@ const BUTTONS = ['btn-navy', 'btn-teal', 'btn-green'];
 @Component({
   selector: 'app-accueil',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ClientNavbarComponent],
   templateUrl: './accueil.component.html',
   styleUrl: './accueil.component.css',
 })
@@ -57,13 +58,15 @@ export class AccueilComponent implements OnInit {
     console.log('Recherche', this.activeTransport(), this.searchForm.value);
   }
 
-  // ⚠️ Le DTO Offre (offre.service.ts) ne porte aucun champ "type transport"
-  // (bus/avion/train) confirmé côté backend. Faute d'info, on route par défaut vers
-  // 'bus' — l'utilisateur peut corriger via les onglets Bus/Avion sur la page de
-  // réservation. À remplacer par le vrai champ dès qu'il sera confirmé côté API.
-  typeReservation(_offre: Offre): 'bus' | 'avion' {
-    return 'bus';
+  
+ typeReservation(offre: Offre): 'bus' | 'train' | 'avion' {
+  switch (offre.typeTransport) {
+    case 'TRAIN': return 'train';
+    case 'AVION': return 'avion';
+    case 'BUS':
+    default: return 'bus'; // couvre aussi les anciennes offres sans typeTransport
   }
+}
 
   accentClass(index: number): string {
     return ACCENTS[index % ACCENTS.length];

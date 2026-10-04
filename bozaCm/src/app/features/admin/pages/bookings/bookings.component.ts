@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
 import { ReservationAdminService } from '../../services/reservation-admin.service';
 import { RapportService } from '../../../../core/services/rapport.service';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { AdminService, AdminProfile } from '../../services/admin.service';
 
 interface StatCard {
   icon: string; iconBg: string; iconColor: string;
@@ -56,6 +57,21 @@ export class BookingsComponent implements OnInit {
   isLoadingReservations = signal(true);
   reservationsError = signal('');
 
+  // Header : menus déroulants cloche/profil + données réelles pour les notifications
+  // (pas de nouveau système de notifications : on réutilise les réservations EN_ATTENTE déjà chargées).
+  isNotifMenuOpen = signal(false);
+  isProfileMenuOpen = signal(false);
+
+  pendingReservations = computed(() =>
+    this.reservations().filter((r) => r.statut === 'EN_ATTENTE').slice(0, 5)
+  );
+  pendingCount = computed(() => this.reservations().filter((r) => r.statut === 'EN_ATTENTE').length);
+
+  adminProfile = signal<AdminProfile | null>(null);
+  adminEmail = computed(() => this.adminProfile()?.email ?? this.authService.currentUser()?.email ?? 'Admin');
+  adminNom = computed(() => this.adminProfile()?.nom ?? this.adminEmail());
+  adminInitiale = computed(() => (this.adminNom()[0] ?? 'A').toUpperCase());
+
   // Filtrage client-side sur les données affichées (le tableau reste en dur, cf. limite déjà connue).
   filteredReservations = computed(() => {
     const statut = this.statutFilter();
@@ -72,7 +88,8 @@ export class BookingsComponent implements OnInit {
     private fb: FormBuilder,
     private reservationService: ReservationAdminService,
     private rapportService: RapportService,
-    private authService: AuthService
+    private authService: AuthService,
+    private adminService: AdminService
   ) {
     this.busForm = this.fb.group({
       clientId: ['', Validators.required],
@@ -102,6 +119,11 @@ export class BookingsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.adminService.getMe().subscribe({
+      next: (res) => this.adminProfile.set(res.data),
+      error: () => {}, // le header retombe sur l'email de la session en cas d'échec
+    });
+
     this.reservationService.getClients().subscribe({
       next: (res) => this.clients.set(res.data ?? res),
     });
@@ -186,6 +208,30 @@ export class BookingsComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  toggleNotifMenu(event: Event) {
+    event.stopPropagation();
+    this.isProfileMenuOpen.set(false);
+    this.isNotifMenuOpen.update((v) => !v);
+  }
+
+  toggleProfileMenu(event: Event) {
+    event.stopPropagation();
+    this.isNotifMenuOpen.set(false);
+    this.isProfileMenuOpen.update((v) => !v);
+  }
+
+  // Ferme les menus déroulants au clic en dehors (sur n'importe quel autre élément de la page).
+  @HostListener('document:click')
+  closeMenus() {
+    this.isNotifMenuOpen.set(false);
+    this.isProfileMenuOpen.set(false);
+  }
+
+  voirReservationsEnAttente() {
+    this.statutFilter.set('En attente');
+    this.isNotifMenuOpen.set(false);
   }
 
   badgeClass(statut: string): string {

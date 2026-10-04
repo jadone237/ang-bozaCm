@@ -6,13 +6,27 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { OffreService, Offre } from '../../../../core/services/offre.service';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { environment } from '../../../../../environments/environment';
+import { ClientNavbarComponent } from '../../../../shared/client-navbar/client-navbar.component';
 
-type TransportType = 'BUS' | 'AVION';
+type TransportType = 'BUS' | 'TRAIN' | 'AVION';
+
+// Images dans bozaCm/public/. Seule bus.jpg existe pour l'instant : si train.jpg / avion.jpg
+// sont absents, l'image est masquée (événement error) et le dégradé + icône prend le relais.
+const HERO_IMAGES: Record<TransportType, string> = {
+  BUS: '/bus.jpg',
+  TRAIN: '/train.jpg',
+  AVION: '/avion.jpg',
+};
+const HERO_LABELS: Record<TransportType, string> = {
+  BUS: 'BUS VIP CLIMATISÉ',
+  TRAIN: 'TRAIN',
+  AVION: 'VOL DIRECT',
+};
 
 @Component({
   selector: 'app-reservation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ClientNavbarComponent],
   templateUrl: './reservation.component.html',
   styleUrl: './reservation.component.css'
 })
@@ -23,6 +37,16 @@ export class ReservationComponent implements OnInit {
   loadError = signal('');
 
   transportType = signal<TransportType>('BUS');
+  heroImage = computed(() => HERO_IMAGES[this.transportType()]);
+  heroLabel = computed(() => HERO_LABELS[this.transportType()]);
+  heroIcon = computed(() => {
+    switch (this.transportType()) {
+      case 'AVION': return 'bi-airplane';
+      case 'TRAIN': return 'bi-train-front';
+      default: return 'bi-bus-front';
+    }
+  });
+  heroImageFailed = signal(false);
   nombrePassagers = signal(1); // fixé à 1 pour l'instant, comme sur la maquette ("1 Adulte")
 
   isSubmitting = signal(false);
@@ -61,7 +85,7 @@ export class ReservationComponent implements OnInit {
   ngOnInit(): void {
     const offreId = Number(this.route.snapshot.paramMap.get('offreId'));
     const typeParam = (this.route.snapshot.paramMap.get('type') || 'bus').toUpperCase();
-    this.transportType.set(typeParam === 'AVION' ? 'AVION' : 'BUS');
+    this.transportType.set(typeParam === 'AVION' ? 'AVION' : typeParam === 'TRAIN' ? 'TRAIN' : 'BUS');
 
     if (!offreId) {
       this.loadError.set('Offre introuvable.');
@@ -96,9 +120,7 @@ export class ReservationComponent implements OnInit {
     });
   }
 
-  setTransportType(type: TransportType): void {
-    this.transportType.set(type);
-  }
+  
 
   submit(): void {
     if (this.form.invalid) {
@@ -124,9 +146,7 @@ export class ReservationComponent implements OnInit {
       prixReservation: this.montantTotal(),
     };
 
-    const endpoint = this.transportType() === 'BUS'
-      ? `${environment.apiUrl}/v1/reservations/bus/create`
-      : `${environment.apiUrl}/v1/reservations/avion/create`;
+    const endpoint = `${environment.apiUrl}/v1/reservations/${this.transportType().toLowerCase()}/create`;
 
     this.http.post<any>(endpoint, payload).subscribe({
       next: (res) => {

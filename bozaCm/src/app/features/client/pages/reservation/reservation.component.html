@@ -1,12 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-white border-bottom px-4">
-  <span class="navbar-brand fw-bold text-navy">BozaCM</span>
-  <div class="d-flex gap-4 mx-auto">
-    <a class="nav-link text-muted" routerLink="/accueil">Accueil</a>
-    <a class="nav-link text-muted" href="#">Offres</a>
-    <a class="nav-link fw-semibold text-navy border-bottom border-2 border-navy">Réserver</a>
-  </div>
-  <button class="btn btn-light rounded-circle help-btn">?</button>
-</nav>
+<app-client-navbar />
 
 <div class="reservation-page">
 
@@ -27,8 +19,12 @@
       <!-- Colonne gauche : récap du voyage -->
       <div class="trip-card">
         <div class="trip-image">
-          <i class="bi" [class.bi-bus-front]="transportType() === 'BUS'" [class.bi-airplane]="transportType() === 'AVION'"></i>
-          <span class="trip-badge">{{ transportType() === 'BUS' ? 'BUS VIP CLIMATISÉ' : 'VOL DIRECT' }}</span>
+          @if (!heroImageFailed()) {
+            <img class="trip-photo" [src]="heroImage()" [alt]="'Illustration ' + transportType()" (error)="heroImageFailed.set(true)">
+          } @else {
+            <i class="bi" [ngClass]="heroIcon()"></i>
+          }
+          <span class="trip-badge">{{ heroLabel() }}</span>
         </div>
 
         <div class="trip-body">
@@ -81,20 +77,7 @@
 
           <h2 class="form-title">Informations passager</h2>
 
-          <div class="transport-toggle">
-            <button type="button"
-                    class="toggle-btn"
-                    [class.active]="transportType() === 'BUS'"
-                    (click)="setTransportType('BUS')">
-              <i class="bi bi-bus-front"></i> Bus
-            </button>
-            <button type="button"
-                    class="toggle-btn"
-                    [class.active]="transportType() === 'AVION'"
-                    (click)="setTransportType('AVION')">
-              <i class="bi bi-airplane"></i> Avion
-            </button>
-          </div>
+          
 
           <form [formGroup]="form" (ngSubmit)="submit()">
 
