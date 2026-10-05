@@ -3,12 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-// ⚠️ Forme exacte de la réponse non vérifiée ici (pas d'accès au code du RapportController
-// dans cette session) — mentionné comme existant ("GET /api/v1/rapport/global"). Le
-// mapping vers les cartes de stats (bookings.component.ts) est défensif : chaque champ
-// retombe sur 0 s'il n'est pas trouvé, plutôt que d'afficher une valeur inventée.
+// Miroir de RapportGlobalDTO (backend). GET /api/v1/rapport/global renvoie le DTO
+// directement, sans enveloppe ApiResponse.
 export interface RapportGlobal {
-  [key: string]: any;
+  totalReservations: number | null;
+  totalConfirmees: number | null;
+  totalEnAttente: number | null;
+  totalAnnulees: number | null;
+  tauxConfirmation: number | null;
+  chiffreAffairesTotal: number | null;
+  offreLaPlusReservee: string | null;
+  agenceLaPlusActive: string | null;
+  trajetLePlusEmprunte: string | null;
+  totalOffres: number | null;
+  totalAgences: number | null;
+  totalTrajets: number | null;
 }
 
 @Injectable({ providedIn: 'root' })

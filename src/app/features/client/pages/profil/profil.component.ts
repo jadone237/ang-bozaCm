@@ -1,10 +1,16 @@
 import { Component, OnInit, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ClientNavbarComponent } from '../../../../shared/client-navbar/client-navbar.component';
 import { ClientReservationService } from '../../../../core/services/client-reservation.service';
 import { ThemeService } from '../../../../core/services/theme.service';
+
+function motsDePasseIdentiques(group: AbstractControl): ValidationErrors | null {
+  const nouveau = group.get('nouveauMotDePasse')?.value;
+  const confirmation = group.get('confirmation')?.value;
+  return nouveau === confirmation ? null : { motsDePasseDifferents: true };
+}
 
 @Component({
   selector: 'app-client-profil',
@@ -14,15 +20,21 @@ import { ThemeService } from '../../../../core/services/theme.service';
   styleUrl: './profil.component.css',
 })
 export class ProfilComponent implements OnInit {
-  onglet = signal<'profil' | 'preferences'>('profil');
+  onglet = signal<'profil' | 'securite' | 'preferences'>('profil');
   isSaving = signal(false);
   saveError = signal('');
   saveSuccess = signal('');
+
+  isChangingPassword = signal(false);
+  passwordError = signal('');
+  passwordSuccess = signal('');
+  showPasswords = signal(false);
 
   // Préférence locale (pas d'endpoint backend dédié pour l'instant).
   recevoirNotifsEmail = signal(true);
 
   form: FormGroup;
+  passwordForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -37,6 +49,13 @@ export class ProfilComponent implements OnInit {
       adresse: [''],
     });
 
+    // Mêmes règles que ChangePasswordDTO côté backend (nouveau mot de passe : 6 caractères minimum).
+    this.passwordForm = this.fb.group({
+      ancienMotDePasse: ['', Validators.required],
+      nouveauMotDePasse: ['', [Validators.required, Validators.minLength(6)]],
+      confirmation: ['', Validators.required],
+    }, { validators: motsDePasseIdentiques });
+
     effect(() => {
       const c = this.reservationService.client();
       if (c) {
@@ -50,8 +69,9 @@ export class ProfilComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.route.snapshot.queryParamMap.get('onglet') === 'preferences') {
-      this.onglet.set('preferences');
+    const onglet = this.route.snapshot.queryParamMap.get('onglet');
+    if (onglet === 'preferences' || onglet === 'securite') {
+      this.onglet.set(onglet);
     }
     if (!this.reservationService.client()) {
       this.reservationService.load();
@@ -77,6 +97,37 @@ export class ProfilComponent implements OnInit {
       error: (err) => {
         this.isSaving.set(false);
         this.saveError.set(err.error?.message || 'Erreur lors de la mise à jour du profil.');
+      },
+    });
+  }
+
+  changerMotDePasse() {
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      return;
+    }
+
+    const { ancienMotDePasse, nouveauMotDePasse } = this.passwordForm.value;
+    if (ancienMotDePasse === nouveauMotDePasse) {
+      this.passwordError.set("Le nouveau mot de passe doit être différent de l'ancien.");
+      return;
+    }
+
+    this.isChangingPassword.set(true);
+    this.passwordError.set('');
+    this.passwordSuccess.set('');
+
+    this.reservationService.changePassword(ancienMotDePasse, nouveauMotDePasse).subscribe({
+      next: () => {
+        this.isChangingPassword.set(false);
+        this.passwordForm.reset();
+        this.passwordSuccess.set('Mot de passe modifié. Utilisez le nouveau mot de passe à votre prochaine connexion.');
+      },
+      error: (err) => {
+        this.isChangingPassword.set(false);
+        // Erreur de validation backend : { message, errors: { champ: message } }
+        const detail = err.error?.errors ? Object.values(err.error.errors)[0] : null;
+        this.passwordError.set((detail as string) || err.error?.message || 'Erreur lors du changement de mot de passe.');
       },
     });
   }

@@ -31,7 +31,8 @@
       <div class="admin-search">
         <div class="input-group">
           <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-          <input type="text" class="form-control border-start-0" placeholder="Rechercher une réservation...">
+          <input type="search" class="form-control border-start-0" placeholder="Rechercher (client, trajet, compagnie, billet...)"
+            [value]="recherche()" (input)="setRecherche($any($event.target).value)">
         </div>
       </div>
 
@@ -48,7 +49,7 @@
               @if (pendingReservations().length === 0) {
                 <div class="dropdown-empty">Aucune réservation en attente.</div>
               } @else {
-                @for (r of pendingReservations(); track r.nom) {
+                @for (r of pendingReservations(); track cle(r)) {
                   <div class="dropdown-item">
                     <div class="client-avatar" [style.background]="r.avatarBg">{{ r.initiales }}</div>
                     <div>
@@ -110,13 +111,14 @@
 
     <div class="filters-bar">
       <div class="d-flex gap-2">
-        <select class="form-select form-select-sm filter-select" (change)="statutFilter.set($any($event.target).value)">
+        <select class="form-select form-select-sm filter-select" [value]="statutFilter()" (change)="setStatutFilter($any($event.target).value)">
           <option>Tous statuts</option>
           <option>Confirmée</option>
           <option>En attente</option>
           <option>Annulée</option>
+          <option>Terminée</option>
         </select>
-        <select class="form-select form-select-sm filter-select" (change)="typeFilter.set($any($event.target).value)">
+        <select class="form-select form-select-sm filter-select" [value]="typeFilter()" (change)="setTypeFilter($any($event.target).value)">
           <option>Tous types</option>
           <option>Bus</option>
           <option>Avion</option>
@@ -127,6 +129,13 @@
         <i class="bi bi-plus-lg"></i> Nouvelle Réservation
       </button>
     </div>
+
+    @if (actionError()) {
+      <div class="alert alert-danger py-2 small d-flex justify-content-between align-items-center">
+        <span>{{ actionError() }}</span>
+        <button type="button" class="btn-close btn-sm" aria-label="Fermer" (click)="actionError.set('')"></button>
+      </div>
+    }
 
     <div class="table-container">
       <table class="table admin-table">
@@ -146,7 +155,7 @@
           } @else if (reservationsError()) {
             <tr><td colspan="6" class="text-danger small text-center py-4">{{ reservationsError() }}</td></tr>
           } @else {
-          @for (r of filteredReservations(); track r.nom) {
+          @for (r of pagedReservations(); track cle(r)) {
             <tr>
               <td>
                 <div class="d-flex align-items-center gap-2">
@@ -158,17 +167,29 @@
               <td>
                 <span class="type-pill"><i class="bi" [ngClass]="r.typeIcon"></i> {{ r.typeLabel }}</span>
               </td>
-              <td class="text-muted small">{{ r.date }}</td>
+              <td class="text-muted small">{{ r.date ? (r.date | date: 'dd/MM/yyyy') : '—' }}</td>
               <td>
                 <span class="status-badge" [ngClass]="badgeClass(r.statut)">{{ badgeLabel(r.statut) }}</span>
               </td>
               <td>
-                @if (r.statut === 'CONFIRMEE') {
-                  <button class="btn btn-sm btn-outline-navy" (click)="voirBillet(r)">Billet</button>
+                @if (actionEnCours() === cle(r)) {
+                  <span class="text-muted small"><span class="spinner-border spinner-border-sm me-1"></span>En cours...</span>
                 } @else {
-                  <button class="btn btn-sm btn-teal-fill" (click)="confirmReservation(r)">Confirmer</button>
+                  @if (r.statut === 'EN_ATTENTE') {
+                    <button class="btn btn-sm btn-teal-fill" [disabled]="!!actionEnCours()" (click)="confirmReservation(r)">Confirmer</button>
+                  }
+                  @if (r.statut === 'CONFIRMEE' || (r.statut === 'TERMINEE' && r.billetNumero)) {
+                    <button class="btn btn-sm btn-outline-navy" [disabled]="!!actionEnCours()" (click)="voirBillet(r)">
+                      {{ r.billetNumero ? 'Billet' : 'Générer billet' }}
+                    </button>
+                  }
+                  @if (r.statut === 'EN_ATTENTE' || r.statut === 'CONFIRMEE') {
+                    <button class="btn btn-sm btn-text-danger" [disabled]="!!actionEnCours()" (click)="cancelReservation(r)">Annuler</button>
+                  }
+                  @if (r.statut === 'ANNULEE' || (r.statut === 'TERMINEE' && !r.billetNumero)) {
+                    <span class="text-muted small">—</span>
+                  }
                 }
-                <button class="btn btn-sm btn-text-danger" (click)="cancelReservation(r)">Annuler</button>
               </td>
             </tr>
           } @empty {
@@ -181,14 +202,26 @@
       </table>
 
       <div class="table-footer">
-        <span class="text-muted small">Affichage de {{ filteredReservations().length }} sur {{ reservations().length }} réservations</span>
-        @if (reservations().length > 0) {
-          <div class="pagination-nav">
-            <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
-          </div>
+        <span class="text-muted small">
+          @if (filteredReservations().length === 0) {
+            0 réservation sur {{ reservations().length }}
+          } @else {
+            Affichage de {{ premierAffiche() }}–{{ dernierAffiche() }} sur {{ filteredReservations().length }} réservation(s)
+            @if (filteredReservations().length !== reservations().length) { (filtrées parmi {{ reservations().length }}) }
+          }
+        </span>
+        @if (totalPages() > 1) {
+          <nav class="pagination-nav" aria-label="Pagination des réservations">
+            <button class="page-btn" [disabled]="pageCourante() === 1" (click)="allerPage(pageCourante() - 1)" aria-label="Page précédente">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            @for (n of pages(); track n) {
+              <button class="page-btn" [class.active]="n === pageCourante()" (click)="allerPage(n)">{{ n }}</button>
+            }
+            <button class="page-btn" [disabled]="pageCourante() === totalPages()" (click)="allerPage(pageCourante() + 1)" aria-label="Page suivante">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </nav>
         }
       </div>
     </div>

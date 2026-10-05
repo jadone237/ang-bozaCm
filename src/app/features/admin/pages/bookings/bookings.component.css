@@ -156,6 +156,7 @@
 .badge-confirmee { background: #e2f5e9; color: #1a7f37; }
 .badge-attente   { background: #faeeda; color: #b45309; }
 .badge-annulee   { background: #fcebeb; color: #a32d2d; }
+.badge-terminee  { background: #eef0f3; color: #4b5563; }
 
 .table-footer {
   display: flex;
@@ -165,15 +166,16 @@
   padding-top: 16px;
 }
 
-.pagination-nav { display: flex; gap: 4px; }
+.pagination-nav { display: flex; flex-wrap: wrap; gap: 4px; }
 .page-btn {
-  width: 28px; height: 28px;
+  min-width: 28px; height: 28px; padding: 0 6px;
   border: 1px solid #e5e7eb;
   background: #fff;
   border-radius: 6px;
   font-size: 12px;
 }
 .page-btn.active { background: #0f1e3d; color: #fff; border-color: #0f1e3d; }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* Modal - Nouvelle réservation */
 .modal-overlay {

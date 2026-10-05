@@ -80,6 +80,15 @@ export class ClientReservationService {
     return this.http.put<ApiResponse<ClientProfile>>(`${environment.apiUrl}/v1/clients/update/${id}`, data);
   }
 
+  // Le backend identifie le client par son token JWT, vérifie l'ancien mot de passe
+  // puis enregistre le nouveau (haché en BCrypt) en base.
+  changePassword(ancienMotDePasse: string, nouveauMotDePasse: string) {
+    return this.http.put<ApiResponse<null>>(`${environment.apiUrl}/v1/clients/me/password`, {
+      ancienMotDePasse,
+      nouveauMotDePasse,
+    });
+  }
+
   annuler(r: ClientReservation) {
     const segment = r.type.toLowerCase();
     return this.http.patch(`${environment.apiUrl}/v1/reservations/${segment}/${r.id}/annuler`, {});

@@ -16,6 +16,7 @@
 
     <div class="tabs" role="tablist">
       <button type="button" role="tab" class="tab" [class.active]="onglet() === 'profil'" (click)="onglet.set('profil')">Profil</button>
+      <button type="button" role="tab" class="tab" [class.active]="onglet() === 'securite'" (click)="onglet.set('securite')">Sécurité</button>
       <button type="button" role="tab" class="tab" [class.active]="onglet() === 'preferences'" (click)="onglet.set('preferences')">Préférences</button>
     </div>
 
@@ -62,6 +63,51 @@
           @if (saveSuccess()) { <div class="alert-success">{{ saveSuccess() }}</div> }
 
           <button type="submit" class="btn-main" [disabled]="isSaving()">{{ isSaving() ? 'Enregistrement...' : 'Enregistrer' }}</button>
+        </form>
+      </section>
+    }
+
+    @if (onglet() === 'securite') {
+      <section class="card">
+        <h2 class="card-title">Changer de mot de passe</h2>
+        <p class="hint">Pour votre sécurité, saisissez d'abord votre mot de passe actuel.</p>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="changerMotDePasse()">
+          <div class="form-group">
+            <label for="ancien">Mot de passe actuel</label>
+            <input id="ancien" [type]="showPasswords() ? 'text' : 'password'" formControlName="ancienMotDePasse" autocomplete="current-password">
+            @if (passwordForm.get('ancienMotDePasse')?.touched && passwordForm.get('ancienMotDePasse')?.invalid) {
+              <span class="field-error">Le mot de passe actuel est obligatoire.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="nouveau">Nouveau mot de passe</label>
+            <input id="nouveau" [type]="showPasswords() ? 'text' : 'password'" formControlName="nouveauMotDePasse" autocomplete="new-password">
+            @if (passwordForm.get('nouveauMotDePasse')?.touched && passwordForm.get('nouveauMotDePasse')?.invalid) {
+              <span class="field-error">6 caractères minimum.</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="confirmation">Confirmer le nouveau mot de passe</label>
+            <input id="confirmation" [type]="showPasswords() ? 'text' : 'password'" formControlName="confirmation" autocomplete="new-password">
+            @if (passwordForm.get('confirmation')?.touched && passwordForm.errors?.['motsDePasseDifferents']) {
+              <span class="field-error">Les deux mots de passe ne correspondent pas.</span>
+            }
+          </div>
+
+          <label class="show-passwords">
+            <input type="checkbox" [checked]="showPasswords()" (change)="showPasswords.set(!showPasswords())">
+            Afficher les mots de passe
+          </label>
+
+          @if (passwordError()) { <div class="alert-error">{{ passwordError() }}</div> }
+          @if (passwordSuccess()) { <div class="alert-success">{{ passwordSuccess() }}</div> }
+
+          <button type="submit" class="btn-main" [disabled]="isChangingPassword()">
+            {{ isChangingPassword() ? 'Modification...' : 'Modifier le mot de passe' }}
+          </button>
         </form>
       </section>
     }
