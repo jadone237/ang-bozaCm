@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&display=swap');
+
+/* ===== Layout admin partagé (sidebar + header) — utilisé par toutes les pages admin/* ===== */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f8f9fb;
+}
+
+.admin-sidebar {
+  width: 256px;
+  background: #fff;
+  color: #0f1e3d;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-logo-icon {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: #f1f2f5;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.sidebar-brand {
+  font-family: 'Liberation Serif', 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.sidebar-subtitle {
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.nav-link-item:hover { background: #f1f2f5; color: #0f1e3d; }
+.nav-link-item.active { background: #eef1f6; color: #0f1e3d; }
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.admin-main { flex: 1; padding: 32px; }
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.admin-title {
+  font-family: 'Liberation Serif', 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: #1e3a8a;
+  margin: 0;
+}
+
+.btn-new-reservation {
+  background: #011844;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.btn-new-reservation:hover { background: #0a2a5e; color: #fff; }
+
+.btn-outline-navy { border: 1px solid #0f1e3d; color: #0f1e3d; background: #fff; }
+.btn-teal-fill { background: #0f6e56; color: #fff; border: none; }
+.btn-text-danger { color: #dc2626; background: transparent; border: none; }
+.btn-outline-navy, .btn-teal-fill, .btn-text-danger { font-size: 12px; margin-right: 4px; }
+
+@media (max-width: 991.98px) {
+  .admin-main { padding: 24px; }
+}
+
+@media (max-width: 767.98px) {
+  .admin-layout { flex-direction: column; }
+
+  .admin-sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .sidebar-header { padding: 12px 16px; }
+  .sidebar-subtitle { display: none; }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex: 1;
+    overflow-x: auto;
+    padding: 8px;
+    gap: 4px;
+  }
+
+  .nav-link-item {
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    padding: 8px 16px;
+    border-top: none;
+    border-left: 1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-footer .nav-link-item { white-space: nowrap; }
+
+  .admin-main { padding: 16px; }
+
+  .admin-header {
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .admin-title { font-size: 20px; }
+}
+/* ===== Thème clair / sombre (espace client) =====
+   Les variables servent aux composants client récents ; les règles [data-theme="dark"] plus bas
+   surchargent les couleurs codées en dur des pages Accueil et Réservation. */
+:root {
+  --bg-page: #f8f9fb;
+  --surface: #ffffff;
+  --surface-soft: #f1f2f5;
+  --border: #e5e7eb;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --heading: #011844;
+  --navbar-brand: #0f1e3d;
+}
+
+:root[data-theme="dark"] {
+  --bg-page: #0b1220;
+  --surface: #131c2e;
+  --surface-soft: #1d2940;
+  --border: #26344d;
+  --text: #e6eaf2;
+  --text-muted: #9aa7bd;
+  --heading: #e6eaf2;
+  --navbar-brand: #8bf1e6;
+  color-scheme: dark;
+}
+
+:root[data-theme="dark"] body { background: var(--bg-page); color: var(--text); }
+
+/* Accueil client */
+:root[data-theme="dark"] app-accueil { display: block; background: var(--bg-page); color: var(--text); }
+:root[data-theme="dark"] app-accueil .search-card,
+:root[data-theme="dark"] app-accueil .offer-card { background: var(--surface); color: var(--text); }
+:root[data-theme="dark"] app-accueil .tabs .tab-btn { background: var(--surface-soft); color: var(--text-muted); }
+:root[data-theme="dark"] app-accueil .tabs .tab-btn.active { background: #8bf1e6; color: #0f1e3d; }
+:root[data-theme="dark"] app-accueil .offer-icon { background: var(--surface-soft); color: var(--text); }
+:root[data-theme="dark"] app-accueil .form-control {
+  background: var(--surface-soft); color: var(--text); border-color: var(--border);
+}
+:root[data-theme="dark"] app-accueil .badge-grey { background: var(--surface-soft); color: var(--text); }
+:root[data-theme="dark"] app-accueil .border-bottom,
+:root[data-theme="dark"] app-accueil .border-top { border-color: var(--border) !important; }
+:root[data-theme="dark"] app-accueil .text-muted,
+:root[data-theme="dark"] app-accueil .small.text-muted { color: var(--text-muted) !important; }
+
+/* Réservation client */
+:root[data-theme="dark"] app-reservation {
+  --bg-page: #0b1220;
+  color: var(--text);
+}
+:root[data-theme="dark"] app-reservation .reservation-header h1,
+:root[data-theme="dark"] app-reservation .trip-route,
+:root[data-theme="dark"] app-reservation .form-title,
+:root[data-theme="dark"] app-reservation .amenities h3,
+:root[data-theme="dark"] app-reservation .form-group label,
+:root[data-theme="dark"] app-reservation .total-amount,
+:root[data-theme="dark"] app-reservation .success-panel h2 { color: var(--heading); }
+:root[data-theme="dark"] app-reservation .trip-card,
+:root[data-theme="dark"] app-reservation .passenger-card { background: var(--surface); border-color: var(--border); }
+:root[data-theme="dark"] app-reservation .trip-meta,
+:root[data-theme="dark"] app-reservation .amenities li,
+:root[data-theme="dark"] app-reservation .total-row,
+:root[data-theme="dark"] app-reservation .reservation-header p,
+:root[data-theme="dark"] app-reservation .terms { color: var(--text-muted); }
+:root[data-theme="dark"] app-reservation .transport-toggle { background: var(--surface-soft); }
+:root[data-theme="dark"] app-reservation .form-group input {
+  background: var(--surface-soft); color: var(--text); border-color: var(--border);
+}
+:root[data-theme="dark"] app-reservation .total-box { background: var(--surface-soft); }
+:root[data-theme="dark"] app-reservation .passenger-badge { background: var(--border); color: var(--text); }
+:root[data-theme="dark"] app-reservation .note-box { background: #2a1d12; border-color: #5c3a1c; color: #fdba74; }
+:root[data-theme="dark"] app-reservation .state-box { color: var(--text-muted); }

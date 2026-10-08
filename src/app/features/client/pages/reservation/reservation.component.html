@@ -1,0 +1,149 @@
+<app-client-navbar />
+
+<div class="reservation-page">
+
+  @if (isLoadingOffre()) {
+    <div class="state-box">Chargement du voyage...</div>
+  } @else if (loadError()) {
+    <div class="state-box error">{{ loadError() }}</div>
+  } @else {
+    @if (offre(); as o) {
+
+    <div class="reservation-header">
+      <h1>Confirmation de votre voyage</h1>
+      <p>Vérifiez les détails et complétez vos informations pour finaliser la réservation.</p>
+    </div>
+
+    <div class="reservation-grid">
+
+      <!-- Colonne gauche : récap du voyage -->
+      <div class="trip-card">
+        <div class="trip-image">
+          @if (!heroImageFailed()) {
+            <img class="trip-photo" [src]="heroImage()" [alt]="'Illustration ' + transportType()" (error)="heroImageFailed.set(true)">
+          } @else {
+            <i class="bi" [ngClass]="heroIcon()"></i>
+          }
+          <span class="trip-badge">{{ heroLabel() }}</span>
+        </div>
+
+        <div class="trip-body">
+          <h2 class="trip-route">{{ o.trajet?.['villeDepart'] || o.titre }} → {{ o.trajet?.['villeArrivee'] || '' }}</h2>
+          <p class="trip-price">{{ o.prix | number:'1.0-0' }} FCFA</p>
+
+          <div class="trip-meta">
+            <div class="meta-item">
+              <i class="bi bi-calendar3"></i>
+              <span>{{ o.dateDepart | date:'dd MMMM yyyy' }}</span>
+            </div>
+            <div class="meta-item">
+              <i class="bi bi-people"></i>
+              <span>{{ o.placesDisponibles }} places disponibles</span>
+            </div>
+          </div>
+
+          <div class="amenities">
+            <h3>Ce voyage inclut</h3>
+            <ul>
+              <li><i class="bi bi-check-circle-fill"></i> Climatisation</li>
+              <li><i class="bi bi-check-circle-fill"></i> Bagages inclus</li>
+              <li><i class="bi bi-check-circle-fill"></i> Siège numéroté</li>
+            </ul>
+          </div>
+
+          <div class="note-box">
+            <i class="bi bi-info-circle-fill"></i>
+            <p><strong>Note importante :</strong> présentez-vous 30 minutes avant le départ avec une pièce d'identité valide.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne droite : formulaire passager -->
+      <div class="passenger-card">
+
+        @if (submitSuccess()) {
+          <div class="success-panel">
+            <i class="bi bi-check-circle-fill"></i>
+            <h2>Réservation confirmée !</h2>
+            <p>Un récapitulatif a été envoyé à votre adresse email.</p>
+            @if (billetUrl(); as url) {
+              <a [href]="url" target="_blank" class="btn-primary billet-link">
+                <i class="bi bi-download"></i> Télécharger le billet
+              </a>
+            }
+            <button type="button" class="btn-secondary-link" (click)="retourAccueil()">Retour à l'accueil</button>
+          </div>
+        } @else {
+
+          <h2 class="form-title">Informations passager</h2>
+
+          
+
+          <form [formGroup]="form" (ngSubmit)="submit()">
+
+            <div class="form-group">
+              <label for="nomComplet">Nom complet</label>
+              <input id="nomComplet" type="text" formControlName="nomComplet" placeholder="Votre nom complet">
+              @if (form.get('nomComplet')?.touched && form.get('nomComplet')?.invalid) {
+                <span class="field-error">Le nom complet est requis (min. 3 caractères).</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input id="email" type="email" formControlName="email" placeholder="votre@email.com">
+              @if (form.get('email')?.touched && form.get('email')?.invalid) {
+                <span class="field-error">Un email valide est requis.</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="telephone">Téléphone</label>
+              <input id="telephone" type="tel" formControlName="telephone" placeholder="6XXXXXXXX">
+              @if (form.get('telephone')?.touched && form.get('telephone')?.invalid) {
+                <span class="field-error">Numéro camerounais invalide (ex: 677123456).</span>
+              }
+            </div>
+
+            <div class="total-box">
+              <div class="total-row">
+                <span>Montant total</span>
+                <span class="passenger-badge">{{ nombrePassagers() }} Adulte</span>
+              </div>
+              <p class="total-amount">{{ montantTotal() | number:'1.0-0' }} FCFA</p>
+            </div>
+
+            @if (submitError()) {
+              <div class="submit-error">{{ submitError() }}</div>
+            }
+
+            <button type="submit" class="btn-confirm" [disabled]="isSubmitting()">
+              @if (isSubmitting()) {
+                Confirmation en cours...
+              } @else {
+                Confirmer la réservation
+              }
+            </button>
+
+            <p class="terms">
+              En confirmant, vous acceptez nos
+              <a routerLink="/conditions">conditions générales</a> et notre
+              <a routerLink="/confidentialite">politique de confidentialité</a>.
+            </p>
+          </form>
+        }
+      </div>
+    </div>
+    }
+  }
+</div>
+
+<footer class="reservation-footer">
+  <span class="footer-brand">BozaCM</span>
+  <div class="footer-links">
+    <a routerLink="/conditions">Conditions Générales</a>
+    <a routerLink="/confidentialite">Confidentialité</a>
+    <a routerLink="/aide">Aide</a>
+  </div>
+  <span class="footer-copy">© 2024 BozaCM. Tous droits réservés.</span>
+</footer>

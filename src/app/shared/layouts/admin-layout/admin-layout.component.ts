@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -15,7 +16,14 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   styleUrls: ['./admin-layout.component.scss']
 })
 export class AdminLayoutComponent {
+  private authService = inject(AuthService);
   isSidebarOpen = false;
+
+  deconnexion(event: Event): void {
+    event.preventDefault();
+    this.fermerSidebar();
+    this.authService.logout();
+  }
 
   toggleSidebar(): void {
     this.isSidebarOpen = !this.isSidebarOpen;

@@ -72,7 +72,7 @@
             <div>{{ offre.titre }}</div>
             <small>{{ offre.trajet.villeDepart }} → {{ offre.trajet.villeArrivee }} · {{ offre.dateDepart | date:'short' }}</small>
           </div>
-          <div class="type-offre"><i class="bi bi-signpost-2"></i></div>
+          <div class="type-offre" [title]="offre.typeTransport ?? 'BUS'"><i class="bi" [class.bi-bus-front]="(offre.typeTransport ?? 'BUS') === 'BUS'" [class.bi-train-front]="offre.typeTransport === 'TRAIN'" [class.bi-airplane]="offre.typeTransport === 'AVION'"></i></div>
           <div>{{ offre.agence.nom }}</div>
           <div class="prix-offre">{{ offre.prix | number:'1.0-0' }} F</div>
           <div><span class="badge-places" [class.peu-places]="offre.placesDisponibles <= 2">{{ offre.placesDisponibles }} dispo</span></div>

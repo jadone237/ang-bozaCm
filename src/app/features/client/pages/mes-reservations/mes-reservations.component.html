@@ -1,0 +1,97 @@
+<app-client-navbar />
+
+<main class="page">
+  <header class="page-header">
+    <h1>Mes réservations</h1>
+    <p>Suivez vos voyages en cours, passés et annulés.</p>
+  </header>
+
+  @if (!estConnecte()) {
+    <div class="state-box">
+      Connectez-vous pour voir vos réservations.
+      <a routerLink="/login" class="btn-main">Se connecter</a>
+    </div>
+  } @else if (reservationService.isLoading() && reservationService.reservations().length === 0) {
+    <div class="state-box">Chargement de vos réservations...</div>
+  } @else if (reservationService.loadError()) {
+    <div class="state-box error">{{ reservationService.loadError() }}</div>
+  } @else {
+
+    <section class="summary">
+      <div class="summary-card">
+        <span class="summary-label">En cours</span>
+        <span class="summary-value">{{ enCours().length }}</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">En attente</span>
+        <span class="summary-value amber">{{ enAttente() }}</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Passées</span>
+        <span class="summary-value">{{ passees().length }}</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Annulées</span>
+        <span class="summary-value red">{{ annulees().length }}</span>
+      </div>
+    </section>
+
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" class="tab" [class.active]="onglet() === 'en-cours'" (click)="setOnglet('en-cours')">
+        En cours ({{ enCours().length }})
+      </button>
+      <button type="button" role="tab" class="tab" [class.active]="onglet() === 'passees'" (click)="setOnglet('passees')">
+        Passées ({{ passees().length }})
+      </button>
+      <button type="button" role="tab" class="tab" [class.active]="onglet() === 'annulees'" (click)="setOnglet('annulees')">
+        Annulées ({{ annulees().length }})
+      </button>
+    </div>
+
+    @if (actionError()) { <div class="action-error">{{ actionError() }}</div> }
+
+    @if (affichees().length === 0) {
+      <div class="state-box">
+        Aucune réservation dans cette catégorie.
+        @if (onglet() === 'en-cours') {
+          <a routerLink="/accueil" class="btn-main">Réserver un voyage</a>
+        }
+      </div>
+    } @else {
+      <div class="list">
+        @for (r of affichees(); track cle(r)) {
+          <article class="res-card">
+            <div class="res-icon"><i class="bi" [ngClass]="icone(r)"></i></div>
+
+            <div class="res-main">
+              <h2 class="res-route">{{ r.depart || '—' }} → {{ r.arrivee || '—' }}</h2>
+              <div class="res-meta">
+                <span><i class="bi bi-calendar3"></i> {{ r.dateDepart ? (r.dateDepart | date:'dd MMM yyyy, HH:mm') : 'Date à confirmer' }}</span>
+                @if (r.compagnie) { <span><i class="bi bi-building"></i> {{ r.compagnie }}</span> }
+                <span class="res-type">{{ r.type }}</span>
+              </div>
+              @if (r.billetNumero) {
+                <div class="res-billet">Billet : {{ r.billetNumero }}</div>
+              }
+            </div>
+
+            <div class="res-side">
+              <span class="badge-statut" [ngClass]="'s-' + r.statut">{{ statutLabel(r.statut) }}</span>
+              <div class="res-prix">{{ r.prix | number:'1.0-0' }} FCFA</div>
+              <div class="res-actions">
+                @if (r.billetNumero) {
+                  <button type="button" class="btn-ghost" (click)="telechargerBillet(r)"><i class="bi bi-download"></i> Billet</button>
+                }
+                @if (peutAnnuler(r) && onglet() === 'en-cours') {
+                  <button type="button" class="btn-ghost danger" [disabled]="busyId() === cle(r)" (click)="annuler(r)">
+                    {{ busyId() === cle(r) ? 'Annulation...' : 'Annuler' }}
+                  </button>
+                }
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  }
+</main>

@@ -55,7 +55,7 @@ export class OffreFormComponent implements OnInit {
   enregistrer(): void {
     if (!this.offre.titre.trim() || !this.offre.description.trim() ||
         this.offre.prix <= 0 || !this.offre.dateDepart || this.offre.nombrePlaces <= 0 ||
-        !this.offre.agenceId || !this.offre.trajetId) {
+        !this.offre.agenceId || !this.offre.trajetId || !this.offre.typeTransport) {
       this.errorMessage = 'Renseignez tous les champs avec des valeurs valides.';
       return;
     }
@@ -92,7 +92,9 @@ export class OffreFormComponent implements OnInit {
           dateDepart: offre.dateDepart.slice(0, 10),
           nombrePlaces: offre.nombrePlaces,
           agenceId: offre.agence.id,
-          trajetId: offre.trajet.id
+          trajetId: offre.trajet.id,
+          // Les offres créées avant l'ajout du mode de transport n'en ont pas : bus par défaut
+          typeTransport: offre.typeTransport ?? 'BUS'
         };
       },
       error: (error) => this.errorMessage = error.message
@@ -100,6 +102,6 @@ export class OffreFormComponent implements OnInit {
   }
 
   private nouvelleOffre(): OffreRequestDTO {
-    return { titre: '', description: '', prix: 0, dateDepart: '', nombrePlaces: 1, agenceId: 0, trajetId: 0 };
+    return { titre: '', description: '', prix: 0, dateDepart: '', nombrePlaces: 1, agenceId: 0, trajetId: 0, typeTransport: 'BUS' };
   }
 }

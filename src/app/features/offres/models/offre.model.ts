@@ -1,6 +1,9 @@
 import { AgenceResponseDTO } from '../../agences/models/agence.model';
 import { TrajetResponseDTO } from '../../trajets/models/trajet.model';
 
+/** Mode de transport d'une offre (enum TypeTransport côté backend, obligatoire à la création). */
+export type TypeTransport = 'BUS' | 'TRAIN' | 'AVION';
+
 export interface OffreRequestDTO {
   titre: string;
   description: string;
@@ -9,6 +12,7 @@ export interface OffreRequestDTO {
   nombrePlaces: number;
   agenceId: number;
   trajetId: number;
+  typeTransport: TypeTransport;
 }
 
 export interface OffreResponseDTO {
@@ -21,6 +25,7 @@ export interface OffreResponseDTO {
   placesDisponibles: number;
   agence: AgenceResponseDTO;
   trajet: TrajetResponseDTO;
+  typeTransport?: TypeTransport | null;
 }
 
 export interface OffrePageResponseDTO {

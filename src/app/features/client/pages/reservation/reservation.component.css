@@ -1,0 +1,388 @@
+:host {
+  --navy: #011844;
+  --teal: #006A63;
+  --teal-light: #8BF1E6;
+  --orange: #EA580C;
+  --bg-page: #F8F9FB;
+
+  display: block;
+  background: var(--bg-page);
+  min-height: 100vh;
+  font-family: 'Manrope', sans-serif;
+}
+
+/* ---- Navbar (reprend exactement le style de la navbar Accueil — CSS scopé par composant,
+   donc dupliqué ici plutôt que partagé) ---- */
+.text-navy { color: #0f1e3d; }
+.border-navy { border-color: #0f1e3d !important; }
+.help-btn { width: 36px; height: 36px; flex-shrink: 0; }
+
+.reservation-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.reservation-header h1 {
+  font-family: 'Noto Serif', 'Liberation Serif', serif;
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.reservation-header p {
+  color: #667085;
+  margin-bottom: 32px;
+}
+
+.reservation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* ---- Carte voyage (gauche) ---- */
+.trip-card, .passenger-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  overflow: hidden;
+}
+
+.trip-image {
+  background: linear-gradient(135deg, var(--navy), var(--teal));
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.trip-image i {
+  font-size: 56px;
+  color: #fff;
+}
+
+.trip-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trip-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: var(--teal-light);
+  color: var(--teal);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+}
+
+.trip-body {
+  padding: 24px;
+}
+
+.trip-route {
+  font-family: 'Noto Serif', 'Liberation Serif', serif;
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.trip-price {
+  color: var(--orange);
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+
+.trip-meta {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  color: #475467;
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.meta-item { display: flex; align-items: center; gap: 6px; }
+
+.amenities h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+
+.amenities ul { list-style: none; padding: 0; margin-bottom: 20px; }
+
+.amenities li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #344054;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.amenities li i { color: var(--teal); }
+
+.note-box {
+  display: flex;
+  gap: 10px;
+  background: #FFF7ED;
+  border: 1px solid #FED7AA;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #7C2D12;
+}
+
+.note-box i { color: var(--orange); font-size: 16px; margin-top: 1px; }
+
+/* ---- Carte passager (droite) ---- */
+.passenger-card { padding: 32px 24px; }
+
+.form-title {
+  font-family: 'Noto Serif', 'Liberation Serif', serif;
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.transport-toggle {
+  display: flex;
+  background: #F2F4F7;
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.toggle-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #667085;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.toggle-btn.active {
+  background: var(--teal-light);
+  color: var(--teal);
+}
+
+.form-group { margin-bottom: 18px; }
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #D0D5DD;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Manrope', sans-serif;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(0, 106, 99, 0.1);
+}
+
+.field-error {
+  color: #D92D20;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.total-box {
+  background: var(--bg-page);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 20px 0;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #475467;
+  margin-bottom: 6px;
+}
+
+.passenger-badge {
+  background: #E4E7EC;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.total-amount {
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.submit-error {
+  background: #FEF3F2;
+  color: #B42318;
+  border: 1px solid #FDA29B;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.btn-confirm {
+  width: 100%;
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 20px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-confirm:hover:not(:disabled) { background: #C2410C; }
+.btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.terms {
+  text-align: center;
+  font-size: 12px;
+  color: #667085;
+  margin-top: 14px;
+}
+
+.terms a { color: var(--teal); text-decoration: none; }
+.terms a:hover { text-decoration: underline; }
+
+.success-panel {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.success-panel i { font-size: 48px; color: var(--teal); margin-bottom: 16px; }
+.success-panel h2 { font-family: 'Noto Serif', serif; color: var(--navy); margin-bottom: 8px; }
+.success-panel p { color: #667085; margin-bottom: 24px; }
+
+.btn-primary {
+  display: inline-block;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.billet-link { margin-bottom: 12px; }
+
+.btn-secondary-link {
+  display: block;
+  margin: 8px auto 0;
+  background: transparent;
+  border: none;
+  color: var(--teal);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.state-box {
+  text-align: center;
+  padding: 80px 20px;
+  color: #667085;
+}
+
+.state-box.error { color: #B42318; }
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .reservation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .reservation-page { padding: 24px 16px; }
+  .reservation-header h1 { font-size: 22px; }
+  .passenger-card { padding: 24px 16px; }
+  .trip-body { padding: 16px; }
+}
+
+/* ---- Footer (reprend le style du reste du site : voir accueil/bookings) ---- */
+.reservation-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--navy);
+  color: #fff;
+  padding: 20px 32px;
+  font-size: 13px;
+}
+
+.footer-brand {
+  font-family: 'Noto Serif', 'Liberation Serif', serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+}
+
+.footer-links a:hover { color: #fff; text-decoration: underline; }
+
+.footer-copy { color: rgba(255, 255, 255, 0.7); }
+
+@media (max-width: 480px) {
+  .reservation-footer {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 16px;
+  }
+}

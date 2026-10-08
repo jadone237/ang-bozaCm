@@ -17,6 +17,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/client/pages/accueil/accueil.component').then(m => m.AccueilComponent) 
   },
 
+  // --- Espace client (module réservations) ---
+  { path: 'reservation/:type/:offreId', loadComponent: () => import('./features/client/pages/reservation/reservation.component').then(m => m.ReservationComponent) },
+  { path: 'client/mes-reservations', loadComponent: () => import('./features/client/pages/mes-reservations/mes-reservations.component').then(m => m.MesReservationsComponent) },
+  { path: 'client/profil', loadComponent: () => import('./features/client/pages/profil/profil.component').then(m => m.ProfilComponent) },
+
   // Compatibilité avec les liens absolus présents dans les listes et formulaires.
   { path: 'agences', redirectTo: '/admin/agences', pathMatch: 'full' },
   { path: 'ajouter-agence', redirectTo: '/admin/ajouter-agence', pathMatch: 'full' },
@@ -64,7 +69,11 @@ export const routes: Routes = [
       { path: 'rapports', loadComponent: () => import('./features/rapport/pages/rapport-global/rapport-global.component').then(m => m.RapportGlobalComponent) },
 
       // 6. Réservations
-      { path: 'reservations', loadComponent: () => import('./features/admin/pages/bookings/bookings.component').then(m => m.BookingsComponent) }
+      { path: 'reservations', loadComponent: () => import('./features/admin/pages/bookings/bookings.component').then(m => m.BookingsComponent) },
+      { path: 'bookings', redirectTo: 'reservations', pathMatch: 'full' },
+
+      // 7. Profil de l'administrateur
+      { path: 'profil', loadComponent: () => import('./features/admin/pages/profile/profile.component').then(m => m.ProfileComponent) }
     ]
   },
 

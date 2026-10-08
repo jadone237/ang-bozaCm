@@ -45,4 +45,19 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
+
+  // currentUser vit en mémoire et se perd au rafraîchissement : on retombe sur le "sub" du JWT (= email).
+  currentEmail(): string | null {
+    const fromSession = this.currentUser()?.email;
+    if (fromSession) return fromSession;
+
+    const token = typeof window !== 'undefined' ? this.getToken() : null;
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      return payload.sub ?? null;
+    } catch {
+      return null;
+    }
+  }
 }

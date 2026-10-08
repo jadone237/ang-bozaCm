@@ -42,14 +42,24 @@
           </select>
         </div>
       </div>
-      <div class="offre-field">
-        <div class="offre-field-label">Trajet</div>
-        <select [(ngModel)]="offre.trajetId">
-          <option [ngValue]="0">Choisir un trajet</option>
-          @for (trajet of trajets; track trajet.id) {
-            <option [ngValue]="trajet.id">{{ trajet.villeDepart }} → {{ trajet.villeArrivee }} · {{ trajet.duree }}</option>
-          }
-        </select>
+      <div class="offre-field-row">
+        <div class="offre-field">
+          <div class="offre-field-label">Trajet</div>
+          <select [(ngModel)]="offre.trajetId">
+            <option [ngValue]="0">Choisir un trajet</option>
+            @for (trajet of trajets; track trajet.id) {
+              <option [ngValue]="trajet.id">{{ trajet.villeDepart }} → {{ trajet.villeArrivee }} · {{ trajet.duree }}</option>
+            }
+          </select>
+        </div>
+        <div class="offre-field">
+          <div class="offre-field-label">Mode de transport</div>
+          <select [(ngModel)]="offre.typeTransport">
+            <option value="BUS">Bus</option>
+            <option value="TRAIN">Train</option>
+            <option value="AVION">Avion</option>
+          </select>
+        </div>
       </div>
     </div>
 

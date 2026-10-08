@@ -1,0 +1,95 @@
+ <div class="admin-layout">
+
+<main class="admin-main">
+
+    <div class="admin-header">
+      <div>
+        <a routerLink="/admin/reservations" class="back-link"><i class="bi bi-arrow-left"></i> Retour</a>
+        <h1 class="admin-title">Mon profil</h1>
+      </div>
+    </div>
+
+    @if (isLoading()) {
+      <p class="text-muted small">Chargement du profil...</p>
+    } @else if (loadError()) {
+      <p class="text-danger small">{{ loadError() }}</p>
+    } @else {
+
+      <div class="profile-tabs">
+        <button type="button" class="profile-tab" [class.active]="activeTab() === 'profil'" (click)="setTab('profil')">
+          Profil
+        </button>
+        <button type="button" class="profile-tab" [class.active]="activeTab() === 'preferences'" (click)="setTab('preferences')">
+          Préférences
+        </button>
+      </div>
+
+      @if (activeTab() === 'profil') {
+        <div class="profile-card">
+
+          <div class="photo-section">
+            <div class="photo-preview-wrapper">
+              @if (photoPreview()) {
+                <img [src]="photoPreview()" class="profile-photo" alt="Aperçu de la nouvelle photo">
+              } @else if (profile()?.photoUrl) {
+                <img [src]="profile()?.photoUrl" class="profile-photo" alt="Photo de profil">
+              } @else {
+                <div class="profile-photo-fallback"><i class="bi bi-person-fill"></i></div>
+              }
+            </div>
+
+            <div>
+              <label class="btn-change-photo">
+                <i class="bi bi-camera"></i> Changer la photo
+                <input type="file" accept="image/png, image/jpeg, image/webp" hidden (change)="onPhotoSelected($event)">
+              </label>
+
+              @if (selectedFile) {
+                <div class="photo-actions">
+                  <button class="btn btn-sm btn-teal-fill" (click)="confirmerPhoto()" [disabled]="isUploadingPhoto()">
+                    {{ isUploadingPhoto() ? 'Envoi...' : 'Valider la photo' }}
+                  </button>
+                  <button class="btn btn-sm btn-text-danger" (click)="annulerPhoto()" [disabled]="isUploadingPhoto()">Annuler</button>
+                </div>
+              }
+              @if (photoError()) { <div class="text-danger small mt-2">{{ photoError() }}</div> }
+            </div>
+          </div>
+
+          <form [formGroup]="profileForm" (ngSubmit)="enregistrerProfil()" class="profile-form">
+            <label class="form-label small fw-semibold">NOM</label>
+            <input type="text" class="form-control mb-3" formControlName="nom">
+
+            <label class="form-label small fw-semibold">EMAIL</label>
+            <input type="email" class="form-control mb-3" formControlName="email">
+
+            @if (saveError()) { <div class="alert alert-danger py-2 small">{{ saveError() }}</div> }
+            @if (saveSuccess()) { <div class="alert alert-success py-2 small">{{ saveSuccess() }}</div> }
+
+            <button type="submit" class="btn btn-new-reservation" [disabled]="isSaving()">
+              {{ isSaving() ? 'Enregistrement...' : 'Enregistrer' }}
+            </button>
+          </form>
+
+        </div>
+      }
+
+      @if (activeTab() === 'preferences') {
+        <div class="profile-card">
+          <div class="preference-row">
+            <div>
+              <div class="fw-semibold">Recevoir les notifications par email</div>
+              <div class="text-muted small">Être prévenu par email des nouvelles réservations en attente.</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" [checked]="recevoirNotifsEmail()" (change)="toggleNotifsEmail()">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      }
+
+    }
+
+  </main>
+</div>
