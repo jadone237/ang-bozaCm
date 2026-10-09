@@ -3,8 +3,8 @@ import { AdminLayoutComponent } from './shared/layouts/admin-layout/admin-layout
 
 export const routes: Routes = [
   // --- Zone Publique / Client & Auth ---
-  // Un visiteur arrive directement sur les offres ; il se connecte seulement pour réserver
-  { path: '', redirectTo: 'accueil', pathMatch: 'full' },
+  // La page de connexion est le point d'entrée de l'application.
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { 
     path: 'login', 
     loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.LoginComponent) 
