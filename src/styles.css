@@ -195,6 +195,8 @@
   background: var(--surface-soft); color: var(--text); border-color: var(--border);
 }
 :root[data-theme="dark"] app-accueil .badge-grey { background: var(--surface-soft); color: var(--text); }
+:root[data-theme="dark"] app-accueil .badge-warn { background: #4a3a10; color: #ffd98a; }
+:root[data-theme="dark"] app-accueil .badge-red { background: #4a1d1b; color: #ffb4ab; }
 :root[data-theme="dark"] app-accueil .border-bottom,
 :root[data-theme="dark"] app-accueil .border-top { border-color: var(--border) !important; }
 :root[data-theme="dark"] app-accueil .text-muted,

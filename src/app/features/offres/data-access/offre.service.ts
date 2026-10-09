@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import { OffrePageResponseDTO, OffreRequestDTO, OffreResponseDTO, RechercheOffreDTO } from '../models/offre.model';
+import { OffrePageResponseDTO, OffreRequestDTO, OffreResponseDTO, OffreResumeDTO, RechercheOffreDTO } from '../models/offre.model';
 import { environment } from '../../../../environments/environment';
 
 
@@ -66,6 +66,12 @@ export class OffreService {
     );
   }
 
+  getResume(): Observable<OffreResumeDTO> {
+    return this.http.get<OffreResumeDTO>(`${this.apiUrl}/resume`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getOffresByPrixRange(prixMin: number, prixMax: number): Observable<OffreResponseDTO[]> {
     return this.http.get<OffreResponseDTO[]>(
       `${this.apiUrl}/search/prix/${prixMin}/${prixMax}`
@@ -85,9 +91,14 @@ export class OffreService {
     if (error.error instanceof ErrorEvent) {
       message = `Erreur client : ${error.error.message}`;
     } else {
-      const backendMessage = typeof error.error === 'string'
-        ? error.error
-        : error.error?.message || error.error?.error;
+      // Avec responseType 'text' (création, modification, suppression), le corps d'erreur JSON arrive en texte
+      let corps = error.error;
+      if (typeof corps === 'string') {
+        try { corps = JSON.parse(corps); } catch { /* vrai texte : on le garde tel quel */ }
+      }
+      const backendMessage = typeof corps === 'string'
+        ? corps
+        : corps?.message || corps?.error;
       message = backendMessage || `Erreur ${error.status} : ${error.message}`;
     }
     return throwError(() => new Error(message));

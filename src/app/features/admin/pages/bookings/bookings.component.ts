@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, signal, HostListener } from '@angular/core';
+import { Component, OnInit, computed, signal, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { OffreResponseDTO } from '../../../offres/models/offre.model';
 import { RapportService, RapportGlobal } from '../../../../core/services/rapport.service';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { AdminService, AdminProfile } from '../../services/admin.service';
+import { NotificationService } from '../../../../shared/ui/notification.service';
 
 interface StatCard {
   icon: string; iconBg: string; iconColor: string;
@@ -39,6 +40,7 @@ const PAGE_SIZE = 10;
   styleUrl: './bookings.component.css',
 })
 export class BookingsComponent implements OnInit {
+  private notifications = inject(NotificationService);
   statutFilter = signal('Tous statuts');
   typeFilter = signal('Tous types');
   recherche = signal('');
@@ -334,8 +336,13 @@ export class BookingsComponent implements OnInit {
     this.changerStatut(cible, this.reservationService.confirmer(cible.type, cible.id), 'la confirmation');
   }
 
-  cancelReservation(cible: Reservation) {
-    if (!confirm(`Annuler la réservation de ${cible.nom} (${cible.offre}) ?`)) return;
+  async cancelReservation(cible: Reservation) {
+    const confirme = await this.notifications.confirmer({
+      titre: 'Annuler la réservation',
+      message: `Annuler la réservation de ${cible.nom} (${cible.offre}) ? La place sera rendue à l’offre.`,
+      libelleConfirmer: 'Annuler la réservation'
+    });
+    if (!confirme) return;
     this.changerStatut(cible, this.reservationService.annuler(cible.type, cible.id), "l'annulation");
   }
 

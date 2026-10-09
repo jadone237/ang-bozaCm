@@ -1,9 +1,10 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ClientNavbarComponent } from '../../../../shared/client-navbar/client-navbar.component';
 import { ClientReservation, ClientReservationService } from '../../../../core/services/client-reservation.service';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { NotificationService } from '../../../../shared/ui/notification.service';
 
 type Onglet = 'en-cours' | 'passees' | 'annulees';
 
@@ -15,6 +16,7 @@ type Onglet = 'en-cours' | 'passees' | 'annulees';
   styleUrl: './mes-reservations.component.css',
 })
 export class MesReservationsComponent implements OnInit {
+  private notifications = inject(NotificationService);
   onglet = signal<Onglet>('en-cours');
   actionError = signal('');
   busyId = signal<string | null>(null);
@@ -67,14 +69,20 @@ export class MesReservationsComponent implements OnInit {
     return r.statut === 'EN_ATTENTE' || r.statut === 'CONFIRMEE';
   }
 
-  annuler(r: ClientReservation) {
-    if (!confirm(`Annuler la réservation ${r.depart} → ${r.arrivee} ?`)) return;
+  async annuler(r: ClientReservation) {
+    const confirme = await this.notifications.confirmer({
+      titre: 'Annuler ma réservation',
+      message: `Annuler la réservation ${r.depart} → ${r.arrivee} ?`,
+      libelleConfirmer: 'Oui, annuler'
+    });
+    if (!confirme) return;
 
     this.actionError.set('');
     this.busyId.set(this.cle(r));
     this.reservationService.annuler(r).subscribe({
       next: () => {
         this.busyId.set(null);
+        this.notifications.succes('Réservation annulée.');
         this.reservationService.load();
       },
       error: (err) => {

@@ -44,4 +44,13 @@ export interface RechercheOffreDTO {
   prixMax?: number;
   dateDepart?: string;
   agenceId?: number;
+  /** Mot-clé libre : titre, agence ou ville. */
+  motCle?: string;
+}
+
+/** Chiffres clés de la page « Gestion des offres » (GET /api/v1/offres/resume). */
+export interface OffreResumeDTO {
+  totalOffres: number;
+  offresActives: number;
+  placesRestantes: number;
 }

@@ -4,16 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AgenceResponseDTO } from '../../../agences/models/agence.model';
 import { AgenceService } from '../../../agences/data-access/agence.service';
+import { NotificationService } from '../../../../shared/ui/notification.service';
+import { SqueletteComponent } from '../../../../shared/ui/squelette.component';
 
 @Component({
   selector: 'app-stat-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SqueletteComponent],
   templateUrl: './stat-list.component.html',
   styleUrl: './stat-list.component.scss'
 })
 export class StatListComponent implements OnInit, OnDestroy {
   private agenceService = inject(AgenceService);
+  private notifications = inject(NotificationService);
 
   agences: AgenceResponseDTO[] = [];
   agencesFiltrees: AgenceResponseDTO[] = [];
@@ -26,8 +29,6 @@ export class StatListComponent implements OnInit, OnDestroy {
 
   isLoading = true;
   errorMessage = '';
-  successMessage = '';
-  private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,33 +36,28 @@ export class StatListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.successMessage = this.route.snapshot.queryParamMap.get('message') || '';
-    if (this.successMessage) {
-      this.afficherSucces(this.successMessage);
+    const message = this.route.snapshot.queryParamMap.get('message');
+    if (message) {
+      this.afficherSucces(message);
     }
     this.chargerAgences();
   }
 
   ngOnDestroy(): void {
-    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
   }
 
   private afficherSucces(message: string): void {
-    this.successMessage = message;
-    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
-    this.feedbackTimer = setTimeout(() => {
-      this.successMessage = '';
-      this.feedbackTimer = undefined;
-      if (this.route.snapshot.queryParamMap.has('message')) {
-        this.router.navigate([], {
-          relativeTo: this.route,
-          queryParams: { message: null },
-          queryParamsHandling: 'merge',
-          replaceUrl: true
-        });
-      }
-    }, 4000);
+    this.notifications.succes(message);
+    if (this.route.snapshot.queryParamMap.has('message')) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { message: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      });
+    }
   }
+
 
   chargerAgences(): void {
     this.isLoading = true;
@@ -129,17 +125,20 @@ export class StatListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/statistiques', agenceId, 'statistiques']);
   }
 
-  supprimerAgence(id: number): void {
-    if (!confirm('Voulez-vous vraiment supprimer cette agence ?')) return;
+  async supprimerAgence(id: number): Promise<void> {
+    const confirme = await this.notifications.confirmer({
+      titre: 'Supprimer l’agence',
+      message: 'Voulez-vous vraiment supprimer cette agence ? Cette action est définitive.',
+      libelleConfirmer: 'Supprimer'
+    });
+    if (!confirme) return;
 
     this.agenceService.deleteAgence(id).subscribe({
       next: () => {
         this.afficherSucces('Agence supprimée avec succès.');
         this.chargerAgences();
       },
-      error: (error: any) => {
-        this.errorMessage = error.message;
-      }
+      error: (error: any) => this.notifications.erreur(error.message)
     });
   }
 }

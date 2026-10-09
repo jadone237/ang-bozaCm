@@ -22,15 +22,19 @@ export class ClientNavbarComponent implements OnInit {
   });
   initiale = computed(() => (this.nomAffiche()[0] ?? 'C').toUpperCase());
   email = computed(() => this.authService.currentEmail() ?? '');
+  /** Visiteur sans compte : pas de notifications ni de menu profil, mais Connexion / Inscription. */
+  readonly estConnecte: boolean;
 
   constructor(
     public themeService: ThemeService,
     public reservationService: ClientReservationService,
     private authService: AuthService
-  ) {}
+  ) {
+    this.estConnecte = this.authService.isAuthenticated();
+  }
 
   ngOnInit() {
-    if (!this.reservationService.client()) {
+    if (this.estConnecte && !this.reservationService.client()) {
       this.reservationService.load();
     }
   }

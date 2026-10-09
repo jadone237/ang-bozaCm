@@ -4,16 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TrajetResponseDTO } from '../../models/trajet.model';
 import { TrajetService } from '../../data-access/trajet.service';
+import { NotificationService } from '../../../../shared/ui/notification.service';
+import { SqueletteComponent } from '../../../../shared/ui/squelette.component';
 
 @Component({
   selector: 'app-trajet-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SqueletteComponent],
   templateUrl: './trajet-list.component.html',
   styleUrl: './trajet-list.component.scss'
 })
 export class TrajetListComponent implements OnInit, OnDestroy {
   private trajetService = inject(TrajetService);
+  private notifications = inject(NotificationService);
 
   trajets: TrajetResponseDTO[] = [];
   resultatsRecherche: TrajetResponseDTO[] = [];
@@ -24,8 +27,6 @@ export class TrajetListComponent implements OnInit, OnDestroy {
   totalPages = 1;
   isLoading = true;
   errorMessage = '';
-  successMessage = '';
-  private feedbackTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,33 +34,28 @@ export class TrajetListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.successMessage = this.route.snapshot.queryParamMap.get('message') || '';
-    if (this.successMessage) {
-      this.afficherSucces(this.successMessage);
+    const message = this.route.snapshot.queryParamMap.get('message');
+    if (message) {
+      this.afficherSucces(message);
     }
     this.chargerTrajets();
   }
 
   ngOnDestroy(): void {
-    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
   }
 
   private afficherSucces(message: string): void {
-    this.successMessage = message;
-    if (this.feedbackTimer) clearTimeout(this.feedbackTimer);
-    this.feedbackTimer = setTimeout(() => {
-      this.successMessage = '';
-      this.feedbackTimer = undefined;
-      if (this.route.snapshot.queryParamMap.has('message')) {
-        this.router.navigate([], {
-          relativeTo: this.route,
-          queryParams: { message: null },
-          queryParamsHandling: 'merge',
-          replaceUrl: true
-        });
-      }
-    }, 4000);
+    this.notifications.succes(message);
+    if (this.route.snapshot.queryParamMap.has('message')) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { message: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      });
+    }
   }
+
 
   chargerTrajets(): void {
     this.isLoading = true;
@@ -98,17 +94,20 @@ export class TrajetListComponent implements OnInit, OnDestroy {
     this.mettreAJourAffichage();
   }
 
-  supprimerTrajet(id: number): void {
-    if (!confirm('Voulez-vous vraiment supprimer ce trajet ?')) {
-      return;
-    }
+  async supprimerTrajet(id: number): Promise<void> {
+    const confirme = await this.notifications.confirmer({
+      titre: 'Supprimer le trajet',
+      message: 'Voulez-vous vraiment supprimer ce trajet ? Cette action est définitive.',
+      libelleConfirmer: 'Supprimer'
+    });
+    if (!confirme) return;
 
     this.trajetService.deleteTrajet(id).subscribe({
       next: () => {
         this.afficherSucces('Trajet supprimé avec succès.');
         this.chargerTrajets();
       },
-      error: (error) => this.errorMessage = error.message
+      error: (error) => this.notifications.erreur(error.message)
     });
   }
 

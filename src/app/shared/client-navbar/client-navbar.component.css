@@ -107,3 +107,13 @@
   .nav-links { order: 3; width: 100%; justify-content: center; gap: 20px; }
   .dropdown-panel { width: min(290px, calc(100vw - 32px)); right: -8px; }
 }
+
+/* Visiteur sans compte */
+.btn-connexion, .btn-inscription {
+  padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap;
+}
+.btn-connexion { color: var(--navbar-brand, #0f1e3d); border: 1px solid var(--border, #e5e7eb); }
+.btn-inscription { background: #f26b21; color: #fff; }
+.btn-connexion:hover { border-color: currentColor; }
+.btn-inscription:hover { filter: brightness(.95); }
+@media (max-width: 480px) { .btn-inscription { display: none; } }

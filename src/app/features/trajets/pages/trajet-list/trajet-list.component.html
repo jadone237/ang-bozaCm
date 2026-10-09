@@ -21,9 +21,6 @@
     </div>
   </div>
 
-  @if (successMessage) {
-    <div class="message-succes">{{ successMessage }}</div>
-  }
 
   <div class="cartes-statistiques">
     <article class="carte-statistique">
@@ -55,7 +52,7 @@
     </div>
 
     @if (isLoading) {
-        <div class="etat-tableau">Chargement des trajets...</div>
+        <app-squelette [lignes]="taillePage" />
     } @else if (errorMessage) {
         <div class="etat-tableau erreur">{{ errorMessage }}</div>
     } @else {

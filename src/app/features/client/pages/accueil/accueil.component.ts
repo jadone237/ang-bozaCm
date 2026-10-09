@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -10,6 +10,27 @@ import { ClientNavbarComponent } from '../../../../shared/client-navbar/client-n
 const ACCENTS = ['accent-navy', 'accent-teal', 'accent-green'];
 const BADGES = ['badge-grey', 'badge-amber', 'badge-green'];
 const BUTTONS = ['btn-navy', 'btn-teal', 'btn-green'];
+
+/** En dessous de ce seuil, on prévient le voyageur qu'il reste peu de places. */
+const SEUIL_PEU_DE_PLACES = 5;
+
+interface FiltresRecherche {
+  transport: 'BUS' | 'AVION' | 'TRAIN';
+  depart: string;
+  destination: string;
+  date: string;
+}
+
+/** Minuscules sans accents, pour que « yaounde » trouve « Yaoundé ». */
+function normaliser(texte: string | undefined | null): string {
+  return (texte ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+/** Date du jour au format AAAA-MM-JJ (heure locale), comparable aux dates des offres. */
+function aujourdhui(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 
 @Component({
   selector: 'app-accueil',
@@ -27,6 +48,18 @@ export class AccueilComponent implements OnInit {
   loadOffresError = signal('');
 
   searchForm: FormGroup;
+  readonly dateMin = aujourdhui();
+  // null tant que le voyageur n'a pas lancé de recherche : toutes les offres à venir sont affichées
+  filtres = signal<FiltresRecherche | null>(null);
+
+  /** Offres à venir (départ aujourd'hui ou plus tard), triées par date, filtrées par la recherche. */
+  offresAffichees = computed(() => {
+    const f = this.filtres();
+    return this.offres()
+      .filter((o) => !this.estPassee(o))
+      .filter((o) => !f || this.correspond(o, f))
+      .sort((a, b) => a.dateDepart.localeCompare(b.dateDepart));
+  });
 
   constructor(private fb: FormBuilder, private offreService: OffreService) {
     this.searchForm = this.fb.group({
@@ -54,7 +87,46 @@ export class AccueilComponent implements OnInit {
   }
 
   search() {
-    console.log('Recherche', this.activeTransport(), this.searchForm.value);
+    const { depart, destination, date } = this.searchForm.value;
+    this.filtres.set({ transport: this.activeTransport(), depart, destination, date });
+  }
+
+  effacerRecherche() {
+    this.searchForm.reset({ depart: '', destination: '', date: '' });
+    this.filtres.set(null);
+  }
+
+  private correspond(offre: Offre, f: FiltresRecherche): boolean {
+    // Les anciennes offres sans typeTransport sont des offres de bus
+    if ((offre.typeTransport ?? 'BUS') !== f.transport) return false;
+    if (f.depart && !normaliser(offre.trajet?.villeDepart).includes(normaliser(f.depart))) return false;
+    if (f.destination && !normaliser(offre.trajet?.villeArrivee).includes(normaliser(f.destination))) return false;
+    if (f.date && offre.dateDepart.slice(0, 10) < f.date) return false;
+    return true;
+  }
+
+  estPassee(offre: Offre): boolean {
+    return offre.dateDepart.slice(0, 10) < this.dateMin;
+  }
+
+  estComplete(offre: Offre): boolean {
+    return (offre.placesDisponibles ?? 0) <= 0;
+  }
+
+  /** Texte du badge de places : « Complet », « Plus que 3 places » ou « 30 places ». */
+  badgePlaces(offre: Offre): string {
+    const n = offre.placesDisponibles ?? 0;
+    if (n <= 0) return 'Complet';
+    if (n <= SEUIL_PEU_DE_PLACES) return n === 1 ? 'Plus qu’1 place' : `Plus que ${n} places`;
+    return `${n} places`;
+  }
+
+  /** Couleur du badge : rouge si complet, ambre s'il reste peu de places, sinon la couleur de la carte. */
+  badgeClassPlaces(offre: Offre, index: number): string {
+    const n = offre.placesDisponibles ?? 0;
+    if (n <= 0) return 'badge-red';
+    if (n <= SEUIL_PEU_DE_PLACES) return 'badge-warn';
+    return this.badgeClass(index);
   }
 
   

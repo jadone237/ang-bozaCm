@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 /* You can add global styles to this file, and also import other style files */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -36,15 +37,56 @@ img,
 svg {
   max-width: 100%;
 }
-/* S'applique à absolument tous les éléments du projet d'un seul coup */
-* {
-  font-family: 'Liberation Serif', 'Times New Roman', Times, serif !important;
+/* ===== Typographie commune (toutes les pages) =====
+   - Titres (h1, h2, h3 et classes de titre) : Times New Roman
+   - Tout le reste (texte, tableaux, formulaires, boutons, chiffres) : Manrope
+   - Les tailles viennent toutes de cette échelle : ne pas écrire de px dans les pages. */
+:root {
+  --font-titre: 'Liberation Serif', 'Times New Roman', Times, serif;
+  --font-texte: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+  --fs-page: 26px;        /* titre de page (Gestion des agences…) */
+  --fs-section: 18px;     /* titre de bloc (Liste des agences partenaires…) */
+  --fs-kpi: 28px;         /* chiffres clés des cartes */
+  --fs-texte: 14px;       /* texte courant, cellules, champs */
+  --fs-secondaire: 13px;  /* sous-titres, messages, boutons */
+  --fs-label: 11px;       /* libellés en capitales, en-têtes de tableau */
+  --fs-mini: 12px;        /* badges, pagination, petites mentions */
 }
 
-.section-agence,
-.page-trajets,
-.page-offres {
-  font-family: 'Liberation Serif', 'Times New Roman', Times, serif !important;
+@media (max-width: 600px) {
+  :root {
+    --fs-page: 22px;
+    --fs-section: 16px;
+    --fs-kpi: 23px;
+  }
+}
+
+body,
+input,
+select,
+textarea,
+button {
+  font-family: var(--font-texte);
+}
+
+h1, h2, h3, h4,
+.titre-page,
+.titre-principal,
+.titre-offres,
+.offre-form-title,
+.titre-formulaire,
+.titre-liste,
+.titre-apercu,
+.titre-panneau {
+  font-family: var(--font-titre);
+}
+
+/* Icônes : on laisse la police d'icônes intacte */
+.bi::before,
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
+  font-family: bootstrap-icons !important;
 }
 
 .page-trajets { color: #181818; }
@@ -53,18 +95,18 @@ svg {
 .page-trajets th,
 .page-trajets .pied-tableau,
 .page-trajets .activite { color: #626060; }
-.page-trajets .titre-principal { font-size: 26px; font-weight: 700; color: #181818; }
+.page-trajets .titre-principal { font-size: var(--fs-page); font-weight: 700; color: #181818; }
 .page-trajets .recherche-trajet input,
 .page-trajets .bouton-principal,
 .page-trajets td,
-.page-trajets .texte-apercu { font-size: 14px; }
-.page-trajets .titre-liste { font-size: 18px; color: #181818; }
+.page-trajets .texte-apercu { font-size: var(--fs-texte); }
+.page-trajets .titre-liste { font-size: var(--fs-section); font-weight: 700; color: #181818; }
 .page-trajets .libelle-statistique,
-.page-trajets th { font-size: 12px; }
+.page-trajets th { font-size: var(--fs-label); }
 .page-trajets td { color: #181818; }
 .page-trajets .pied-tableau,
 .page-trajets .activite,
-.page-trajets .badge-trajet { font-size: 12px; }
+.page-trajets .badge-trajet { font-size: var(--fs-mini); }
 .page-trajets .texte-apercu { color: #e0e7ef; }
 
 @media (max-width: 768px) {

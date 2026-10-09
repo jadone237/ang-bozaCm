@@ -26,6 +26,13 @@ export class OffreFormComponent implements OnInit {
   trajets: TrajetResponseDTO[] = [];
   offreId?: number;
   isEditMode = false;
+  /** Aujourd'hui (AAAA-MM-JJ, heure locale) : pas de départ dans le passé. */
+  readonly dateMin = (() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  })();
+  /** Date de l'offre au chargement (mode modification). */
+  dateInitiale = '';
   isSubmitting = false;
   errorMessage = '';
 
@@ -59,6 +66,11 @@ export class OffreFormComponent implements OnInit {
       this.errorMessage = 'Renseignez tous les champs avec des valeurs valides.';
       return;
     }
+    // Une offre existante déjà passée reste modifiable tant qu'on ne change pas sa date
+    if (this.offre.dateDepart < this.dateMin && this.offre.dateDepart !== this.dateInitiale) {
+      this.errorMessage = 'La date de départ ne peut pas être dans le passé.';
+      return;
+    }
 
     this.isSubmitting = true;
     this.errorMessage = '';
@@ -85,6 +97,7 @@ export class OffreFormComponent implements OnInit {
     if (this.offreId === undefined) return;
     this.offreService.getOffreById(this.offreId).subscribe({
       next: (offre) => {
+        this.dateInitiale = offre.dateDepart.slice(0, 10);
         this.offre = {
           titre: offre.titre,
           description: offre.description,

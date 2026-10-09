@@ -65,6 +65,8 @@ export class ReservationComponent implements OnInit {
   });
 
   form: FormGroup;
+  /** Un visiteur peut consulter l'offre ; la connexion n'est demandée qu'au moment de réserver. */
+  readonly estConnecte: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -74,6 +76,7 @@ export class ReservationComponent implements OnInit {
     private offreService: OffreService,
     private authService: AuthService
   ) {
+    this.estConnecte = this.authService.isAuthenticated();
     this.form = this.fb.group({
       nomComplet: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
@@ -123,6 +126,10 @@ export class ReservationComponent implements OnInit {
   
 
   submit(): void {
+    if (!this.estConnecte) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+      return;
+    }
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;

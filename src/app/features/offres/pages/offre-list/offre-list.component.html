@@ -8,7 +8,7 @@
     <div class="actions-haut-offres">
       <div class="recherche-offres">
         <i class="bi bi-search"></i>
-        <input type="search" [(ngModel)]="recherche" (input)="filtrerOffres()" placeholder="Rechercher une offre...">
+        <input type="search" [(ngModel)]="recherche" (input)="saisirRecherche()" placeholder="Rechercher une offre...">
       </div>
       <div class="bouton-nouvelle-offre" routerLink="/ajouter-offre"><i class="bi bi-plus-lg"></i> Nouvelle offre</div>
       <i class="bi bi-bell icone-entete"></i>
@@ -16,20 +16,19 @@
     </div>
   </div>
 
-  @if (successMessage) { <div class="message-succes">{{ successMessage }}</div> }
   @if (errorMessage && !isLoading) { <div class="message-erreur">{{ errorMessage }}</div> }
 
   <div class="statistiques-offres">
     <div class="carte-offre-stat">
-      <div><div class="libelle-stat-offre">Total offres</div><div class="valeur-stat-offre">{{ offres.length }}</div></div>
+      <div><div class="libelle-stat-offre">Total offres</div><div class="valeur-stat-offre">{{ resume.totalOffres }}</div></div>
       <div class="icone-stat-offre bleu"><i class="bi bi-card-list"></i></div>
     </div>
     <div class="carte-offre-stat">
-      <div><div class="libelle-stat-offre">Offres actives</div><div class="valeur-stat-offre">{{ nombreOffresActives }}</div></div>
+      <div><div class="libelle-stat-offre">Offres à venir</div><div class="valeur-stat-offre">{{ resume.offresActives }}</div></div>
       <div class="icone-stat-offre vert"><i class="bi bi-calendar-check"></i></div>
     </div>
     <div class="carte-offre-stat">
-      <div><div class="libelle-stat-offre">Places restantes</div><div class="valeur-stat-offre">{{ nombrePlacesDisponibles }}</div></div>
+      <div><div class="libelle-stat-offre">Places restantes</div><div class="valeur-stat-offre">{{ resume.placesRestantes }}</div></div>
       <div class="icone-stat-offre cyan"><i class="bi bi-person-seat"></i></div>
     </div>
     <div class="carte-offre-stat carte-stat-accent">
@@ -54,7 +53,7 @@
           }
         </select>
       </div>
-      <div class="compteur-offres">Affichage de {{ offresFiltrees.length ? (page - 1) * taillePage + 1 : 0 }}–{{ (page - 1) * taillePage + offresAffichees.length }} sur {{ offresFiltrees.length }} offres</div>
+      <div class="compteur-offres">Affichage de {{ totalOffresFiltrees ? (page - 1) * taillePage + 1 : 0 }}–{{ (page - 1) * taillePage + offresAffichees.length }} sur {{ totalOffresFiltrees }} offres</div>
     </div>
 
     <div class="entete-ligne-offre">
@@ -62,7 +61,7 @@
     </div>
 
     @if (isLoading) {
-      <div class="etat-offres">Chargement des offres...</div>
+      <app-squelette [lignes]="taillePage" />
     } @else if (offresAffichees.length === 0) {
       <div class="etat-offres">Aucune offre trouvée.</div>
     } @else {
@@ -70,15 +69,21 @@
         <div class="ligne-offre">
           <div class="titre-cellule-offre">
             <div>{{ offre.titre }}</div>
-            <small>{{ offre.trajet.villeDepart }} → {{ offre.trajet.villeArrivee }} · {{ offre.dateDepart | date:'short' }}</small>
+            <small>{{ offre.trajet.villeDepart }} → {{ offre.trajet.villeArrivee }} · {{ offre.dateDepart | date:'d MMM yyyy' }}</small>
           </div>
           <div class="type-offre" [title]="offre.typeTransport ?? 'BUS'"><i class="bi" [class.bi-bus-front]="(offre.typeTransport ?? 'BUS') === 'BUS'" [class.bi-train-front]="offre.typeTransport === 'TRAIN'" [class.bi-airplane]="offre.typeTransport === 'AVION'"></i></div>
           <div>{{ offre.agence.nom }}</div>
-          <div class="prix-offre">{{ offre.prix | number:'1.0-0' }} F</div>
-          <div><span class="badge-places" [class.peu-places]="offre.placesDisponibles <= 2">{{ offre.placesDisponibles }} dispo</span></div>
+          <div class="prix-offre">{{ offre.prix | number:'1.0-0' }} FCFA</div>
+          <div class="cellule-places">
+            <span class="badge-places" [ngClass]="etatPlaces(offre)">{{ libellePlaces(offre) }}</span>
+            <div class="remplissage" [title]="(offre.nombrePlaces - offre.placesDisponibles) + ' / ' + offre.nombrePlaces + ' places réservées'">
+              <div class="piste-remplissage"><div class="jauge-remplissage" [ngClass]="etatPlaces(offre)" [style.width.%]="tauxRemplissage(offre)"></div></div>
+              <small>{{ offre.nombrePlaces - offre.placesDisponibles }}/{{ offre.nombrePlaces }}</small>
+            </div>
+          </div>
           <div class="actions-ligne-offre">
             <div class="action-offre" [routerLink]="['/modifier-offre', offre.id]" title="Modifier"><i class="bi bi-pencil"></i></div>
-            <div class="action-offre supprimer" (click)="supprimerOffre(offre.id)" title="Supprimer"><i class="bi bi-trash"></i></div>
+            <div class="action-offre supprimer" (click)="supprimerOffre(offre)" title="Supprimer"><i class="bi bi-trash"></i></div>
           </div>
         </div>
       }

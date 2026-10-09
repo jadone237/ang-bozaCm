@@ -176,3 +176,22 @@
     max-width: 300px;
   }
 }
+/* Bouton mode clair / sombre de l'en-tête */
+.btn-theme {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  background: transparent;
+  color: #64748b;
+  font-size: 17px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #0f766e;
+    border-color: #0f766e;
+  }
+}

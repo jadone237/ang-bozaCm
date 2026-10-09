@@ -19,7 +19,7 @@
   }
 
   @if (isLoading) {
-    <div class="etat-chargement">Chargement des données statistiques en cours...</div>
+    <div class="panneau-carte"><app-squelette [lignes]="6" /></div>
   } @else if (stats) {
     <!-- 4 Cartes d'indicateurs (KPIs) -->
     <div class="grille-indicateurs">
@@ -59,6 +59,42 @@
         <div class="valeur-indicateur">{{ stats.chiffreAffaire | number:'1.0-0' }}</div>
       </div>
     </div>
+
+    <!-- Évolution sur 6 mois : un graphique par mesure (réservations, CA) + remplissage des offres -->
+    @if (evolution; as evo) {
+      <div class="grille-evolution">
+        <div class="panneau-carte">
+          <div class="entete-panneau">
+            <div class="titre-panneau"><i class="bi bi-graph-up text-vert"></i> Réservations par mois</div>
+            <span class="etiquette-periode">6 MOIS</span>
+          </div>
+          <app-graphique-mois [mois]="evo.mois" mesure="reservations" />
+        </div>
+
+        <div class="panneau-carte">
+          <div class="entete-panneau">
+            <div class="titre-panneau"><i class="bi bi-cash-coin text-vert"></i> Chiffre d'affaires par mois</div>
+            <span class="etiquette-periode">FCFA</span>
+          </div>
+          <app-graphique-mois [mois]="evo.mois" mesure="chiffreAffaire" />
+        </div>
+
+        <div class="panneau-carte carte-remplissage">
+          <div class="entete-panneau">
+            <div class="titre-panneau"><i class="bi bi-person-check text-vert"></i> Remplissage des offres</div>
+          </div>
+          <div class="valeur-remplissage">{{ evo.tauxRemplissage | number:'1.0-1' }} %</div>
+          <div class="piste-remplissage-agence" role="meter" aria-label="Taux de remplissage"
+               [attr.aria-valuenow]="evo.tauxRemplissage" aria-valuemin="0" aria-valuemax="100">
+            <div class="jauge-remplissage-agence" [style.width.%]="evo.tauxRemplissage"></div>
+          </div>
+          <p class="detail-remplissage">
+            {{ evo.placesReservees | number }} place(s) réservée(s) sur {{ evo.placesTotales | number }} proposée(s)
+            dans les {{ stats.nombreOffres }} offre(s) de l'agence.
+          </p>
+        </div>
+      </div>
+    }
 
     <!-- Section Centrale : Classement & Barres de progression -->
     <div class="grille-analyse-principale">

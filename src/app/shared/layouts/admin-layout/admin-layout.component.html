@@ -79,6 +79,12 @@
       </div>
       
       <div class="d-flex align-items-center gap-3">
+        <!-- Mode clair / sombre (même réglage que l'espace client, mémorisé dans le navigateur) -->
+        <button type="button" class="btn-theme" (click)="themeService.toggle()"
+                [attr.aria-label]="themeService.theme() === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair'"
+                [title]="themeService.theme() === 'light' ? 'Mode sombre' : 'Mode clair'">
+          <i class="bi" [class.bi-moon-stars]="themeService.theme() === 'light'" [class.bi-sun]="themeService.theme() === 'dark'"></i>
+        </button>
         <a routerLink="/admin/profil" class="d-flex align-items-center gap-2 border-start ps-3 text-reset text-decoration-none" title="Mon profil">
           <div class="text-end d-none d-sm-block">
             <h6 class="mb-0 fw-bold fs-7">Administrateur</h6>

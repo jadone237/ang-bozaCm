@@ -86,9 +86,14 @@ export class AgenceService {
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Erreur client : ${error.error.message}`;
     } else {
-      const backendMessage = typeof error.error === 'string'
-        ? error.error
-        : error.error?.message || error.error?.error;
+      // Avec responseType 'text' (création, modification, suppression), le corps d'erreur JSON arrive en texte
+      let corps = error.error;
+      if (typeof corps === 'string') {
+        try { corps = JSON.parse(corps); } catch { /* vrai texte : on le garde tel quel */ }
+      }
+      const backendMessage = typeof corps === 'string'
+        ? corps
+        : corps?.message || corps?.error;
       errorMessage = `Erreur HTTP ${error.status} sur ${error.url || 'le service agences'} : ${backendMessage || error.message}`;
     }
     console.error(errorMessage);

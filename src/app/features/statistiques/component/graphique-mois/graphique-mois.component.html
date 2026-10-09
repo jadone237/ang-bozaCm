@@ -1,0 +1,24 @@
+<div class="graphique-mois" role="img"
+     [attr.aria-label]="(mesure() === 'reservations' ? 'Réservations' : 'Chiffre d affaires en FCFA') + ' par mois, maximum ' + maximum()">
+  @for (m of mois(); track m.mois) {
+    <div class="colonne-mois" tabindex="0">
+      <div class="zone-barre">
+        @if (valeur(m) > 0) {
+          <span class="valeur-barre">
+            @if (mesure() === 'reservations') { {{ m.reservations }} } @else { {{ m.chiffreAffaire / 1000 | number:'1.0-0' }} k }
+          </span>
+        }
+        <div class="barre-mois" [style.height.%]="hauteur(m)"></div>
+      </div>
+      <span class="libelle-mois">{{ dateDuMois(m) | date:'MMM' }}</span>
+      <div class="infobulle-mois">
+        <strong>{{ dateDuMois(m) | date:'MMMM yyyy' }}</strong>
+        @if (mesure() === 'reservations') {
+          {{ m.reservations }} réservation(s), dont {{ m.confirmees }} confirmée(s)
+        } @else {
+          {{ m.chiffreAffaire | number:'1.0-0' }} FCFA ({{ m.confirmees }} réservation(s) confirmée(s))
+        }
+      </div>
+    </div>
+  }
+</div>

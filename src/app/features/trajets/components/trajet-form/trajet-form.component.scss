@@ -13,17 +13,17 @@
 .sur-titre {
   margin-bottom: 6px;
   color: #007f78;
-  font-size: 11px;
+  font-size: var(--fs-label);
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
 }
-.titre-formulaire { margin-bottom: 8px; color: #0b2550; font-size: 24px; font-weight: 700; }
-.description-formulaire { color: #8a9ab2; font-size: 13px; }
+.titre-formulaire { margin-bottom: 8px; color: #0b2550; font-size: var(--fs-page); font-weight: 700; }
+.description-formulaire { color: #8a9ab2; font-size: var(--fs-secondaire); }
 
 .champs-trajet { display: grid; gap: 18px; }
 .groupe-champ-trajet { display: grid; gap: 8px; }
-.libelle-champ { color: #33435a; font-size: 12px; font-weight: 700; }
+.libelle-champ { color: #33435a; font-size: var(--fs-secondaire); font-weight: 700; }
 .groupe-champ-trajet input {
   width: 100%;
   box-sizing: border-box;
@@ -33,7 +33,7 @@
   outline: none;
   color: #12233f;
   background: #f8fafc;
-  font-size: 14px;
+  font-size: var(--fs-texte);
 }
 .groupe-champ-trajet input:focus { border-color: #007f78; background: #fff; }
 
@@ -43,7 +43,7 @@
   border-radius: 7px;
   color: #b42318;
   background: #fff1f0;
-  font-size: 13px;
+  font-size: var(--fs-secondaire);
 }
 .actions-formulaire-trajet {
   display: flex;
@@ -57,7 +57,7 @@
   padding: 10px 16px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--fs-secondaire);
   font-weight: 700;
 }
 .bouton-annuler { border: 1px solid #dfe5ec; color: #53647b; background: #fff; }
@@ -70,7 +70,7 @@
     padding: 20px 16px;
   }
 
-  .titre-formulaire { font-size: 21px; }
+  .titre-formulaire { font-size: var(--fs-page); font-weight: 700;}
   .actions-formulaire-trajet { flex-direction: column-reverse; }
   .bouton-annuler, .bouton-enregistrer { min-height: 44px; text-align: center; }
 }

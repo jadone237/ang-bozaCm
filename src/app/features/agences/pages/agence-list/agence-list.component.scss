@@ -13,7 +13,7 @@
     align-items: center;
 
     h2 {
-        font-size: 26px;
+        font-size: var(--fs-page);
         font-weight: 700;
         color: #181818;
         margin: 0;
@@ -55,7 +55,7 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 
     .titre-stat {
-        font-size: 12px;
+        font-size: var(--fs-label);
         text-transform: uppercase;
         color: #626060;
         font-weight: 700;
@@ -63,7 +63,7 @@
     }
 
     h3 {
-        font-size: 28px;
+        font-size: var(--fs-kpi);
         font-weight: 700;
         color: #181818;
         margin: 5px 0;
@@ -108,7 +108,7 @@
     margin-bottom: 20px;
 
     h3 {
-        font-size: 18px;
+        font-size: var(--fs-section);
         font-weight: 700;
         color: #181818;
         margin: 0;
@@ -151,7 +151,7 @@
     text-align: left;
 
     th {
-        font-size: 12px;
+        font-size: var(--fs-label);
         text-transform: uppercase;
         color: #626060;
         padding-bottom: 12px;
@@ -163,7 +163,7 @@
     td {
         padding: 16px 0;
         color: #181818;
-        font-size: 14px;
+        font-size: var(--fs-texte);
         border-bottom: 1px solid #f8fafc;
         vertical-align: middle;
     }
@@ -182,7 +182,7 @@
     background-color: #f0fdf4;
     color: #0f766e;
     font-weight: 700;
-    font-size: 12px;
+    font-size: var(--fs-mini);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -230,7 +230,7 @@
     color: #dc2626;
     padding: 12px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: var(--fs-secondaire);
 }
 
 .alerte-succes {
@@ -238,7 +238,7 @@
     color: #15803d;
     padding: 12px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: var(--fs-secondaire);
 }
 
 .actions-agence {
@@ -254,7 +254,7 @@
     gap: 16px;
     padding-top: 18px;
     color: #8a9ab2;
-    font-size: 12px;
+    font-size: var(--fs-mini);
 }
 
 .boutons-pagination {
@@ -349,16 +349,15 @@
     }
 
     .carte-stat h3 {
-        font-size: 23px;
+        font-size: var(--fs-kpi);
     }
 
     .carte-stat .titre-stat {
-        font-size: 10px;
+        font-size: var(--fs-label);
     }
 
     .en-tete-page h2 {
-        font-size: 22px;
-    }
+        font-size: var(--fs-page); font-weight: 700;}
 }
 
 @media (max-width: 350px) {
@@ -412,11 +411,10 @@
         content: attr(data-label);
         flex: 0 0 42%;
         color: #7b8b9f;
-        font-size: 10px;
+        font-size: var(--fs-label);
         font-weight: 700;
         text-align: left;
-        text-transform: uppercase;
-    }
+        text-transform: uppercase; letter-spacing: .06em;}
 
     .tableau-simple td:last-child {
         border-bottom: 0;

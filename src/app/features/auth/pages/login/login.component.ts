@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../../core/auth/auth.service';
 
@@ -23,8 +23,13 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService
   ) {
+    // Arrivée depuis « Réserver » sans être connecté : on ouvre directement l'onglet Client
+    if (this.route.snapshot.queryParamMap.get('returnUrl')) {
+      this.activeTab.set('CLIENT');
+    }
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -63,7 +68,7 @@ export class LoginComponent {
             break;
           case 'CLIENT':
             this.authService.saveSession(response);
-            this.router.navigateByUrl('/accueil');
+            this.router.navigateByUrl(this.pageDeRetour());
             break;
           default:
             this.errorMessage.set('Ce type de compte ne peut pas accéder à cet espace.');
@@ -74,5 +79,11 @@ export class LoginComponent {
         this.errorMessage.set('Email ou mot de passe incorrect');
       },
     });
+  }
+
+  /** Page à rouvrir après la connexion d'un client (seulement une adresse interne à l'application). */
+  private pageDeRetour(): string {
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    return returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('//') ? returnUrl : '/accueil';
   }
 }

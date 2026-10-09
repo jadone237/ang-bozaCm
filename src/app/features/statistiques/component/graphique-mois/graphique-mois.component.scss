@@ -1,0 +1,79 @@
+/* Barres verticales : marque fine, extrémité arrondie, ancrée sur la ligne de base */
+.graphique-mois {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  height: 190px;
+  padding-top: 18px;
+  border-bottom: 1px solid #e4e9ef;
+}
+.colonne-mois {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  outline: none;
+}
+.zone-barre {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+.barre-mois {
+  width: min(28px, 70%);
+  border-radius: 4px 4px 0 0;
+  background: #0a9488;
+  transition: opacity .15s ease;
+}
+.valeur-barre {
+  margin-bottom: 4px;
+  color: #46566e;
+  font-size: var(--fs-mini);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.libelle-mois {
+  margin-top: 8px;
+  margin-bottom: -26px;
+  color: #8798b1;
+  font-size: var(--fs-mini);
+  text-transform: capitalize;
+}
+.graphique-mois { margin-bottom: 30px; }
+
+/* Survol (ou focus clavier) : la colonne visée ressort, les autres s'estompent */
+.graphique-mois:hover .barre-mois { opacity: .45; }
+.colonne-mois:hover .barre-mois,
+.colonne-mois:focus-visible .barre-mois { opacity: 1; }
+.colonne-mois:focus-visible .libelle-mois { color: #007f78; font-weight: 700; }
+.infobulle-mois {
+  position: absolute;
+  bottom: calc(100% - 8px);
+  left: 50%;
+  z-index: 5;
+  width: max-content;
+  max-width: 220px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #0b2550;
+  color: #fff;
+  font-size: var(--fs-mini);
+  line-height: 1.4;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(11, 37, 80, .25);
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s ease;
+  strong { display: block; text-transform: capitalize; }
+}
+.colonne-mois:hover .infobulle-mois,
+.colonne-mois:focus-visible .infobulle-mois { opacity: 1; }
+.colonne-mois:first-child .infobulle-mois { left: 0; transform: none; }
+.colonne-mois:last-child .infobulle-mois { left: auto; right: 0; transform: none; }

@@ -1,0 +1,49 @@
+.zone-toasts {
+  position: fixed; right: 20px; bottom: 20px; z-index: 2000;
+  display: flex; flex-direction: column; gap: 10px; max-width: min(380px, calc(100vw - 32px));
+}
+.toast-boza {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px; border-radius: 10px; border-left: 4px solid;
+  background: var(--surface, #fff); color: var(--text, #181818);
+  box-shadow: 0 8px 24px rgba(15, 30, 61, .18);
+  font-family: var(--font-texte); font-size: var(--fs-texte, 14px);
+  animation: entree-toast .2s ease-out;
+  span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  > i { font-size: 17px; margin-top: 1px; }
+}
+.toast-succes { border-color: #16804a; > i { color: #16804a; } }
+.toast-erreur { border-color: #b42318; > i { color: #b42318; } }
+.toast-info   { border-color: #007f78; > i { color: #007f78; } }
+.fermer-toast { border: 0; background: transparent; color: inherit; opacity: .6; cursor: pointer; padding: 0 2px; }
+.fermer-toast:hover { opacity: 1; }
+@keyframes entree-toast { from { opacity: 0; transform: translateY(8px); } }
+
+.fond-confirmation {
+  position: fixed; inset: 0; z-index: 2100;
+  display: grid; place-items: center; padding: 16px;
+  background: rgba(11, 20, 40, .55);
+  animation: fondu .15s ease-out;
+}
+.fenetre-confirmation {
+  width: min(420px, 100%); padding: 24px; border-radius: 14px; text-align: center;
+  background: var(--surface, #fff); color: var(--text, #181818);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
+  font-family: var(--font-texte);
+  h2 { font-family: var(--font-titre); font-size: var(--fs-section, 18px); font-weight: 700; margin: 12px 0 6px; }
+  p { color: var(--text-muted, #56627a); font-size: var(--fs-texte, 14px); margin: 0 0 20px; }
+}
+.icone-confirmation {
+  display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%;
+  background: #e7f8f7; color: #007f78; font-size: 22px;
+  &.danger { background: #fff1f0; color: #b42318; }
+}
+.actions-confirmation { display: flex; gap: 10px; justify-content: center; }
+.actions-confirmation button {
+  min-width: 120px; padding: 10px 16px; border-radius: 8px; border: 1px solid transparent;
+  font-weight: 700; font-size: var(--fs-secondaire, 13px); cursor: pointer;
+}
+.bouton-annuler { background: transparent; border-color: var(--border, #d9e1ea) !important; color: inherit; }
+.bouton-confirmer { background: #007f78; color: #fff; &.danger { background: #b42318; } }
+.actions-confirmation button:focus-visible { outline: 3px solid #f2a33a; outline-offset: 2px; }
+@keyframes fondu { from { opacity: 0; } }

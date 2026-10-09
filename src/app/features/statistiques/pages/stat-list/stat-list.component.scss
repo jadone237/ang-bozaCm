@@ -1,6 +1,6 @@
 .page-offres {
   color: #181818;
-  font-family: 'Liberation Serif', 'Times New Roman', Times, serif !important;
+  font-family: var(--font-texte);
 }
 
 .entete-offres,
@@ -21,20 +21,18 @@
 
 .surtitre-offres {
   color: #8798b1;
-  font-size: 10px;
+  font-size: var(--fs-label);
   letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
+  text-transform: uppercase;}
 
 .titre-offres {
-  font-size: 26px;
-  color: #181818;
-}
+  font-size: var(--fs-page);
+  color: #181818; font-weight: 700;}
 
 .description-offres {
   margin-top: 4px;
   color: #8798b1;
-  font-size: 12px;
+  font-size: var(--fs-secondaire);
 }
 
 .actions-haut-offres {
@@ -56,7 +54,7 @@
     border: 0;
     outline: 0;
     background: transparent;
-    font-size: 12px;
+    font-size: var(--fs-texte);
   }
 }
 
@@ -65,7 +63,7 @@
   border-radius: 6px;
   background: #007f78;
   color: #fff;
-  font-size: 12px;
+  font-size: var(--fs-secondaire);
   font-weight: 700;
   cursor: pointer;
   display: flex;
@@ -84,7 +82,7 @@
   margin-bottom: 15px;
   padding: 10px 13px;
   border-radius: 7px;
-  font-size: 13px;
+  font-size: var(--fs-secondaire);
 }
 
 .message-succes {
@@ -122,7 +120,7 @@
 .libelle-stat-offre {
   margin-bottom: 7px;
   color: #8292aa;
-  font-size: 12px;
+  font-size: var(--fs-label);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -130,7 +128,7 @@
 
 .valeur-stat-offre {
   color: #0b2550;
-  font-size: 28px;
+  font-size: var(--fs-kpi);
   font-weight: 700;
 }
 
@@ -168,17 +166,16 @@
     border-radius: 6px;
     background: #f2f4f6;
     color: #48566a;
-    font-size: 11px;
+    font-size: var(--fs-texte);
     outline: none;
   }
 }
 
 .compteur-offres {
   color: #91a0b7;
-  font-size: 9px;
+  font-size: var(--fs-label);
   font-weight: 700;
-  text-transform: uppercase;
-}
+  text-transform: uppercase; letter-spacing: .06em;}
 
 /* Grille spécifique Agence : 6 colonnes */
 .entete-ligne-agence,
@@ -193,7 +190,7 @@
   padding: 12px 22px;
   background: #fafbfc;
   color: #626060;
-  font-size: 12px;
+  font-size: var(--fs-label);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -204,7 +201,7 @@
   padding: 12px 22px;
   border-top: 1px solid #f0f2f5;
   color: #46566e;
-  font-size: 14px;
+  font-size: var(--fs-texte);
 }
 
 .titre-cellule-offre {
@@ -215,7 +212,7 @@
     display: block;
     margin-top: 4px;
     color: #626060;
-    font-size: 12px;
+    font-size: var(--fs-mini);
     font-weight: 400;
   }
 }
@@ -257,7 +254,7 @@
   padding: 34px;
   text-align: center;
   color: #8798b1;
-  font-size: 13px;
+  font-size: var(--fs-secondaire);
 }
 
 .pagination-offres {
@@ -318,13 +315,13 @@
 
 @media (max-width: 520px) {
   .entete-offres { margin: 0 0 18px; gap: 14px; }
-  .titre-offres { font-size: 23px; }
+  .titre-offres { font-size: var(--fs-page); font-weight: 700;}
   .actions-haut-offres { gap: 10px; }
   .bouton-nouvelle-offre { justify-content: center; min-height: 44px; }
   .statistiques-offres { gap: 10px; margin-bottom: 18px; }
   .carte-offre-stat { min-width: 0; padding: 12px; }
-  .libelle-stat-offre { font-size: 10px; }
-  .valeur-stat-offre { font-size: 23px; }
+  .libelle-stat-offre { font-size: var(--fs-label); }
+  .valeur-stat-offre { font-size: var(--fs-kpi); }
   .barre-filtres-offres { padding: 13px; }
   .filtres-gauche { width: 100%; align-items: stretch; flex-direction: column; }
   .filtres-gauche select { width: 100%; max-width: none; min-height: 42px; }
@@ -361,10 +358,9 @@
     display: block;
     margin-bottom: 3px;
     color: #8798b1;
-    font-size: 9px;
+    font-size: var(--fs-label);
     font-weight: 700;
-    text-transform: uppercase;
-  }
+    text-transform: uppercase; letter-spacing: .06em;}
   .ligne-agence > div:nth-child(2)::before { content: 'Ville'; }
   .ligne-agence > div:nth-child(3)::before { content: 'Téléphone'; }
   .ligne-agence > div:nth-child(4)::before { content: 'Adresse'; }

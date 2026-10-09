@@ -13,14 +13,14 @@
     margin-bottom: 25px;
 
     h2 {
-        font-size: 22px;
+        font-size: var(--fs-page);
         font-weight: 700;
         color: #181818;
         margin: 0 0 5px 0;
     }
 
     p {
-        font-size: 14px;
+        font-size: var(--fs-secondaire);
         color: #626060;
         margin: 0;
     }
@@ -38,7 +38,7 @@
     gap: 8px;
 
     label {
-        font-size: 13px;
+        font-size: var(--fs-secondaire);
         font-weight: 700;
         color: #181818;
         text-transform: uppercase;
@@ -64,7 +64,7 @@
 }
 
 .message-erreur {
-    font-size: 12px;
+    font-size: var(--fs-secondaire);
     color: #dc2626;
     margin-top: 2px;
 }
@@ -120,8 +120,7 @@
     }
 
     .en-tete-formulaire h2 {
-        font-size: 20px;
-    }
+        font-size: var(--fs-page); font-weight: 700;}
 
     .actions-formulaire {
         flex-direction: column-reverse;

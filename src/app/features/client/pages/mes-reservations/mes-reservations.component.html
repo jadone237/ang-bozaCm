@@ -66,7 +66,7 @@
             <div class="res-main">
               <h2 class="res-route">{{ r.depart || '—' }} → {{ r.arrivee || '—' }}</h2>
               <div class="res-meta">
-                <span><i class="bi bi-calendar3"></i> {{ r.dateDepart ? (r.dateDepart | date:'dd MMM yyyy, HH:mm') : 'Date à confirmer' }}</span>
+                <span><i class="bi bi-calendar3"></i> {{ r.dateDepart ? (r.dateDepart | date:'d MMM yyyy') : 'Date à confirmer' }}</span>
                 @if (r.compagnie) { <span><i class="bi bi-building"></i> {{ r.compagnie }}</span> }
                 <span class="res-type">{{ r.type }}</span>
               </div>

@@ -101,6 +101,8 @@ padding: 4px;
 .badge-grey  { background: #e6e9f0; color: #0f1e3d; }
 .badge-amber { background: #fde9e0; color: #b45309; }
 .badge-green { background: #e2f5e9; color: #1a7f37; }
+.badge-warn  { background: #fff3cd; color: #8a4b00; font-weight: 700; }
+.badge-red   { background: #fde2e1; color: #b42318; font-weight: 700; }
 
 .btn-navy  { background-color: #0f1e3d; color: #fff; }
 .btn-teal  { background-color: #0f6e56; color: #fff; }

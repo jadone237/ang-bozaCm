@@ -1,7 +1,7 @@
 .page-rapport-global {
   padding: 12px 24px 40px;
   color: #17345e;
-  font-family: 'Liberation Serif', 'Times New Roman', Times, serif !important;
+  font-family: var(--font-texte);
 }
 
 /* En-tête */
@@ -11,7 +11,7 @@
   .titre-bloc {
     h1 {
       margin: 0;
-      font-size: 26px;
+      font-size: var(--fs-page);
       font-weight: 700;
       color: #0b2247;
     }
@@ -19,7 +19,7 @@
     .sous-titre {
       margin: 6px 0 0;
       color: #7b8b9f;
-      font-size: 13px;
+      font-size: var(--fs-secondaire);
     }
   }
 }
@@ -30,14 +30,14 @@
   border-radius: 8px;
   background: #fff1f0;
   color: #b42318;
-  font-size: 13px;
+  font-size: var(--fs-secondaire);
 }
 
 .etat-chargement {
   padding: 50px;
   text-align: center;
   color: #8292aa;
-  font-size: 14px;
+  font-size: var(--fs-secondaire);
 }
 
 /* 1. Grille Supérieure des 6 Cartes KPI */
@@ -72,7 +72,7 @@
 
   .libelle-kpi {
     color: #8b99ad;
-    font-size: 10px;
+    font-size: var(--fs-label);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -80,7 +80,7 @@
   }
 
   .valeur-kpi {
-    font-size: 26px;
+    font-size: var(--fs-kpi);
     font-weight: 800;
     color: #0b2247;
   }
@@ -109,7 +109,7 @@
 
   h2 {
     margin: 0;
-    font-size: 18px;
+    font-size: var(--fs-section);
     font-weight: 700;
     color: #0e2444;
   }
@@ -165,7 +165,7 @@
     flex: 1;
 
     .label-perf {
-      font-size: 9px;
+      font-size: var(--fs-label);
       font-weight: 700;
       color: #8c9caa;
       letter-spacing: 0.08em;
@@ -174,7 +174,7 @@
     }
 
     .valeur-perf {
-      font-size: 15px;
+      font-size: var(--fs-texte);
       font-weight: 700;
       color: #0b2247;
     }
@@ -184,7 +184,7 @@
     text-align: right;
 
     .nombre-perf {
-      font-size: 20px;
+      font-size: var(--fs-section);
       font-weight: 800;
       color: #0b2247;
       line-height: 1;
@@ -193,7 +193,7 @@
     small {
       display: block;
       margin-top: 4px;
-      font-size: 10px;
+      font-size: var(--fs-mini);
       color: #8c9caa;
     }
   }
@@ -237,7 +237,7 @@
 
   .taux-label {
     margin-top: 4px;
-    font-size: 9px;
+    font-size: var(--fs-label);
     font-weight: 700;
     color: #8294a9;
     letter-spacing: 0.06em;
@@ -299,7 +299,7 @@
 
   .info-ca {
     .label-ca {
-      font-size: 11px;
+      font-size: var(--fs-label);
       font-weight: 700;
       letter-spacing: 0.12em;
       color: #869cb8;
@@ -404,21 +404,21 @@
 
 @media (max-width: 520px) {
   .page-rapport-global { padding: 6px 0 24px; }
-  .entete-rapport .titre-bloc h1 { font-size: 22px; }
+  .entete-rapport .titre-bloc h1 { font-size: var(--fs-page); font-weight: 700;}
   .grille-kpi-global { gap: 10px; }
   .carte-kpi { padding: 12px; }
-  .carte-kpi .valeur-kpi { font-size: 22px; }
+  .carte-kpi .valeur-kpi { font-size: var(--fs-kpi); }
   .panneau-carte { min-width: 0; padding: 16px; }
-  .entete-panneau h2 { font-size: 16px; }
+  .entete-panneau h2 { font-size: var(--fs-section); }
   .carte-performance { align-items: flex-start; gap: 10px; padding: 12px; }
   .carte-performance .icone-perf { flex: 0 0 36px; width: 36px; height: 36px; }
-  .carte-performance .details-perf .valeur-perf { font-size: 13px; overflow-wrap: anywhere; }
-  .carte-performance .indicateur-perf .nombre-perf { font-size: 17px; }
+  .carte-performance .details-perf .valeur-perf { font-size: var(--fs-texte); overflow-wrap: anywhere; }
+  .carte-performance .indicateur-perf .nombre-perf { font-size: var(--fs-section); }
   .donught-chart { width: 150px; height: 150px; }
   .donught-centre { width: 120px; height: 120px; }
   .donught-centre .taux-pourcent { font-size: 27px; }
   .banniere-ca-sombre { padding: 20px 16px; }
-  .banniere-ca-sombre .info-ca .valeur-ca { font-size: 30px; overflow-wrap: anywhere; }
+  .banniere-ca-sombre .info-ca .valeur-ca { font-size: var(--fs-kpi); overflow-wrap: anywhere; }
   .banniere-ca-sombre .info-ca .valeur-ca .unite-fcfa { font-size: 15px; }
   .banniere-ca-sombre .actions-banniere button { min-height: 44px; }
 }

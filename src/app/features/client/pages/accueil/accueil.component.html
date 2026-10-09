@@ -20,15 +20,15 @@
     <form [formGroup]="searchForm" (ngSubmit)="search()" class="row g-3 align-items-end">
       <div class="col-sm-6 col-md-4">
         <label class="form-label small text-muted">DÉPART</label>
-        <input type="text" class="form-control" formControlName="depart">
+        <input type="text" class="form-control" formControlName="depart" placeholder="Ex. Yaoundé">
       </div>
       <div class="col-sm-6 col-md-4">
         <label class="form-label small text-muted">DESTINATION</label>
-        <input type="text" class="form-control" formControlName="destination">
+        <input type="text" class="form-control" formControlName="destination" placeholder="Ex. Douala">
       </div>
       <div class="col-sm-6 col-md-2">
         <label class="form-label small text-muted">DATE</label>
-        <input type="date" class="form-control" formControlName="date">
+        <input type="date" class="form-control" formControlName="date" [min]="dateMin">
       </div>
       <div class="col-sm-6 col-md-2">
         <button type="submit" class="btn btn-orange w-100">
@@ -40,22 +40,38 @@
 </section>
 
 <section class="container py-5">
-  <h2 class="fw-bold border-bottom pb-3 mb-4">Offres disponibles</h2>
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 border-bottom pb-3 mb-4">
+    <h2 class="fw-bold mb-0">{{ filtres() ? 'Résultats de la recherche' : 'Offres disponibles' }}</h2>
+    @if (filtres(); as f) {
+      <div class="d-flex align-items-center gap-2 small text-muted">
+        <span>{{ offresAffichees().length }} offre(s) en {{ f.transport }}@if (f.date) {, à partir du {{ f.date | date:'d MMMM yyyy' }}}</span>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="effacerRecherche()">
+          <i class="bi bi-x-lg"></i> Effacer la recherche
+        </button>
+      </div>
+    }
+  </div>
 
   @if (isLoadingOffres()) {
     <p class="text-muted">Chargement des offres...</p>
   } @else if (loadOffresError()) {
     <p class="text-danger">{{ loadOffresError() }}</p>
-  } @else if (offres().length === 0) {
-    <p class="text-muted">Aucune offre disponible pour le moment.</p>
+  } @else if (offresAffichees().length === 0) {
+    <p class="text-muted">
+      @if (filtres()) {
+        Aucune offre ne correspond à votre recherche. Essayez un autre moyen de transport, une autre ville ou une autre date.
+      } @else {
+        Aucune offre disponible pour le moment.
+      }
+    </p>
   } @else {
     <div class="row g-4">
-      @for (offre of offres(); track offre.id; let i = $index) {
+      @for (offre of offresAffichees(); track offre.id; let i = $index) {
         <div class="col-sm-6 col-lg-4">
           <div class="offer-card" [ngClass]="accentClass(i)">
             <div class="d-flex justify-content-between align-items-start mb-3">
               <div class="offer-icon"><i class="bi bi-signpost-2"></i></div>
-              <span class="badge-pill" [ngClass]="badgeClass(i)">{{ offre.placesDisponibles }} places</span>
+              <span class="badge-pill" [ngClass]="badgeClassPlaces(offre, i)">{{ badgePlaces(offre) }}</span>
             </div>
             <h5 class="fw-bold">{{ offre.titre }}</h5>
             @if (offre.trajet?.villeDepart) {
@@ -64,7 +80,7 @@
               </p>
             }
             <p class="text-muted small mb-4">
-              <i class="bi bi-calendar3"></i> {{ offre.dateDepart | date:'dd MMM yyyy' }}
+              <i class="bi bi-calendar3"></i> {{ offre.dateDepart | date:'EEEE d MMMM yyyy' }}
               @if (offre.agence?.nom) { — {{ offre.agence.nom }} }
             </p>
 
@@ -73,7 +89,11 @@
                 <div class="small text-muted">À PARTIR DE</div>
                 <div class="fw-bold fs-5">{{ offre.prix | number:'1.0-0' }} FCFA</div>
               </div>
-              <a [routerLink]="['/reservation', typeReservation(offre), offre.id]" class="btn" [ngClass]="boutonClass(i)">Réserver</a>
+              @if (estComplete(offre)) {
+                <button type="button" class="btn btn-secondary" disabled>Complet</button>
+              } @else {
+                <a [routerLink]="['/reservation', typeReservation(offre), offre.id]" class="btn" [ngClass]="boutonClass(i)">Réserver</a>
+              }
             </div>
           </div>
         </div>

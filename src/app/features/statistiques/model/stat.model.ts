@@ -33,3 +33,17 @@ export interface AgenceClassementDTO {
   chiffreAffaire: number;
   rang: number;
 }
+// 3. Évolution mensuelle d'une agence + taux de remplissage de ses offres
+export interface MoisStatistiqueDTO {
+  mois: string;            // « 2026-10 »
+  reservations: number;
+  confirmees: number;
+  chiffreAffaire: number;  // FCFA, réservations confirmées
+}
+
+export interface EvolutionAgenceDTO {
+  mois: MoisStatistiqueDTO[];
+  placesTotales: number;
+  placesReservees: number;
+  tauxRemplissage: number; // en %
+}

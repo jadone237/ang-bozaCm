@@ -27,9 +27,14 @@ export class RapportService {
     if (error.error instanceof ErrorEvent) {
       message = `Erreur client : ${error.error.message}`;
     } else {
-      const backendMessage = typeof error.error === 'string'
-        ? error.error
-        : error.error?.message || error.error?.error;
+      // Avec responseType 'text' (création, modification, suppression), le corps d'erreur JSON arrive en texte
+      let corps = error.error;
+      if (typeof corps === 'string') {
+        try { corps = JSON.parse(corps); } catch { /* vrai texte : on le garde tel quel */ }
+      }
+      const backendMessage = typeof corps === 'string'
+        ? corps
+        : corps?.message || corps?.error;
       message = `Erreur HTTP ${error.status} sur ${error.url || 'le service de rapport'} : ${backendMessage || error.message}`;
     }
     return throwError(() => new Error(message));

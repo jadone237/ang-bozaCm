@@ -1,0 +1,438 @@
+/* =============================================================================
+   MODE SOMBRE DE L'ESPACE ADMIN
+   Activé par le bouton lune / soleil de l'en-tête admin (ThemeService pose
+   data-theme="dark" sur <html>). Les variables --surface, --text… sont définies
+   dans styles.css et partagées avec l'espace client.
+
+   1. Règles générales (fond de page, barre latérale, utilitaires Bootstrap)
+   2. Règles générées à partir des couleurs de chaque page admin :
+      chaque couleur claire est remplacée par son équivalent sombre
+      (fond blanc → --surface, texte foncé → --text, gris → --text-muted,
+      teintes pâles → même teinte assombrie). Les fonds déjà foncés et les
+      boutons de couleur vive restent inchangés. Les règles portent !important
+      car les sélecteurs imbriqués des composants Angular sont plus spécifiques.
+   3. Ajustements à la main (à la fin, pour passer après les règles générées)
+   ============================================================================= */
+
+/* --- 1. Règles générales --- */
+:root[data-theme="dark"] app-admin-layout .dashboard-wrapper,
+:root[data-theme="dark"] app-admin-layout .main-content { background-color: var(--bg-page); color: var(--text); }
+:root[data-theme="dark"] app-admin-layout .sidebar { background-color: var(--surface); border-color: var(--border); }
+:root[data-theme="dark"] app-admin-layout .text-dark { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .bg-white,
+:root[data-theme="dark"] app-admin-layout .bg-light { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .border-top,
+:root[data-theme="dark"] app-admin-layout .border-start,
+:root[data-theme="dark"] app-admin-layout .border-bottom { border-color: var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout h1,
+:root[data-theme="dark"] app-admin-layout h2,
+:root[data-theme="dark"] app-admin-layout h3,
+:root[data-theme="dark"] app-admin-layout h4 { color: var(--heading); }
+:root[data-theme="dark"] app-admin-layout input,
+:root[data-theme="dark"] app-admin-layout select,
+:root[data-theme="dark"] app-admin-layout textarea { color: var(--text); color-scheme: dark; }
+:root[data-theme="dark"] app-admin-layout input::placeholder,
+:root[data-theme="dark"] app-admin-layout textarea::placeholder { color: var(--text-muted); }
+
+/* --- 2. Règles générées par page --- */
+
+/* --- bookings.component.css --- */
+:root[data-theme="dark"] app-admin-layout .admin-header-actions { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .admin-avatar { background-color: #0f1e3d !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .notif-badge { background-color: #dc2626 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .dropdown-panel { background-color: var(--surface) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .dropdown-header { color: var(--text-muted) !important; border-bottom: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .dropdown-empty { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .dropdown-item:hover { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .dropdown-footer-link { color: var(--heading) !important; border-top: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .dropdown-footer-link:hover { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .dropdown-item-btn { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .dropdown-item-btn:hover { background-color: var(--surface-soft) !important; color: #e76a6a !important; }
+:root[data-theme="dark"] app-admin-layout .stat-card { background-color: var(--surface) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .stat-label { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .filters-bar { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .table-container { background-color: var(--surface) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .admin-table thead th { color: var(--text-muted) !important; border-bottom: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .admin-table td { border-bottom: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .client-avatar { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .type-pill { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .badge-confirmee { background-color: #183f26 !important; color: #6fe290 !important; }
+:root[data-theme="dark"] app-admin-layout .badge-attente { background-color: #3f3018 !important; color: #f29e5f !important; }
+:root[data-theme="dark"] app-admin-layout .badge-annulee { background-color: #3f1818 !important; color: #d97777 !important; }
+:root[data-theme="dark"] app-admin-layout .badge-terminee { background-color: var(--surface-soft) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .page-btn { border: 1px solid var(--border) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .page-btn.active { background-color: #0f1e3d !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .modal-box { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-close-modal { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .type-tab { border: 1px solid var(--border) !important; background-color: var(--surface) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .type-tab.active { background-color: #0f1e3d !important; color: #fff !important; }
+
+/* --- profile.component.css --- */
+:root[data-theme="dark"] app-admin-layout .back-link { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .back-link:hover { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .profile-tabs { border-bottom: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .profile-tab { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .profile-tab.active { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .profile-card { background-color: var(--surface) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .photo-section { border-bottom: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .profile-photo-fallback { background-color: #0f1e3d !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .btn-change-photo { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-change-photo:hover { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .toggle-slider { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .toggle-slider::before { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .toggle-switch input:checked + .toggle-slider { background-color: #0f6e56 !important; }
+
+/* --- agence-form.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .conteneur-formulaire { background-color: var(--surface) !important; border: 0.5px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .en-tete-formulaire h2 { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .en-tete-formulaire p { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .groupe-champ label { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .groupe-champ input { border: 1px solid var(--border) !important; background-color: var(--surface-soft) !important; color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .groupe-champ input:focus { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .message-erreur { color: #e76a6a !important; }
+:root[data-theme="dark"] app-admin-layout .actions-formulaire { border-top: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-annuler { color: var(--text-muted) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-annuler:hover { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-valider { background-color: #0f766e !important; color: #ffffff !important; }
+:root[data-theme="dark"] app-admin-layout .btn-valider:hover { background-color: #0d9488 !important; }
+
+/* --- agence-list.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .en-tete-page h2 { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-nouvelle-agence { background-color: #0f766e !important; color: #ffffff !important; }
+:root[data-theme="dark"] app-admin-layout .btn-nouvelle-agence:hover { background-color: #0d9488 !important; }
+:root[data-theme="dark"] app-admin-layout .carte-stat { background-color: var(--surface) !important; border: 0.5px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-stat .titre-stat { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-stat h3 { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-stat .texte-tendance { color: #77eee5 !important; }
+:root[data-theme="dark"] app-admin-layout .carte-stat .texte-tendance.vert { color: #5ff1c1 !important; }
+:root[data-theme="dark"] app-admin-layout .carte-stat .texte-tendance.orange { color: #f2bb5f !important; }
+:root[data-theme="dark"] app-admin-layout .carte-stat .icone-stat { background-color: #183f24 !important; color: #77eee5 !important; }
+:root[data-theme="dark"] app-admin-layout .conteneur-tableau { background-color: var(--surface) !important; border: 0.5px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .barre-recherche-titre h3 { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .champ-recherche i { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .champ-recherche input { border: 0.5px solid var(--border) !important; background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .champ-recherche input:focus { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .tableau-simple th { color: var(--text-muted) !important; border-bottom: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .tableau-simple td { color: var(--text) !important; border-bottom: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .avatar-cercle { background-color: #183f24 !important; color: #77eee5 !important; }
+:root[data-theme="dark"] app-admin-layout .btn-action.modifier { background-color: #1a2b3d !important; color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-action.modifier:hover { background-color: #1e2939 !important; }
+:root[data-theme="dark"] app-admin-layout .btn-action.supprimer { background-color: #3f1818 !important; color: #e76a6a !important; }
+:root[data-theme="dark"] app-admin-layout .btn-action.supprimer:hover { background-color: #3f1818 !important; }
+:root[data-theme="dark"] app-admin-layout .texte-centre { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .alerte-erreur { background-color: #3f1818 !important; color: #e76a6a !important; }
+:root[data-theme="dark"] app-admin-layout .alerte-succes { background-color: #183f24 !important; color: #7ce9a5 !important; }
+:root[data-theme="dark"] app-admin-layout .pagination-agences { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-page { border: 1px solid var(--border) !important; background-color: var(--surface) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-page.page-active { background-color: #0f766e !important; color: #fff !important; }
+@media (max-width: 600px) { :root[data-theme="dark"] app-admin-layout .tableau-simple tbody tr { border: 1px solid var(--border) !important; background-color: var(--surface) !important; } }
+@media (max-width: 600px) { :root[data-theme="dark"] app-admin-layout .tableau-simple td { border-bottom: 1px solid var(--border) !important; } }
+@media (max-width: 600px) { :root[data-theme="dark"] app-admin-layout .tableau-simple td::before { color: var(--text-muted) !important; } }
+
+/* --- offre-form.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .offre-form-card { border: 1px solid var(--border) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-eyebrow { color: #71f4eb !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-title { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-description { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-field-label { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-field input,
+:root[data-theme="dark"] app-admin-layout .offre-field select,
+:root[data-theme="dark"] app-admin-layout .offre-field textarea { border: 1px solid var(--border) !important; background-color: var(--surface-soft) !important; color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-field input:focus,
+:root[data-theme="dark"] app-admin-layout .offre-field select:focus,
+:root[data-theme="dark"] app-admin-layout .offre-field textarea:focus { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-error { background-color: #3f1a18 !important; color: #eb6f66 !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-actions { border-top: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-cancel { border: 1px solid var(--border) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-save { background-color: #007f78 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-card { border: 1px solid var(--border) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-eyebrow { color: #71f4eb !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-title { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-description { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-field-label { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-field input,
+:root[data-theme="dark"] app-admin-layout .offre-field select,
+:root[data-theme="dark"] app-admin-layout .offre-field textarea { border: 1px solid var(--border) !important; background-color: var(--surface-soft) !important; color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-field input:focus,
+:root[data-theme="dark"] app-admin-layout .offre-field select:focus,
+:root[data-theme="dark"] app-admin-layout .offre-field textarea:focus { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-error { background-color: #3f1a18 !important; color: #eb6f66 !important; }
+:root[data-theme="dark"] app-admin-layout .offre-form-actions { border-top: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-cancel { border: 1px solid var(--border) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .offre-save { background-color: #007f78 !important; color: #fff !important; }
+
+/* --- offre-list.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .page-offres { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .surtitre-offres { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-offres { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .description-offres { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .recherche-offres { background-color: #1e2939 !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-nouvelle-offre { background-color: #007f78 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .icone-entete { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .message-succes { background-color: #183f2a !important; color: #7ce9b1 !important; }
+:root[data-theme="dark"] app-admin-layout .message-erreur { background-color: #3f1a18 !important; color: #eb6f66 !important; }
+:root[data-theme="dark"] app-admin-layout .carte-offre-stat { border: 1px solid var(--border) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-stat-accent { border-color: var(--border) !important; background-color: #183f3d !important; }
+:root[data-theme="dark"] app-admin-layout .libelle-stat-offre { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .valeur-stat-offre { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .icone-stat-offre.bleu { background-color: #1e2839 !important; color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .icone-stat-offre.vert { background-color: #1a3c32 !important; color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .icone-stat-offre.cyan { background-color: #183f3a !important; color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .tableau-offres { border: 1px solid var(--border) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .filtres-gauche select { background-color: var(--surface-soft) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .compteur-offres { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .entete-ligne-offre { background-color: var(--surface-soft) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .ligne-offre { border-top: 1px solid var(--border) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-cellule-offre { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-cellule-offre small { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .type-offre { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .prix-offre { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .badge-places { background-color: #1a3c35 !important; color: #6ae7de !important; }
+:root[data-theme="dark"] app-admin-layout .badge-places.peu-places { background-color: #3f3518 !important; color: #f4b871 !important; }
+:root[data-theme="dark"] app-admin-layout .badge-places.complet { background-color: #3f1b18 !important; color: #da7e77 !important; }
+:root[data-theme="dark"] app-admin-layout .badge-places.depart-passe { background-color: #1e2839 !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .actions-ligne-offre { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .action-offre.supprimer { color: #d77e7a !important; }
+:root[data-theme="dark"] app-admin-layout .etat-offres { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-page { border: 1px solid var(--border) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-page.page-active { background-color: #007f78 !important; color: #fff !important; }
+@media (max-width: 600px) { :root[data-theme="dark"] app-admin-layout .ligne-offre { border: 1px solid var(--border) !important; } }
+@media (max-width: 600px) { :root[data-theme="dark"] app-admin-layout .ligne-offre > div:nth-child(3)::before,
+:root[data-theme="dark"] app-admin-layout .ligne-offre > div:nth-child(4)::before,
+:root[data-theme="dark"] app-admin-layout .ligne-offre > div:nth-child(5)::before { color: var(--text-muted) !important; } }
+@media (max-width: 600px) { :root[data-theme="dark"] app-admin-layout .action-offre { background-color: #202e37 !important; } }
+@media (max-width: 600px) { :root[data-theme="dark"] app-admin-layout .action-offre.supprimer { background-color: #3f1a18 !important; } }
+:root[data-theme="dark"] app-admin-layout .remplissage small { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .piste-remplissage { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .jauge-remplissage { background-color: #16877f !important; }
+:root[data-theme="dark"] app-admin-layout .jauge-remplissage.peu-places { background-color: #d97706 !important; }
+:root[data-theme="dark"] app-admin-layout .jauge-remplissage.complet { background-color: #cb4a40 !important; }
+:root[data-theme="dark"] app-admin-layout .jauge-remplissage.depart-passe { background-color: var(--surface-soft) !important; }
+
+/* --- rapport-global.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .page-rapport-global { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .entete-rapport .titre-bloc h1 { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .entete-rapport .titre-bloc .sous-titre { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .message-erreur { background-color: #3f1a18 !important; color: #eb6f66 !important; }
+:root[data-theme="dark"] app-admin-layout .etat-chargement { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-kpi { background-color: var(--surface) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-kpi .icone-kpi { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-kpi .icone-kpi.vert { color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .carte-kpi .icone-kpi.rouge { color: #d77e7a !important; }
+:root[data-theme="dark"] app-admin-layout .carte-kpi .libelle-kpi { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-kpi .valeur-kpi { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .panneau-carte { background-color: var(--surface) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .entete-panneau h2 { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .entete-panneau .icone-options,
+:root[data-theme="dark"] app-admin-layout .entete-panneau .icone-info { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-performance { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-performance .icone-perf.cyan { background-color: #7eedd7 !important; color: #71f4eb !important; }
+:root[data-theme="dark"] app-admin-layout .carte-performance .icone-perf.marine { background-color: #17345e !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .carte-performance .icone-perf.gris { background-color: #1f2938 !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-performance .details-perf .label-perf { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-performance .details-perf .valeur-perf { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-performance .indicateur-perf .nombre-perf { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-performance .indicateur-perf small { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .donught-centre { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .donught-centre .taux-pourcent { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .donught-centre .taux-label { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .legende-taux .item-legende .info-gauche { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .legende-taux .item-legende .point-legende.vert { background-color: #007f78 !important; }
+:root[data-theme="dark"] app-admin-layout .legende-taux .item-legende .point-legende.orange { background-color: #f3ba70 !important; }
+:root[data-theme="dark"] app-admin-layout .legende-taux .item-legende .point-legende.rouge { background-color: #d9383a !important; }
+:root[data-theme="dark"] app-admin-layout .legende-taux .item-legende strong { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .banniere-ca-sombre { background-color: #06193b !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .banniere-ca-sombre .info-ca .label-ca { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .banniere-ca-sombre .info-ca .valeur-ca { color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .banniere-ca-sombre .info-ca .valeur-ca .unite-fcfa { color: #b3c5df !important; }
+:root[data-theme="dark"] app-admin-layout .banniere-ca-sombre .info-ca .mention-confirmation { color: #5fc5f2 !important; }
+:root[data-theme="dark"] app-admin-layout .banniere-ca-sombre .actions-banniere .bouton-export { background-color: var(--surface) !important; color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .banniere-ca-sombre .actions-banniere .bouton-export:hover { background-color: #212b36 !important; }
+:root[data-theme="dark"] app-admin-layout .banniere-ca-sombre .actions-banniere .bouton-details-agences { background-color: #007f78 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .banniere-ca-sombre .actions-banniere .bouton-details-agences:hover { background-color: #006762 !important; }
+
+/* --- ag-stats.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .page-stats-agence { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-section-stats h1 { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-section-stats .sous-titre-agence-actuelle { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-section-stats .sous-titre-agence-actuelle span { color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .barre-recherche-arrondie { background-color: #1d2a3a !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .barre-recherche-arrondie input { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-icone-nav { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-indicateur { background-color: var(--surface) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .icone-indicateur { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .badge-progression { color: #71f4e7 !important; }
+:root[data-theme="dark"] app-admin-layout .badge-taux { color: #71f4e7 !important; }
+:root[data-theme="dark"] app-admin-layout .libelle-indicateur { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .valeur-indicateur { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .panneau-carte { background-color: var(--surface) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-panneau { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-panneau .text-vert { color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .icone-filigrane { color: #e5ebf3 !important; }
+:root[data-theme="dark"] app-admin-layout .etiquette-periode { background-color: #1c2d3b !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .item-classement { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .badge-rang.premier { background-color: #007f78 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .badge-rang.second,
+:root[data-theme="dark"] app-admin-layout .badge-rang.troisieme { background-color: #1e2b39 !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .details-item-classement .nom-element { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .details-item-classement .description-element { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .chiffres-item-classement .montant-classement { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .chiffres-item-classement .montant-classement .unite-fcfa { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .chiffres-item-classement .taux-vert { color: #71f4e7 !important; }
+:root[data-theme="dark"] app-admin-layout .chiffres-item-classement .taux-gris { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .ligne-barre-stat .entete-barre .label-agence-barre { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .ligne-barre-stat .entete-barre .score-barre { color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .ligne-barre-stat .piste-barre { background-color: #212b36 !important; }
+:root[data-theme="dark"] app-admin-layout .ligne-barre-stat .progression-barre { background-color: #1f365d !important; }
+:root[data-theme="dark"] app-admin-layout .ligne-barre-stat .progression-barre.principale { background-color: #142e56 !important; }
+:root[data-theme="dark"] app-admin-layout .ligne-barre-stat .progression-barre.foncee { background-color: #50688a !important; }
+:root[data-theme="dark"] app-admin-layout .axe-graduations-x { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-analyse-sombre { background-color: #0d2247 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .carte-analyse-sombre .contenu-analyse-sombre p { color: #b7c7de !important; }
+:root[data-theme="dark"] app-admin-layout .carte-analyse-sombre .bouton-rapport { background-color: #007f78 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .carte-meilleur-agent { background-color: var(--surface-soft) !important; border: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-meilleur-agent .cercle-icone-etoile { background-color: var(--surface) !important; border: 1px solid var(--border) !important; color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .carte-meilleur-agent .nom-section-agent { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-meilleur-agent .nom-agent-valeur { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-meilleur-agent .badge-satisfaction { background-color: #183f38 !important; color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .etat-chargement { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .navigation-retour { color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .valeur-remplissage { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .piste-remplissage-agence { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .jauge-remplissage-agence { background-color: #0a9488 !important; }
+:root[data-theme="dark"] app-admin-layout .detail-remplissage { color: var(--text-muted) !important; }
+
+/* --- graphique-mois.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .graphique-mois { border-bottom: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .barre-mois { background-color: #0a9488 !important; }
+:root[data-theme="dark"] app-admin-layout .valeur-barre { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .libelle-mois { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .colonne-mois:focus-visible .libelle-mois { color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .infobulle-mois { background-color: #0b2550 !important; color: #fff !important; }
+
+/* --- stat-list.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .page-offres { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .surtitre-offres { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-offres { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .description-offres { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .recherche-offres { background-color: #1e2939 !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-nouvelle-offre { background-color: #007f78 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .icone-entete { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .message-succes { background-color: #183f2a !important; color: #7ce9b1 !important; }
+:root[data-theme="dark"] app-admin-layout .message-erreur { background-color: #3f1a18 !important; color: #eb6f66 !important; }
+:root[data-theme="dark"] app-admin-layout .carte-offre-stat { border: 1px solid var(--border) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-stat-accent { border-color: var(--border) !important; background-color: #183f3d !important; }
+:root[data-theme="dark"] app-admin-layout .libelle-stat-offre { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .valeur-stat-offre { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .icone-stat-offre.bleu { background-color: #1e2839 !important; color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .icone-stat-offre.vert { background-color: #1a3c32 !important; color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .icone-stat-offre.cyan { background-color: #183f3a !important; color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .tableau-offres { border: 1px solid var(--border) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .filtres-gauche select { background-color: var(--surface-soft) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .compteur-offres { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .entete-ligne-offre { background-color: var(--surface-soft) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .ligne-offre { border-top: 1px solid var(--border) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-cellule-offre { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-cellule-offre small { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-stats-agence { border: 1px solid var(--border) !important; background-color: #183f3a !important; color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-stats-agence:hover { background-color: #007f78 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .actions-ligne-offre { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .action-offre.supprimer { color: #d77e7a !important; }
+:root[data-theme="dark"] app-admin-layout .etat-offres { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-page { border: 1px solid var(--border) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-page.page-active { background-color: #007f78 !important; color: #fff !important; }
+@media (max-width: 600px) { :root[data-theme="dark"] app-admin-layout .ligne-agence { border: 1px solid var(--border) !important; } }
+@media (max-width: 600px) { :root[data-theme="dark"] app-admin-layout .ligne-agence > div:nth-child(2)::before,
+:root[data-theme="dark"] app-admin-layout .ligne-agence > div:nth-child(3)::before,
+:root[data-theme="dark"] app-admin-layout .ligne-agence > div:nth-child(4)::before { color: var(--text-muted) !important; } }
+
+/* --- trajet-form.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .conteneur-formulaire-trajet { border: 1px solid var(--border) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .sur-titre { color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .titre-formulaire { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .description-formulaire { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .libelle-champ { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .groupe-champ-trajet input { border: 1px solid var(--border) !important; color: var(--heading) !important; background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .groupe-champ-trajet input:focus { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .message-erreur { color: #eb6f66 !important; background-color: #3f1a18 !important; }
+:root[data-theme="dark"] app-admin-layout .actions-formulaire-trajet { border-top: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-annuler { border: 1px solid var(--border) !important; color: var(--text-muted) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-enregistrer { color: #fff !important; background-color: #007f78 !important; }
+
+/* --- trajet-list.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .sur-titre { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-principal { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .recherche-trajet { background-color: #1c2a3b !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .recherche-trajet input { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-principal { background-color: #007f78 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .message-succes { color: #7ce9a5 !important; background-color: #183f24 !important; }
+:root[data-theme="dark"] app-admin-layout .carte-statistique { border: 1px solid var(--border) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .libelle-statistique { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .valeur-statistique { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .icone-statistique.bleu { background-color: #1d273a !important; color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .icone-statistique.vert { background-color: #1b3b37 !important; color: #71f4ec !important; }
+:root[data-theme="dark"] app-admin-layout .icone-statistique.orange { background-color: #3f2b18 !important; color: #e9a968 !important; }
+:root[data-theme="dark"] app-admin-layout .bloc-trajets { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .titre-liste { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-action,
+:root[data-theme="dark"] app-admin-layout .pagination button { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout th { background-color: var(--surface-soft) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout td { border-bottom: 1px solid var(--border) !important; color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout td i { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .badge-trajet { background-color: #18273f !important; color: #6f9de2 !important; }
+:root[data-theme="dark"] app-admin-layout .pied-tableau { color: var(--text-muted) !important; background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .pagination span { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .etat-tableau { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .erreur { color: #df7c71 !important; }
+:root[data-theme="dark"] app-admin-layout .bouton-action.supprimer { color: #df7c71 !important; }
+:root[data-theme="dark"] app-admin-layout .carte-couverture { background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .carte-couverture > span { color: #71f4ec !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .aperçu-rapide { background-color: #0b2550 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .texte-apercu { color: #b8c8df !important; }
+:root[data-theme="dark"] app-admin-layout .activite { color: #92a8c7 !important; }
+:root[data-theme="dark"] app-admin-layout .activite div:last-child { color: #72dfd8 !important; }
+:root[data-theme="dark"] app-admin-layout .barre-activite { background-color: #304a70 !important; }
+:root[data-theme="dark"] app-admin-layout .barre-activite span { background-color: #54d8d0 !important; }
+
+/* --- admin-layout.component.scss --- */
+:root[data-theme="dark"] app-admin-layout .dashboard-wrapper { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .sidebar { background-color: var(--surface) !important; border-right: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .sidebar .nav-link { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .sidebar .nav-link:hover { background-color: #1a2b3d !important; color: #77eee5 !important; }
+:root[data-theme="dark"] app-admin-layout .sidebar .nav-link.active { background-color: #183f24 !important; color: #60f1e4 !important; }
+:root[data-theme="dark"] app-admin-layout .btn-close-sidebar { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-close-sidebar:hover { color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-burger { background-color: var(--surface) !important; border: 1px solid var(--border) !important; color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-burger:hover { background-color: #1a2b3d !important; }
+:root[data-theme="dark"] app-admin-layout .btn-teal { background-color: #0d9488 !important; color: #ffffff !important; }
+:root[data-theme="dark"] app-admin-layout .btn-teal:hover { background-color: #0f766e !important; }
+:root[data-theme="dark"] app-admin-layout .bg-light-teal { background-color: #183f37 !important; }
+:root[data-theme="dark"] app-admin-layout .text-teal { color: #60f1e4 !important; }
+:root[data-theme="dark"] app-admin-layout .btn-theme { border: 1px solid var(--border) !important; color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-theme:hover { color: #77eee5 !important; }
+
+/* --- styles.css --- */
+:root[data-theme="dark"] app-admin-layout .admin-layout { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .admin-sidebar { background-color: var(--surface) !important; color: var(--heading) !important; border-right: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .sidebar-logo-icon { background-color: var(--surface-soft) !important; }
+:root[data-theme="dark"] app-admin-layout .nav-link-item { color: var(--text-muted) !important; }
+:root[data-theme="dark"] app-admin-layout .nav-link-item:hover { background-color: var(--surface-soft) !important; color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .nav-link-item.active { background-color: #1e2839 !important; color: var(--heading) !important; }
+:root[data-theme="dark"] app-admin-layout .sidebar-footer { border-top: 1px solid var(--border) !important; }
+:root[data-theme="dark"] app-admin-layout .admin-title { color: #718de0 !important; }
+:root[data-theme="dark"] app-admin-layout .btn-new-reservation { background-color: #011844 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .btn-new-reservation:hover { background-color: #0a2a5e !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .btn-outline-navy { color: var(--heading) !important; background-color: var(--surface) !important; }
+:root[data-theme="dark"] app-admin-layout .btn-teal-fill { background-color: #0f6e56 !important; color: #fff !important; }
+:root[data-theme="dark"] app-admin-layout .btn-text-danger { color: #e76a6a !important; }
+
+/* --- 3. Ajustements à la main --- */
+:root[data-theme="dark"] app-admin-layout .colonne-mois .infobulle-mois { background-color: #1d2940 !important; border: 1px solid var(--border); }
+/* Barres « Réservations par agence » : l'agence affichée en teal, les autres en gris-bleu */
+:root[data-theme="dark"] app-admin-layout .ligne-barre-stat .progression-barre { background-color: #4a5b78 !important; }
+:root[data-theme="dark"] app-admin-layout .ligne-barre-stat .progression-barre.principale { background-color: #0a9488 !important; }
+/* Pages Réservations et Mon profil : leur conteneur prend le fond de page, pas celui d'une carte */
+:root[data-theme="dark"] app-admin-layout .admin-layout { background-color: var(--bg-page) !important; }
+/* Cartes de la page Réservations : leurs couleurs viennent d'attributs [style], on les éclaircit ici */
+:root[data-theme="dark"] app-admin-layout .stat-card .stat-value { color: var(--text) !important; }
+:root[data-theme="dark"] app-admin-layout .stat-card .stat-sub { filter: brightness(1.7); }

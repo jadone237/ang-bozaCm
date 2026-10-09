@@ -18,9 +18,6 @@
     </div>
   </div>
 
-  @if (successMessage) { 
-    <div class="message-succes">{{ successMessage }}</div> 
-  }
   @if (errorMessage && !isLoading) { 
     <div class="message-erreur">{{ errorMessage }}</div> 
   }
@@ -75,7 +72,7 @@
     </div>
 
     @if (isLoading) {
-      <div class="etat-offres">Chargement des agences...</div>
+      <app-squelette [lignes]="taillePage" />
     } @else if (agencesAffichees.length === 0) {
       <div class="etat-offres">Aucune agence trouvée.</div>
     } @else {

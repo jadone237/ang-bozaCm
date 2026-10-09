@@ -24,7 +24,7 @@
         </div>
         <div class="offre-field">
           <div class="offre-field-label">Date de départ</div>
-          <input type="date" [(ngModel)]="offre.dateDepart">
+          <input type="date" [(ngModel)]="offre.dateDepart" [min]="dateInitiale && dateInitiale < dateMin ? dateInitiale : dateMin">
         </div>
       </div>
       <div class="offre-field-row">

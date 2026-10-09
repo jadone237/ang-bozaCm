@@ -2,13 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { AgenceClassementDTO, AgenceStatistiqueDTO } from '../../model/stat.model';
+import { AgenceClassementDTO, AgenceStatistiqueDTO, EvolutionAgenceDTO } from '../../model/stat.model';
+import { GraphiqueMoisComponent } from '../graphique-mois/graphique-mois.component';
+import { SqueletteComponent } from '../../../../shared/ui/squelette.component';
 import { SatsService } from '../../service/sats.service';
 
 @Component({
   selector: 'app-ag-stats',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SqueletteComponent, GraphiqueMoisComponent],
   templateUrl: './ag-stats.component.html',
   styleUrl: './ag-stats.component.scss'
 })
@@ -18,6 +20,7 @@ export class AgStatsComponent implements OnInit {
   agenceId!: number;
   stats: AgenceStatistiqueDTO | null = null;
   classement: AgenceClassementDTO[] = [];
+  evolution: EvolutionAgenceDTO | null = null;
   isLoading = true;
   errorMessage = '';
 
@@ -45,11 +48,13 @@ export class AgStatsComponent implements OnInit {
 
     forkJoin({
       stats: this.satsService.getStatistiquesByAgenceId(this.agenceId),
-      classement: this.satsService.getClassementAgences()
+      classement: this.satsService.getClassementAgences(),
+      evolution: this.satsService.getEvolutionAgence(this.agenceId, 6)
     }).subscribe({
-      next: ({ stats, classement }) => {
+      next: ({ stats, classement, evolution }) => {
         this.stats = stats;
         this.classement = classement;
+        this.evolution = evolution;
         this.isLoading = false;
       },
       error: (error) => {

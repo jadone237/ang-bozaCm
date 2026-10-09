@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -17,6 +18,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 })
 export class AdminLayoutComponent {
   private authService = inject(AuthService);
+  themeService = inject(ThemeService);
   isSidebarOpen = false;
 
   deconnexion(event: Event): void {

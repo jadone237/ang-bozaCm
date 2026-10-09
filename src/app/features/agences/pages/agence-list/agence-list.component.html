@@ -9,9 +9,6 @@
   </button>
   </div>
 
-  @if (successMessage) {
-    <div class="alerte-succes">{{ successMessage }}</div>
-  }
   @if (statsErrorMessage) {
     <div class="alerte-erreur">{{ statsErrorMessage }}</div>
   }
@@ -62,7 +59,7 @@
     </div>
 
     @if (isLoading) {
-      <div class="texte-centre">Chargement...</div>
+      <app-squelette [lignes]="pageSize" />
     } @else if (errorMessage) {
       <div class="alerte-erreur">{{ errorMessage }}</div>
     } @else {
