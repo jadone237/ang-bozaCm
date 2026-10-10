@@ -49,7 +49,7 @@ export class AccueilComponent implements OnInit {
 
   searchForm: FormGroup;
   readonly dateMin = aujourdhui();
-  // null tant que le voyageur n'a pas lancé de recherche : toutes les offres à venir sont affichées
+  // null tant que le voyageur n'a pas lancé de recherche : toutes les offres sont affichées
   filtres = signal<FiltresRecherche | null>(null);
 
   /** Offres disponibles en premier, puis expirées, filtrées par la recherche. */
