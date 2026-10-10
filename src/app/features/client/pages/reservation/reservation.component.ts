@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OffreService, Offre } from '../../../../core/services/offre.service';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { ClientReservationService } from '../../../../core/services/client-reservation.service';
 import { environment } from '../../../../../environments/environment';
 import { ClientNavbarComponent } from '../../../../shared/client-navbar/client-navbar.component';
 
@@ -74,7 +75,8 @@ export class ReservationComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private offreService: OffreService,
-    private authService: AuthService
+    private authService: AuthService,
+    private clientService: ClientReservationService
   ) {
     this.estConnecte = this.authService.isAuthenticated();
     this.form = this.fb.group({
@@ -137,21 +139,18 @@ export class ReservationComponent implements OnInit {
     const o = this.offre();
     if (!o) return;
 
+    // Le backend exige l'identifiant du client (chargé par la barre de navigation via /clients/email)
+    const clientId = this.clientService.client()?.idClient;
+    if (!clientId) {
+      this.clientService.load();
+      this.submitError.set('Votre compte est en cours de chargement. Réessayez dans un instant.');
+      return;
+    }
+
     this.isSubmitting.set(true);
     this.submitError.set('');
 
-    // ⚠️ À VÉRIFIER avec ReservationBusController / ReservationAvionController :
-    // si le backend déduit le client courant depuis le token JWT (SecurityContext),
-    // ce payload suffit. S'il exige un clientId explicite dans le DTO, ajoute-le
-    // (ex: clientId: this.authService.currentUser()?.id).
-    const payload = {
-      offreId: o.id,
-      nomPassager: this.form.value.nomComplet,
-      emailPassager: this.form.value.email,
-      telephonePassager: this.form.value.telephone,
-      nombrePlaces: this.nombrePassagers(),
-      prixReservation: this.montantTotal(),
-    };
+    const payload = this.construirePayload(o, clientId);
 
     const endpoint = `${environment.apiUrl}/v1/reservations/${this.transportType().toLowerCase()}/create`;
 
@@ -159,6 +158,8 @@ export class ReservationComponent implements OnInit {
       next: (res) => {
         this.isSubmitting.set(false);
         this.submitSuccess.set(true);
+        // Met à jour « Mes réservations » et les notifications
+        this.clientService.load();
 
         // Défensif : nom exact du champ id non confirmé dans la réponse de création
         // de réservation (ReservationBusController/AvionController non vus ici).
@@ -182,6 +183,24 @@ export class ReservationComponent implements OnInit {
   // Si aucun billet n'existe encore pour cette réservation (pas encore créé côté
   // backend, ou pas auto-généré), l'appel échoue silencieusement — pas de lien
   // de téléchargement affiché plutôt qu'un lien cassé.
+  /**
+   * Corps attendu par ReservationBusRequestDTO / ReservationTrainRequestDTO / ReservationAvionRequestDTO.
+   * La compagnie est l'agence de l'offre ; les autres valeurs correspondent à ce qu'affiche la page
+   * (bus VIP climatisé, train en seconde, vol en économie avec 23 kg de bagages).
+   */
+  private construirePayload(o: Offre, clientId: number): Record<string, unknown> {
+    const compagnie = o.agence?.nom ?? 'BozaCM';
+    switch (this.transportType()) {
+      case 'TRAIN':
+        return { offreId: o.id, clientId, compagnieTrain: compagnie, numeroWagon: 'W1', classeTrain: 'SECONDE' };
+      case 'AVION':
+        return { offreId: o.id, clientId, compagnieAerienne: compagnie, numeroVol: `BZ${o.id}`, classeAvion: 'ECONOMIE', poidsMaxBagages: 23 };
+      case 'BUS':
+      default:
+        return { offreId: o.id, clientId, compagnieBus: compagnie, typeBus: 'VIP', climatisation: true };
+    }
+  }
+
   private chercherBillet(reservationId: number): void {
     this.http.get<any>(`${environment.apiUrl}/v1/billets/reservation/${reservationId}`).subscribe({
       next: (res) => {
