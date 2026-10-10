@@ -64,6 +64,14 @@ export class ReservationComponent implements OnInit {
     const o = this.offre();
     return o ? o.prix * this.nombrePassagers() : 0;
   });
+  offreExpiree = computed(() => {
+    const o = this.offre();
+    if (!o) return false;
+    const d = new Date();
+    const aujourdhui = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    return o.dateDepart.slice(0, 10) < aujourdhui;
+  });
+  offreIndisponible = computed(() => this.offreExpiree() || (this.offre()?.placesDisponibles ?? 1) <= 0);
 
   form: FormGroup;
   /** Un visiteur peut consulter l'offre ; la connexion n'est demandée qu'au moment de réserver. */
@@ -138,6 +146,12 @@ export class ReservationComponent implements OnInit {
     }
     const o = this.offre();
     if (!o) return;
+    if (this.offreIndisponible()) {
+      this.submitError.set(this.offreExpiree()
+        ? 'Cette offre a expiré : le départ est déjà passé.'
+        : "Cette offre est complète : il n'y a plus de place disponible.");
+      return;
+    }
 
     // Le backend exige l'identifiant du client (chargé par la barre de navigation via /clients/email)
     const clientId = this.clientService.client()?.idClient;

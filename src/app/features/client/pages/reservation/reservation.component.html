@@ -117,12 +117,16 @@
               <div class="submit-error">{{ submitError() }}</div>
             }
 
-            @if ((offre()?.placesDisponibles ?? 1) <= 0) {
+            @if (offreExpiree()) {
+              <div class="submit-error">Cette offre a expiré : le départ est déjà passé et elle n'est plus disponible à la réservation.</div>
+            } @else if ((offre()?.placesDisponibles ?? 1) <= 0) {
               <div class="submit-error">Cette offre est complète : il n'y a plus de place disponible.</div>
             }
 
-            <button type="submit" class="btn-confirm" [disabled]="isSubmitting() || (offre()?.placesDisponibles ?? 1) <= 0">
-              @if ((offre()?.placesDisponibles ?? 1) <= 0) {
+            <button type="submit" class="btn-confirm" [disabled]="isSubmitting() || offreIndisponible()">
+              @if (offreExpiree()) {
+                Offre expirée
+              } @else if ((offre()?.placesDisponibles ?? 1) <= 0) {
                 Offre complète
               } @else if (isSubmitting()) {
                 Confirmation en cours...

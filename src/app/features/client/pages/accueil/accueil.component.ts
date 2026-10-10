@@ -52,13 +52,15 @@ export class AccueilComponent implements OnInit {
   // null tant que le voyageur n'a pas lancé de recherche : toutes les offres à venir sont affichées
   filtres = signal<FiltresRecherche | null>(null);
 
-  /** Offres à venir (départ aujourd'hui ou plus tard), triées par date, filtrées par la recherche. */
+  /** Offres disponibles en premier, puis expirées, filtrées par la recherche. */
   offresAffichees = computed(() => {
     const f = this.filtres();
     return this.offres()
-      .filter((o) => !this.estPassee(o))
       .filter((o) => !f || this.correspond(o, f))
-      .sort((a, b) => a.dateDepart.localeCompare(b.dateDepart));
+      .sort((a, b) => {
+        const disponibilite = Number(this.estPassee(a)) - Number(this.estPassee(b));
+        return disponibilite || a.dateDepart.localeCompare(b.dateDepart);
+      });
   });
 
   constructor(private fb: FormBuilder, private offreService: OffreService) {
@@ -115,6 +117,7 @@ export class AccueilComponent implements OnInit {
 
   /** Texte du badge de places : « Complet », « Plus que 3 places » ou « 30 places ». */
   badgePlaces(offre: Offre): string {
+    if (this.estPassee(offre)) return 'Offre expirée';
     const n = offre.placesDisponibles ?? 0;
     if (n <= 0) return 'Complet';
     if (n <= SEUIL_PEU_DE_PLACES) return n === 1 ? 'Plus qu’1 place' : `Plus que ${n} places`;
@@ -123,6 +126,7 @@ export class AccueilComponent implements OnInit {
 
   /** Couleur du badge : rouge si complet, ambre s'il reste peu de places, sinon la couleur de la carte. */
   badgeClassPlaces(offre: Offre, index: number): string {
+    if (this.estPassee(offre)) return 'badge-expired';
     const n = offre.placesDisponibles ?? 0;
     if (n <= 0) return 'badge-red';
     if (n <= SEUIL_PEU_DE_PLACES) return 'badge-warn';

@@ -89,7 +89,9 @@
                 <div class="small text-muted">À PARTIR DE</div>
                 <div class="fw-bold fs-5">{{ offre.prix | number:'1.0-0' }} FCFA</div>
               </div>
-              @if (estComplete(offre)) {
+              @if (estPassee(offre)) {
+                <button type="button" class="btn btn-secondary" disabled>Indisponible</button>
+              } @else if (estComplete(offre)) {
                 <button type="button" class="btn btn-secondary" disabled>Complet</button>
               } @else {
                 <a [routerLink]="['/reservation', typeReservation(offre), offre.id]" class="btn" [ngClass]="boutonClass(i)">Réserver</a>
