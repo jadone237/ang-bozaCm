@@ -115,7 +115,7 @@ export class AccueilComponent implements OnInit {
     return (offre.placesDisponibles ?? 0) <= 0;
   }
 
-  /** Texte du badge de places : « Complet », « Plus que 3 places » ou « 30 places ». */
+  /** Statut de disponibilité de l'offre, puis nombre de places restantes. */
   badgePlaces(offre: Offre): string {
     if (this.estPassee(offre)) return 'Offre expirée';
     const n = offre.placesDisponibles ?? 0;
